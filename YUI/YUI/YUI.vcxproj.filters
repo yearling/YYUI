@@ -1,0 +1,142 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="YYUI">
+      <UniqueIdentifier>{24f63a45-4915-4ca0-8ef0-d6c67111c995}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="YYUI\include">
+      <UniqueIdentifier>{89f02c89-3551-4a0a-afd4-70a6dd05a2bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="YYUI\src">
+      <UniqueIdentifier>{d93cf291-7104-4013-a43c-bddcda2a6736}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="YYUI\include\base">
+      <UniqueIdentifier>{a58c1d62-9ba5-415f-ac09-833783ca0b72}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="YYUI\include\Exception">
+      <UniqueIdentifier>{e872dc81-75a6-4ea4-a6dc-fae8e2375c62}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="YUI.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\YYExceptionAll.h">
+      <Filter>YYUI\include\Exception</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\YYExceptionInfo.hpp">
+      <Filter>YYUI\include\Exception</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\YYExceptionToString.h">
+      <Filter>YYUI\include\Exception</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\YYGetErrorInfo.h">
+      <Filter>YYUI\include\Exception</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\YYThrowException.h">
+      <Filter>YYUI\include\Exception</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\YYDisableIf.h">
+      <Filter>YYUI\include\Exception</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\YYErrorInfo.h">
+      <Filter>YYUI\include\Exception</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\YYException.hpp">
+      <Filter>YYUI\include\Exception</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\YYUI.h">
+      <Filter>YYUI\include\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\YWindowWnd.h">
+      <Filter>YYUI\include\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\YYUtility.h">
+      <Filter>YYUI\include\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\YPaintManagerUI.h">
+      <Filter>YYUI\include\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\YControlUI.h">
+      <Filter>YYUI\include\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\YUIDlgBuilder.h">
+      <Filter>YYUI\include\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\YWindowImpl.h">
+      <Filter>YYUI\include\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\YYUIDef.h">
+      <Filter>YYUI\include\base</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="YUI.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\YWindowWnd.cpp">
+      <Filter>YYUI\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\YPaintManagerUI.cpp">
+      <Filter>YYUI\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\YControlUI.cpp">
+      <Filter>YYUI\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\YYUtility.cpp">
+      <Filter>YYUI\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\YUIDlgBuilder.cpp">
+      <Filter>YYUI\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\YWindowImpl.cpp">
+      <Filter>YYUI\src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="YUI.rc">
+      <Filter>资源文件</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="small.ico">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="YUI.ico">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="icon1.ico">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="00706.ico">
+      <Filter>资源文件</Filter>
+    </Image>
+  </ItemGroup>
+</Project>
