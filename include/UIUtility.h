@@ -4,12 +4,12 @@
 
 #pragma once
 
-#include "YYUI.h"
+#include "YUI.h"
 #include <windows.h>
 #include <string>
 #include <memory>
 
-namespace YYCOM
+namespace YUI
 {
    
     std::string WChar2Ansi(LPCWSTR pwStr);

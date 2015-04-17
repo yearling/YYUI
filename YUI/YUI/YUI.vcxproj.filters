@@ -69,28 +69,28 @@
     <ClInclude Include="..\..\include\YYException.hpp">
       <Filter>YYUI\include\Exception</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\YYUI.h">
+    <ClInclude Include="..\..\include\ControlUI.h">
       <Filter>YYUI\include\base</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\YWindowWnd.h">
+    <ClInclude Include="..\..\include\PaintManagerUI.h">
       <Filter>YYUI\include\base</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\YPaintManagerUI.h">
+    <ClInclude Include="..\..\include\DlgBuilder.h">
       <Filter>YYUI\include\base</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\YControlUI.h">
+    <ClInclude Include="..\..\include\WindowImpl.h">
       <Filter>YYUI\include\base</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\YUIDlgBuilder.h">
+    <ClInclude Include="..\..\include\WindowWnd.h">
       <Filter>YYUI\include\base</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\YWindowImpl.h">
+    <ClInclude Include="..\..\include\UIDef.h">
       <Filter>YYUI\include\base</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\YYUIDef.h">
+    <ClInclude Include="..\..\include\UIUtility.h">
       <Filter>YYUI\include\base</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\YYUtility.h">
+    <ClInclude Include="..\..\include\YUI.h">
       <Filter>YYUI\include\base</Filter>
     </ClInclude>
   </ItemGroup>
@@ -101,25 +101,22 @@
     <ClCompile Include="YUI.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\YWindowWnd.cpp">
+    <ClCompile Include="..\..\src\ControlUI.cpp">
       <Filter>YYUI\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\YPaintManagerUI.cpp">
+    <ClCompile Include="..\..\src\PaintManagerUI.cpp">
       <Filter>YYUI\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\YControlUI.cpp">
+    <ClCompile Include="..\..\src\DlgBuilder.cpp">
       <Filter>YYUI\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\YYUtility.cpp">
+    <ClCompile Include="..\..\src\WindowImpl.cpp">
       <Filter>YYUI\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\YUIDlgBuilder.cpp">
+    <ClCompile Include="..\..\src\WindowWnd.cpp">
       <Filter>YYUI\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\YWindowImpl.cpp">
-      <Filter>YYUI\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\YYUI.cpp">
+    <ClCompile Include="..\..\src\UIUtility.cpp">
       <Filter>YYUI\src</Filter>
     </ClCompile>
   </ItemGroup>

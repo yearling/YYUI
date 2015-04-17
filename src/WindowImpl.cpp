@@ -1,9 +1,9 @@
 
-#include "YYUI.h"
-#include "YWindowImpl.h"
-#include "YYUtility.h"
+#include "YUI.h"
+#include "WindowImpl.h"
+#include "UIUtility.h"
 #include <Windowsx.h>
-namespace YYCOM
+namespace YUI
 {
 
     WindowImpl::WindowImpl()
@@ -55,7 +55,7 @@ namespace YYCOM
         return CS_DBLCLKS;
     }
 
-    YYCOM::UILIB_RESOURCETYPE WindowImpl::GetResourceType() const
+    YUI::UILIB_RESOURCETYPE WindowImpl::GetResourceType() const
     {
         return UILIB_FILE;
     }
@@ -70,7 +70,7 @@ namespace YYCOM
         return _T("");
     }
 
-    std::shared_ptr<YControlUI> WindowImpl::CreateControl(const YString & strClassName)
+    std::shared_ptr<ControlUI> WindowImpl::CreateControl(const YString & strClassName)
     {
         return nullptr;
     }

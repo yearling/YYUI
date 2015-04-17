@@ -148,11 +148,11 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\YControlUI.h" />
-    <ClInclude Include="..\..\include\YPaintManagerUI.h" />
-    <ClInclude Include="..\..\include\YUIDlgBuilder.h" />
-    <ClInclude Include="..\..\include\YWindowImpl.h" />
-    <ClInclude Include="..\..\include\YWindowWnd.h" />
+    <ClInclude Include="..\..\include\ControlUI.h" />
+    <ClInclude Include="..\..\include\PaintManagerUI.h" />
+    <ClInclude Include="..\..\include\DlgBuilder.h" />
+    <ClInclude Include="..\..\include\WindowImpl.h" />
+    <ClInclude Include="..\..\include\WindowWnd.h" />
     <ClInclude Include="..\..\include\YYDisableIf.h" />
     <ClInclude Include="..\..\include\YYErrorInfo.h" />
     <ClInclude Include="..\..\include\YYException.hpp" />
@@ -161,22 +161,21 @@
     <ClInclude Include="..\..\include\YYExceptionToString.h" />
     <ClInclude Include="..\..\include\YYGetErrorInfo.h" />
     <ClInclude Include="..\..\include\YYThrowException.h" />
-    <ClInclude Include="..\..\include\YYUI.h" />
-    <ClInclude Include="..\..\include\YYUIDef.h" />
-    <ClInclude Include="..\..\include\YYUtility.h" />
+    <ClInclude Include="..\..\include\YUI.h" />
+    <ClInclude Include="..\..\include\UIDef.h" />
+    <ClInclude Include="..\..\include\UIUtility.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="YUI.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\YControlUI.cpp" />
-    <ClCompile Include="..\..\src\YPaintManagerUI.cpp" />
-    <ClCompile Include="..\..\src\YUIDlgBuilder.cpp" />
-    <ClCompile Include="..\..\src\YWindowImpl.cpp" />
-    <ClCompile Include="..\..\src\YWindowWnd.cpp" />
-    <ClCompile Include="..\..\src\YYUI.cpp" />
-    <ClCompile Include="..\..\src\YYUtility.cpp" />
+    <ClCompile Include="..\..\src\ControlUI.cpp" />
+    <ClCompile Include="..\..\src\PaintManagerUI.cpp" />
+    <ClCompile Include="..\..\src\DlgBuilder.cpp" />
+    <ClCompile Include="..\..\src\WindowImpl.cpp" />
+    <ClCompile Include="..\..\src\WindowWnd.cpp" />
+    <ClCompile Include="..\..\src\UIUtility.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

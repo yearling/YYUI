@@ -2,34 +2,34 @@
 // Create by yyCom ,2015/4/10
 //////////////////////////////////////////////////////////////////////////
 
-#include "YYUI.h"
-#include "YWindowWnd.h"
-#include "YControlUI.h"
-#include "YYUIDef.h"
-#include "YYUtility.h"
-#include "YPaintManagerUI.h"
+#include "YUI.h"
+#include "WindowWnd.h"
+#include "ControlUI.h"
+#include "UIDef.h"
+#include "UIUtility.h"
+#include "PaintManagerUI.h"
 
 
-namespace YYCOM
+namespace YUI
 {
 
-    YWindowWnd::YWindowWnd() : m_hWnd( NULL ),
+    WindowWnd::WindowWnd() : m_hWnd( NULL ),
         m_OldWndProc( ::DefWindowProc ),
         m_bSubClassed( false )
     {
 
     }
 
-    void YWindowWnd::RegisterWindowClass()
+    void WindowWnd::RegisterWindowClass()
     {
         WNDCLASSEX wc;
         ZeroMemory(&wc,sizeof(wc));
         wc.cbSize = sizeof(wc);
         wc.style = GetClassStyle();
-        wc.lpfnWndProc = YWindowWnd::WndProc; //用自己的WndProc
+        wc.lpfnWndProc = WindowWnd::WndProc; //用自己的WndProc
         wc.cbClsExtra = 0;
         wc.cbWndExtra = 0;
-        wc.hInstance = YPaintManagerUI::GetInstance();
+        wc.hInstance = PaintManagerUI::GetInstance();
         wc.hIcon = NULL;
         wc.hCursor = ::LoadCursor(NULL, IDC_ARROW);
         wc.hbrBackground = NULL;
@@ -50,7 +50,7 @@ namespace YYCOM
     }
 
 
-    void YWindowWnd::RegisterSuperClass()
+    void WindowWnd::RegisterSuperClass()
     {
         //！！目前还不知道有什么用
         //功能是如下
@@ -62,14 +62,14 @@ namespace YYCOM
         wc.cbSize = sizeof(wc);
         if( !::GetClassInfoEx( NULL, GetSuperClassName() , &wc) )
         {
-            if( !::GetClassInfoEx(YPaintManagerUI::GetInstance(),GetSuperClassName(),&wc))
+            if( !::GetClassInfoEx(PaintManagerUI::GetInstance(),GetSuperClassName(),&wc))
             {
                 THROW_EXCEPTION(YYUIException()<< UIErrorStr(_T("找不到Register Class Name"))); 
             }
         }
         m_OldWndProc = wc.lpfnWndProc;
-        wc.lpfnWndProc = YWindowWnd::ControlProc;
-        wc.hInstance = YPaintManagerUI::GetInstance();
+        wc.lpfnWndProc = WindowWnd::ControlProc;
+        wc.hInstance = PaintManagerUI::GetInstance();
         wc.lpszClassName = GetWindowClassName();
 
         ATOM hr = ::RegisterClassEx(&wc);
@@ -81,12 +81,12 @@ namespace YYCOM
         }
     }
 
-    HWND YWindowWnd::Create(HWND hwndParent, LPCTSTR pstrName, DWORD dwStyle, DWORD dwExStyle, const RECT rc, HMENU hMenu/*= NULL*/)
+    HWND WindowWnd::Create(HWND hwndParent, LPCTSTR pstrName, DWORD dwStyle, DWORD dwExStyle, const RECT rc, HMENU hMenu/*= NULL*/)
     {
         return Create(hwndParent, pstrName, dwStyle, dwExStyle, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, hMenu );
     }
 
-    HWND YWindowWnd::Create(HWND hWndParent, LPCTSTR pstrName, DWORD dwStyple, DWORD dwExStyle, int x /*= CW_USEDEFAULT*/, int y /*= CW_USEDEFAULT*/, int cx /*= CW_USEDEFAULT*/, int cy /*= CW_USEDEFAULT*/, HMENU hMenu /*= NULL*/)
+    HWND WindowWnd::Create(HWND hWndParent, LPCTSTR pstrName, DWORD dwStyple, DWORD dwExStyle, int x /*= CW_USEDEFAULT*/, int y /*= CW_USEDEFAULT*/, int cx /*= CW_USEDEFAULT*/, int cy /*= CW_USEDEFAULT*/, HMENU hMenu /*= NULL*/)
     {
         try
         {
@@ -95,7 +95,7 @@ namespace YYCOM
                 RegisterSuperClass();   //如果SuperClassName存在的话就创建SuperClass
             else
                 RegisterWindowClass();
-            m_hWnd = CreateWindowEx( dwExStyle, GetWindowClassName(), pstrName, dwStyple, x, y, cx, cy, hWndParent, hMenu, YPaintManagerUI::GetInstance(), this);
+            m_hWnd = CreateWindowEx( dwExStyle, GetWindowClassName(), pstrName, dwStyple, x, y, cx, cy, hWndParent, hMenu, PaintManagerUI::GetInstance(), this);
 
             assert( m_hWnd != NULL );
             return m_hWnd;
@@ -106,25 +106,25 @@ namespace YYCOM
         }
     }
 
-    HWND YWindowWnd::CreateUIWindow(HWND hWndParent, LPCTSTR pstrWindowName, DWORD dwStyle /*=0*/, DWORD dwExStyle/*=0*/)
+    HWND WindowWnd::CreateUIWindow(HWND hWndParent, LPCTSTR pstrWindowName, DWORD dwStyle /*=0*/, DWORD dwExStyle/*=0*/)
     {
         return Create(hWndParent,pstrWindowName,dwStyle,dwExStyle,0,0,0,0,NULL);
     }
 
-    UINT YWindowWnd::GetClassStyle() const
+    UINT WindowWnd::GetClassStyle() const
     {
         return 0;
     }
 
-    LRESULT CALLBACK YWindowWnd::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+    LRESULT CALLBACK WindowWnd::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
-        YWindowWnd *pWnd = NULL;
+        WindowWnd *pWnd = NULL;
 
         if(uMsg == WM_NCCREATE )
         {
             //窗口刚开始创建时CreateWindowEx，最后一个参数LPVOID lpParam，保存了当前的this指针，这里取出来；
             LPCREATESTRUCT lpcs = reinterpret_cast<LPCREATESTRUCT>( lParam );
-            pWnd = static_cast<YWindowWnd*>( lpcs->lpCreateParams );
+            pWnd = static_cast<WindowWnd*>( lpcs->lpCreateParams );
             pWnd->m_hWnd = hWnd;
             //这时把YWindowWnd的指针绑到当前生成的HWND上
             //相当于每个HWND都通过这个指针映射到一个YWinodwWnd的类
@@ -132,7 +132,7 @@ namespace YYCOM
         }
         else
         {
-            pWnd = reinterpret_cast< YWindowWnd* >( ::GetWindowLongPtr( hWnd,GWLP_USERDATA ) );
+            pWnd = reinterpret_cast< WindowWnd* >( ::GetWindowLongPtr( hWnd,GWLP_USERDATA ) );
             if(uMsg == WM_NCDESTROY && pWnd != NULL )
             {
                 //一般调用的是DefWindowProc
@@ -153,7 +153,7 @@ namespace YYCOM
             return ::DefWindowProc(hWnd,uMsg,wParam,lParam);
     }
 
-    void YWindowWnd::UnsubClass()
+    void WindowWnd::UnsubClass()
     {
         assert( ::IsWindow(m_hWnd) );
         if( ::IsWindow(m_hWnd) )
@@ -165,12 +165,12 @@ namespace YYCOM
         m_bSubClassed = false;
     }
 
-    HWND YWindowWnd::SubClass(HWND hWnd)
+    HWND WindowWnd::SubClass(HWND hWnd)
     {
         assert(::IsWindow(hWnd));
         assert(m_hWnd == NULL);
         //把当前YWindowWnd的WndProc设为hWnd的WndProc,之前的保存;
-        m_OldWndProc = (WNDPROC)SetWindowLongPtr((hWnd), GWLP_WNDPROC, (LPARAM)(WNDPROC)(YWindowWnd::WndProc));
+        m_OldWndProc = (WNDPROC)SetWindowLongPtr((hWnd), GWLP_WNDPROC, (LPARAM)(WNDPROC)(WindowWnd::WndProc));
         if( m_OldWndProc == NULL )
             return NULL;
         m_bSubClassed = true;
@@ -179,37 +179,37 @@ namespace YYCOM
         return m_hWnd;
     }
 
-    void YWindowWnd::OnFinalMessage(HWND /*hWnd*/)
+    void WindowWnd::OnFinalMessage(HWND /*hWnd*/)
     {
 
     }
 
-    LRESULT YWindowWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
+    LRESULT WindowWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
         return ::CallWindowProc( m_OldWndProc, m_hWnd, uMsg, wParam, lParam);
     }
 
     
 
-    LPCTSTR YWindowWnd::GetSuperClassName() const
+    LPCTSTR WindowWnd::GetSuperClassName() const
     {
         return NULL;
     }
 
-    LRESULT CALLBACK YWindowWnd::ControlProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+    LRESULT CALLBACK WindowWnd::ControlProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
-        YWindowWnd *pWnd = nullptr;
+        WindowWnd *pWnd = nullptr;
         if( uMsg == WM_NCCREATE )
         {
             LPCREATESTRUCT lpcs = reinterpret_cast<LPCREATESTRUCT>( lParam );
-            pWnd = static_cast<YWindowWnd*>( lpcs->lpCreateParams );
+            pWnd = static_cast<WindowWnd*>( lpcs->lpCreateParams );
             //之前的窗口的附加指针已经被占用，只能用附加Prop
             ::SetProp( hWnd, _T("YYProperty"), (HANDLE)pWnd );
             pWnd->m_hWnd = hWnd;
         }
         else
         {
-            pWnd = reinterpret_cast<YWindowWnd *>(::GetProp(hWnd, _T("YYProperty")));
+            pWnd = reinterpret_cast<WindowWnd *>(::GetProp(hWnd, _T("YYProperty")));
             if( uMsg == WM_NCDESTROY && pWnd != nullptr )
             {
                 LRESULT lRes = ::CallWindowProc( pWnd->m_OldWndProc, hWnd, uMsg, wParam, lParam );
@@ -229,7 +229,7 @@ namespace YYCOM
 
     
 
-    void YWindowWnd::ShowWindow(bool bShow /*= true*/, bool bTakeFocus /*= true*/)
+    void WindowWnd::ShowWindow(bool bShow /*= true*/, bool bTakeFocus /*= true*/)
     {
         assert( ::IsWindow( m_hWnd ) );
         if( !::IsWindow( m_hWnd ) )
@@ -237,7 +237,7 @@ namespace YYCOM
         ::ShowWindow(m_hWnd, bShow? ( bTakeFocus ? SW_SHOWNORMAL : SW_SHOWNOACTIVATE ) : SW_HIDE);
     }
 
-    UINT YWindowWnd::ShowModal()
+    UINT WindowWnd::ShowModal()
     {
         assert(::IsWindow(m_hWnd));
         UINT nRet = 0;
@@ -254,7 +254,7 @@ namespace YYCOM
                 ::EnableWindow( hWndParent, TRUE ) ;
                 ::SetFocus( hWndParent );
             }
-            if( !YPaintManagerUI::TranslateMessage(& msg ) )
+            if( !PaintManagerUI::TranslateMessage(& msg ) )
             {
                 ::TranslateMessage(&msg);
                 ::DispatchMessage(&msg);
@@ -269,7 +269,7 @@ namespace YYCOM
         return nRet;
     }
 
-    void YWindowWnd::Close(UINT nRet)
+    void WindowWnd::Close(UINT nRet)
     {
         assert(::IsWindow(m_hWnd));
         if( !::IsWindow( m_hWnd ) )
@@ -277,19 +277,19 @@ namespace YYCOM
         PostMessage( WM_CLOSE, (WPARAM)nRet , 0L );
     }
 
-    LRESULT YWindowWnd::SendMessage(UINT uMsg, WPARAM wParam /*= 0*/, LPARAM lParam /*= 0L*/)
+    LRESULT WindowWnd::SendMessage(UINT uMsg, WPARAM wParam /*= 0*/, LPARAM lParam /*= 0L*/)
     {
         assert( ::IsWindow( m_hWnd ) );
         return ::SendMessage( m_hWnd, uMsg, wParam, lParam);
     }
 
-    LRESULT YWindowWnd::PostMessage(UINT uMsg, WPARAM wParam /*= 0*/, LPARAM lParam /*= 0L*/)
+    LRESULT WindowWnd::PostMessage(UINT uMsg, WPARAM wParam /*= 0*/, LPARAM lParam /*= 0L*/)
     {
         assert( ::IsWindow( m_hWnd ) );
         return ::PostMessage( m_hWnd, uMsg, wParam, lParam);
     }
 
-    void YWindowWnd::CenterWindow()
+    void WindowWnd::CenterWindow()
     {
         assert( ::IsWindow( m_hWnd ));
         assert( (GetWindowLong( m_hWnd, GWL_STYLE) & WS_CHILD) == 0 );
@@ -336,9 +336,9 @@ namespace YYCOM
 
     }
 
-    void YWindowWnd::SetIcon(UINT nRes)
+    void WindowWnd::SetIcon(UINT nRes)
     {
-        HICON hIcon = (HICON)::LoadImage(YPaintManagerUI::GetInstance(), 
+        HICON hIcon = (HICON)::LoadImage(PaintManagerUI::GetInstance(), 
                                         MAKEINTRESOURCE(nRes), 
                                         IMAGE_ICON,
                                         (::GetSystemMetrics(SM_CXICON) + 15) & ~15,
@@ -348,13 +348,13 @@ namespace YYCOM
         ::SendMessage( m_hWnd, WM_SETICON, (WPARAM)FALSE, (LPARAM)hIcon);
     }
 
-    YWindowWnd::~YWindowWnd()
+    WindowWnd::~WindowWnd()
     {
 
     }
 
 
-    void YNotifyPump::NotifyPump(NotifyMsg & msg)
+    void INotifyPump::NotifyPump(NotifyMsg & msg)
     {
         //to do ??没看明白加了个virtual wnd做什么用
         HandleMsg(msg);
@@ -364,7 +364,7 @@ namespace YYCOM
 
     
 
-    void YNotifyPump::HandleMsg(const NotifyMsg & msg)
+    void INotifyPump::HandleMsg(const NotifyMsg & msg)
     {
         auto strMsgType = msg.strType;
         auto spControler = msg.pSender.lock();
@@ -375,7 +375,7 @@ namespace YYCOM
         auto pos = m_MessageMap.find(ss);
         if(pos == m_MessageMap.end())
         {
-            YMsgHandleChain::HandleMsg(msg);
+            MsgHandleChain::HandleMsg(msg);
         }
         else
         {
@@ -385,19 +385,19 @@ namespace YYCOM
     }
 
 
-    void YMsgHandleChain::HandleMsg(const NotifyMsg & msg)
+    void MsgHandleChain::HandleMsg(const NotifyMsg & msg)
     {
         auto sp= m_wpSuccessor.lock();
         if(sp)
             sp->HandleMsg(msg);
     }
 
-    void YMsgHandleChain::SetSuccessor(std::shared_ptr<YMsgHandleChain> & sp)
+    void MsgHandleChain::SetSuccessor(std::shared_ptr<MsgHandleChain> & sp)
     {
         m_wpSuccessor = sp;
     }
 
-    YMsgHandleChain::YMsgHandleChain()
+    MsgHandleChain::MsgHandleChain()
     {
 
     }

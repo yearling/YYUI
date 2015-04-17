@@ -2,9 +2,9 @@
 // Create by yyCom, 2015/4/10
 //////////////////////////////////////////////////////////////////////////
 
-#include "YYUtility.h"
+#include "UIUtility.h"
 
-namespace YYCOM
+namespace YUI
 {
 
 
@@ -157,7 +157,7 @@ namespace YYCOM
         return ( left == 0 && right == 0 && top == 0 && bottom == 0);
     }
 
-    YYCOM::YString GetFileExtension(const YString & str)
+    YUI::YString GetFileExtension(const YString & str)
     {
         auto pos = str.find_last_of(_T('.'));
         if( pos == YString::npos)
@@ -166,7 +166,7 @@ namespace YYCOM
         return str.substr(pos+1);
     }
 
-    YYCOM::YString GetFileDir(const YString & strFilePath)
+    YUI::YString GetFileDir(const YString & strFilePath)
     {
         auto pos = strFilePath.find_last_of(_T("/\\"));
         if( pos == YString::npos )
@@ -175,7 +175,7 @@ namespace YYCOM
         return strFilePath.substr(0,pos);
     }
 
-    YYCOM::YString GetFileName(const YString & strFilePath)
+    YUI::YString GetFileName(const YString & strFilePath)
     {
         auto pos = strFilePath.find_last_of(_T("/\\"));
         if( pos == YString::npos )

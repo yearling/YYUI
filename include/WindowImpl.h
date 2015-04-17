@@ -1,12 +1,12 @@
 #pragma once
 
-#include "YYUI.h"
-#include "YWindowWnd.h"
-#include "YYUIDef.h"
-#include "YUIDlgBuilder.h"
-#include "YPaintManagerUI.h"
+#include "YUI.h"
+#include "WindowWnd.h"
+#include "UIDef.h"
+#include "DlgBuilder.h"
+#include "PaintManagerUI.h"
 
-namespace YYCOM
+namespace YUI
 {
     enum UILIB_RESOURCETYPE
     {
@@ -17,8 +17,8 @@ namespace YYCOM
     };
 
     class WindowImpl 
-        : public YWindowWnd
-        , public YNotifyPump
+        : public WindowWnd
+        , public INotifyPump
         , public INotifyUI
         , public IMessageFilterUI
         , public IDialogBuilderCallBack
@@ -37,14 +37,14 @@ namespace YYCOM
         virtual LPCTSTR                 GetWindowClassName(void) const= 0;
         virtual LRESULT                 ResponseDefaultKeyEvent(WPARAM wParam);
 
-        YPaintManagerUI                 m_PaintManager;
+        PaintManagerUI                 m_PaintManager;
 
     public:
         virtual UINT                    GetClassStyle() const;
         virtual UILIB_RESOURCETYPE      GetResourceType() const;
         virtual YString                 GetZIPFileName() const;
         virtual YString                 GetResourceID() const;
-        virtual std::shared_ptr<YControlUI> CreateControl(const YString & strClassName);
+        virtual std::shared_ptr<ControlUI> CreateControl(const YString & strClassName);
         virtual LRESULT                 MessageHandler(UINT uMsg, WPARAM wParam, LPARAM /*lParam*/, bool& /*bHandled*/);
         virtual LRESULT                 OnClose(UINT uMsg, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled);
         virtual LRESULT                 OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled);

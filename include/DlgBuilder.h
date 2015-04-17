@@ -1,20 +1,20 @@
 #pragma once
 
-#include "YYUI.h"
+#include "YUI.h"
 #include <memory>
 
-namespace YYCOM
+namespace YUI
 {
     class IDialogBuilderCallBack
     {
     public:
-        virtual std::shared_ptr<YControlUI> 
+        virtual std::shared_ptr<ControlUI> 
                                         CreateControl(YString pstrClass) =0 ;
     };
 
-    class YDialogBuilder
+    class DialogBuilder
     {
     public:
-        YDialogBuilder();
+        DialogBuilder();
     };
 }

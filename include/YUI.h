@@ -14,7 +14,10 @@
 #include <vector>
 #include <map>
 #include <unordered_map>
-namespace YYCOM
+using YYCOM::Exception;
+using YYCOM::ThrowException;
+using YYCOM::ErrorInfo;
+namespace YUI
 {
     //YString 用的就是标准string
 #if defined UNICODE || defined _UNICODE
@@ -28,22 +31,23 @@ namespace YYCOM
 	typedef YYCOM::ErrorInfo<struct tag_err_str,YString> UIErrorStr;
 
     //定义消息名
-    extern const YString                MSGTYPE_windows_init;
-
+#define  MSG_WindowInit                 (_T("windowinit"))
+#define  MSG_KillFocus                  (_T("killfocus"))
+#define  MSG_SetFocus                   (_T("setfocus"))
    
     //前置定义
-    class YControlUI;
+    class ControlUI;
     class INotifyUI;
     class IMessageFilterUI;
     class ITranslateAccelerator;
-    class YPaintManagerUI;
+    class PaintManagerUI;
 
     //定义消息体
     struct NotifyMsg
     {
         YString                         strType;
         YString                         strVirtualWnd;
-        std::weak_ptr<YControlUI>       pSender;
+        std::weak_ptr<ControlUI>       pSender;
         unsigned long                   lTimeStamp;
         POINT                           ptMouse;
         WPARAM                          wParam;
@@ -81,7 +85,7 @@ namespace YYCOM
         UIEVENT_COMMAND,
         UIEVENT__LAST,
     };
-    struct tagTFontInfo
+    struct FontInfo
     {
         HFONT                           m_hFont;
         YString                     m_strFontName;
@@ -92,7 +96,7 @@ namespace YYCOM
         TEXTMETRIC                      m_tm;
     };
 
-    struct tagTImageInfo
+    struct ImageInfo
     {
         HBITMAP                         m_hBitmap;
         int                             m_nX;
@@ -101,9 +105,9 @@ namespace YYCOM
         YString                     m_strResType;
         DWORD                           m_dwMask;
     };
-    struct YTimer
+    struct TimerInfo
     {
-        std::weak_ptr<YControlUI>       pSender;
+        std::weak_ptr<ControlUI>       pSender;
         UINT                            nLocalID;
         HWND                            hWnd;
         UINT                            uWinTimer;
@@ -112,16 +116,27 @@ namespace YYCOM
     struct ControlEvent
     {
         int                             m_Type;
-        std::weak_ptr<YControlUI>       m_pSender;
+        std::weak_ptr<ControlUI>        m_pSender;
         DWORD                           m_dwTimestamp;
         POINT                           m_ptMouse;
         TCHAR                           m_chKey;
         WORD                            m_wKeyState;
         WPARAM                          m_wParam;
         LPARAM                          m_lParam;
+        ControlEvent():m_Type( UIEVENT__FIRST )
+                                        ,m_dwTimestamp(0)
+                                        ,m_wKeyState(0)
+                                        ,m_wParam(0)
+                                        ,m_lParam(0)
+        {
+            m_ptMouse.x = -1;
+            m_ptMouse.y = -1;
+            m_chKey = _T('\0');
+        }
+
     };
 
-    struct tagTRelativePosUI
+    struct RelativePosUI
     {
         bool                            m_bRelative;
         SIZE                            m_szParent;
@@ -130,4 +145,5 @@ namespace YYCOM
         int                             m_nZoomXPercent;
         int                             m_nZoomYPercent;
     };
+
 }

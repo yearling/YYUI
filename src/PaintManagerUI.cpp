@@ -2,22 +2,22 @@
 // Create by yyCom, 2015/4/10
 //////////////////////////////////////////////////////////////////////////
 
-#include "YYUI.h"
-#include "YPaintManagerUI.h"
-#include "YYUtility.h"
+#include "YUI.h"
+#include "PaintManagerUI.h"
+#include "UIUtility.h"
 #include <commctrl.h>
 #include <WindowsX.h>
 #pragma comment(lib,"comctl32.lib")
-namespace YYCOM
+namespace YUI
 {
 
-    void YYCOM::YPaintManagerUI::SetInstance(HINSTANCE hInst)
+    void YUI::PaintManagerUI::SetInstance(HINSTANCE hInst)
     {
         g_hInstance = hInst;
     }
     HPEN g_hUpdateRectPen = NULL;
 
-    YYCOM::YPaintManagerUI::YPaintManagerUI():
+    YUI::PaintManagerUI::PaintManagerUI():
         m_hWndPaint( NULL )
         ,m_hDCPaint( NULL)
         ,m_hDCOffscreen( NULL )
@@ -45,7 +45,7 @@ namespace YYCOM
         LOGFONT lf = { 0 };
         ::GetObject(::GetStockObject(DEFAULT_GUI_FONT),sizeof(lf),&lf);
         lf.lfCharSet = DEFAULT_CHARSET;
-        if( !YPaintManagerUI::g_strDefaultFontName.empty() )
+        if( !PaintManagerUI::g_strDefaultFontName.empty() )
         {
             _tcscpy_s(lf.lfFaceName, LF_FACESIZE, g_strDefaultFontName.c_str());
             HFONT hDefaultFont = ::CreateFontIndirect( &lf );
@@ -79,52 +79,52 @@ namespace YYCOM
         }
     }
 
-    YYCOM::YPaintManagerUI::~YPaintManagerUI()
+    YUI::PaintManagerUI::~PaintManagerUI()
     {
         //!! todo
     }
 
 
-    bool YYCOM::YPaintManagerUI::TranslateMessage(const LPMSG pMsg)
+    bool YUI::PaintManagerUI::TranslateMessage(const LPMSG pMsg)
     {
         return false;
     }
-    HINSTANCE YYCOM::YPaintManagerUI::g_hInstance = NULL;
+    HINSTANCE YUI::PaintManagerUI::g_hInstance = NULL;
 
-    std::vector<void*> YYCOM::YPaintManagerUI::g_vecTranslateAccelerator;
+    std::vector<void*> YUI::PaintManagerUI::g_vecTranslateAccelerator;
 
-    YString YYCOM::YPaintManagerUI::g_strDefaultFontName;
-
-
+    YString YUI::PaintManagerUI::g_strDefaultFontName;
 
 
 
-    short YYCOM::YPaintManagerUI::g_L       = 180;
 
-    short YYCOM::YPaintManagerUI::g_S       = 180;
 
-    short YYCOM::YPaintManagerUI::g_H       = 180;
+    short YUI::PaintManagerUI::g_L       = 180;
 
-    HANDLE YYCOM::YPaintManagerUI::g_hResourceZip = NULL;
+    short YUI::PaintManagerUI::g_S       = 180;
 
-    bool YYCOM::YPaintManagerUI::g_bCachedResourceZip = false;
+    short YUI::PaintManagerUI::g_H       = 180;
 
-    YString YYCOM::YPaintManagerUI::g_strResourceZip;
+    HANDLE YUI::PaintManagerUI::g_hResourceZip = NULL;
 
-    YString YYCOM::YPaintManagerUI::g_strResourcePath;
+    bool YUI::PaintManagerUI::g_bCachedResourceZip = false;
 
-    HINSTANCE YYCOM::YPaintManagerUI::g_hResourceInstance = NULL;
+    YString YUI::PaintManagerUI::g_strResourceZip;
+
+    YString YUI::PaintManagerUI::g_strResourcePath;
+
+    HINSTANCE YUI::PaintManagerUI::g_hResourceInstance = NULL;
 
    // std::set<funCreateControl> YPaintManagerUI::g_setPlugins;
 
-    std::vector< std::weak_ptr<YPaintManagerUI> > YPaintManagerUI::g_vecPreMessages;
+    std::vector< std::weak_ptr<PaintManagerUI> > PaintManagerUI::g_vecPreMessages;
 
 
 
 
 
 
-    void YPaintManagerUI::Init(HWND hWnd)
+    void PaintManagerUI::Init(HWND hWnd)
     {
         assert( ::IsWindow(hWnd ) && "hwnd 不是个有效值");
 
@@ -133,7 +133,7 @@ namespace YYCOM
         g_vecPreMessages.push_back(this->shared_from_this());
     }
 
-    YString YPaintManagerUI::GetInstancePath()
+    YString PaintManagerUI::GetInstancePath()
     {
         if( g_hInstance == NULL )
             return _T('\0');
@@ -142,52 +142,52 @@ namespace YYCOM
         return GetFileDir(YString(szModule));
     }
 
-    YYCOM::YString YPaintManagerUI::GetCurrentPath()
+    YUI::YString PaintManagerUI::GetCurrentPath()
     {
         TCHAR szPath[MAX_PATH +1 ]= { 0 };
         ::GetCurrentDirectory(MAX_PATH,szPath);
         return szPath;
     }
 
-    HINSTANCE YPaintManagerUI::GetResourceDll()
+    HINSTANCE PaintManagerUI::GetResourceDll()
     {
         if( g_hResourceInstance == NULL )
             return g_hInstance;
         return g_hResourceInstance;
     }
 
-    const YString & YPaintManagerUI::GetSourcePath()
+    const YString & PaintManagerUI::GetSourcePath()
     {
         return g_strResourcePath;
     }
 
-    const YString & YPaintManagerUI::GetResourceZip()
+    const YString & PaintManagerUI::GetResourceZip()
     {
         return g_strResourceZip;
     }
 
-    bool YPaintManagerUI::IsCachedResourceZip()
+    bool PaintManagerUI::IsCachedResourceZip()
     {
         return g_bCachedResourceZip;
     }
 
-    HANDLE YPaintManagerUI::GetResourceZipHandle()
+    HANDLE PaintManagerUI::GetResourceZipHandle()
     {
         return g_hResourceZip;
     }
 
    
-    void YPaintManagerUI::SetCurrentPath(const YString & strPath)
+    void PaintManagerUI::SetCurrentPath(const YString & strPath)
     {
         ::SetCurrentDirectory(strPath.c_str());
     }
 
-    void YPaintManagerUI::SetResourceDll(HINSTANCE hInstance)
+    void PaintManagerUI::SetResourceDll(HINSTANCE hInstance)
     {
         g_hResourceInstance = hInstance;
     }
 
-    void YPaintManagerUI::SetResourcePath(const YString &strPath)
+    void PaintManagerUI::SetResourcePath(const YString &strPath)
     {
         g_strResourcePath = strPath;
         if(g_strResourcePath.empty())
@@ -197,13 +197,13 @@ namespace YYCOM
             g_strResourcePath+=_T('\\');
     }
 
-    void YPaintManagerUI::SetResourceZip(void)
+    void PaintManagerUI::SetResourceZip(void)
     {
         //!todo 
         return;
     }
 
-    void YPaintManagerUI::ReloadSkin()
+    void PaintManagerUI::ReloadSkin()
     {
         for(auto iter = g_vecPreMessages.begin();iter!=g_vecPreMessages.end();++iter)
         {
@@ -215,7 +215,7 @@ namespace YYCOM
         }
     }
 
-    bool YPaintManagerUI::LoadPlugin(const YString & strModuleName)
+    bool PaintManagerUI::LoadPlugin(const YString & strModuleName)
     {
         assert(!strModuleName.empty());
         if(strModuleName.empty())
@@ -240,39 +240,39 @@ namespace YYCOM
     }
 #endif
 
-    HDC YPaintManagerUI::GetPaintDC() const
+    HDC PaintManagerUI::GetPaintDC() const
     {
         return m_hDCPaint;
     }
 
-    HWND YPaintManagerUI::GetPaintWindow() const
+    HWND PaintManagerUI::GetPaintWindow() const
     {
         return m_hWndPaint;
     }
 
-    HWND YPaintManagerUI::GetTooltipWindow() const
+    HWND PaintManagerUI::GetTooltipWindow() const
     {
         return m_hwndTooltip;
     }
 
-    POINT YPaintManagerUI::GetMousePos() const
+    POINT PaintManagerUI::GetMousePos() const
     {
         return m_ptLastMousePos;
     }
 
-    SIZE YPaintManagerUI::GetClientSize() const
+    SIZE PaintManagerUI::GetClientSize() const
     {
         RECT rcClient = { 0 };
         ::GetClientRect( m_hWndPaint, &rcClient);
         return YSize(rcClient.right - rcClient.left , rcClient.bottom - rcClient.top);
     }
 
-    SIZE YPaintManagerUI::GetInitSize() const
+    SIZE PaintManagerUI::GetInitSize() const
     {
         return m_szInitWindowSize;
     }
 
-    void YPaintManagerUI::SetInitSize(int cx, int cy)
+    void PaintManagerUI::SetInitSize(int cx, int cy)
     {
         m_szInitWindowSize.cx = cx;
         m_szInitWindowSize.cy = cy;
@@ -280,67 +280,67 @@ namespace YYCOM
             ::SetWindowPos(m_hWndPaint, NULL, 0, 0, cx, cy,SWP_NOZORDER | SWP_NOMOVE | SWP_NOACTIVATE);
     }
 
-    const RECT& YPaintManagerUI::GetSizeBox() const 
+    const RECT& PaintManagerUI::GetSizeBox() const 
     {
         return m_rcSizeBox;
     }
 
-    void YPaintManagerUI::SetSizeBox(const RECT &rcSizeBox)
+    void PaintManagerUI::SetSizeBox(const RECT &rcSizeBox)
     {
         m_rcSizeBox = rcSizeBox;
     }
 
-    const RECT& YPaintManagerUI::GetCaptionRect() const
+    const RECT& PaintManagerUI::GetCaptionRect() const
     {
         return m_rcCaption;
     }
 
-    void YPaintManagerUI::SetCaptionRect(const RECT & rcCaption)
+    void PaintManagerUI::SetCaptionRect(const RECT & rcCaption)
     {
         m_rcCaption =rcCaption;
     }
 
-    SIZE YPaintManagerUI::GetRoundCorner() const
+    SIZE PaintManagerUI::GetRoundCorner() const
     {
         return m_szRoundCorner;
     }
 
-    void YPaintManagerUI::SetRoundCorner(int cx, int cy)
+    void PaintManagerUI::SetRoundCorner(int cx, int cy)
     {
         m_szRoundCorner.cx = cx;
         m_szRoundCorner.cy = cy;
     }
 
-    SIZE YPaintManagerUI::GetMinInfo() const
+    SIZE PaintManagerUI::GetMinInfo() const
     {
         return m_szMinWindow;
     }
 
-    void YPaintManagerUI::SetMinInfo(int cx, int cy)
+    void PaintManagerUI::SetMinInfo(int cx, int cy)
     {
         assert(cx >= 0 && cy >= 0);
         m_szMinWindow.cx = cx;
         m_szMinWindow.cy = cy;
     }
 
-    SIZE YPaintManagerUI::GetMaxInfo() const
+    SIZE PaintManagerUI::GetMaxInfo() const
     {
         return m_szMaxWindow;
     }
 
-    void YPaintManagerUI::SetMaxInfo(int cx, int cy)
+    void PaintManagerUI::SetMaxInfo(int cx, int cy)
     {
         assert(cx >= 0 && cy >= 0);
         m_szMaxWindow.cx = cx;
         m_szMaxWindow.cy = cy;
     }
 
-    int YPaintManagerUI::GetTransparent() const
+    int PaintManagerUI::GetTransparent() const
     {
         return m_nOpacity;
     }
 
-    void YPaintManagerUI::SetTransparent(int nOpacity)
+    void PaintManagerUI::SetTransparent(int nOpacity)
     {
         if( nOpacity < 0)
             nOpacity = 0 ;
@@ -369,17 +369,17 @@ namespace YYCOM
         fSetLayeredWindowAttributes(m_hWndPaint, 0, nOpacity, LWA_ALPHA);
     }
 
-    void YPaintManagerUI::SetBackgroundTransparent(bool bTrans)
+    void PaintManagerUI::SetBackgroundTransparent(bool bTrans)
     {
         m_bAlphaBackGround = bTrans;
     }
 
-    bool YPaintManagerUI::IsShowUpdateRect() const
+    bool PaintManagerUI::IsShowUpdateRect() const
     {
         return m_bShowUpdateRect;
     }
 
-    void YPaintManagerUI::SetShowUpdateRect(bool bShow)
+    void PaintManagerUI::SetShowUpdateRect(bool bShow)
     {
         m_bShowUpdateRect = bShow;
     }
@@ -390,7 +390,7 @@ namespace YYCOM
         bool bPickNext;
     };
 
-    bool YPaintManagerUI::PreMessageHandler(UINT uMsg,WPARAM wParam,LPARAM lParam,LRESULT &lRes)
+    bool PaintManagerUI::PreMessageHandler(UINT uMsg,WPARAM wParam,LPARAM lParam,LRESULT &lRes)
     {
         for( auto filter : m_vecMessageFilters ) 
         {
@@ -444,7 +444,7 @@ namespace YYCOM
         return false;
     }
 
-    bool YPaintManagerUI::MessageHandler(UINT uMesg, WPARAM wParam, LPARAM lParam, LRESULT &lRes)
+    bool PaintManagerUI::MessageHandler(UINT uMesg, WPARAM wParam, LPARAM lParam, LRESULT &lRes)
     {
         if( m_hWndPaint == NULL )
             return false;
@@ -488,7 +488,7 @@ namespace YYCOM
             }
         case WM_CLOSE:
             {
-                ControlEvent eve = { 0 };
+                ControlEvent eve;
                 eve.m_ptMouse = m_ptLastMousePos;
                 eve.m_dwTimestamp = ::GetTickCount();
                 if( m_pEventHover )
@@ -565,7 +565,7 @@ namespace YYCOM
                         if( m_bFirstLayout )
                         {
                             m_bFirstLayout = false;
-                           SendNotify(m_pRoot,MSGTYPE_windows_init,0,0,false);
+                           SendNotify(m_pRoot,MSG_WindowInit,0,0,false);
                         }
                     }
                 }
@@ -654,7 +654,7 @@ namespace YYCOM
                 auto spControlFocus = m_pFocus.lock();
                 if(spControlFocus)
                 {
-                    ControlEvent eve =  { 0 };
+                    ControlEvent eve;
                     eve.m_Type = UIEVENT_WINDOWSIZE;
                     eve.m_pSender = m_pFocus;
                     eve.m_dwTimestamp = ::GetTickCount();
@@ -667,20 +667,217 @@ namespace YYCOM
 
         case WM_TIMER:
             {
+                for( auto iter : m_vecTimers)
+                {
+                    if(iter.hWnd == m_hWndPaint && iter.uWinTimer == LOWORD(wParam) && iter.bKilled == false)
+                    {
+                        ControlEvent eve;
+                        eve.m_Type = UIEVENT_TIMER;
+                        eve.m_pSender = iter.pSender;
+                        eve.m_wParam = iter.nLocalID;
+                        eve.m_dwTimestamp = ::GetTickCount();
+                        auto sp = iter.pSender.lock();
+                        if(sp)
+                            sp->Event(eve);
+                        break;
+                    }
+                }
+            }
+            break;
+        case WM_MOUSEHOVER:
+            {
+                m_bMouseTracking = false;
+                POINT pt= { GET_X_LPARAM( lParam ), GET_Y_LPARAM(lParam) };
+                auto spControl = FindControl(pt);
+                if(! spControl)
+                    break;
+                if( m_pEventHover )
+                {
+                    ControlEvent eve;
+                    eve.m_ptMouse = pt;
+                    eve.m_Type = UIEVENT_MOUSEHOVER;
+                    eve.m_pSender = m_pEventHover;
+                    eve.m_dwTimestamp = ::GetTickCount();
+                    m_pEventHover->Event(eve);
+                }
+                YString sToolTip = spControl->GetToolTip();
+                if( sToolTip.empty() ) return true;
+                ::ZeroMemory(&m_ToolTip, sizeof(TOOLINFO));
+                m_ToolTip.cbSize = sizeof(TOOLINFO);
+                m_ToolTip.uFlags = TTF_IDISHWND;
+                m_ToolTip.hwnd = m_hWndPaint;
+                m_ToolTip.uId = (UINT_PTR) m_hWndPaint;
+                m_ToolTip.hinst = g_hInstance;
+                m_ToolTip.lpszText = const_cast<LPTSTR>( (LPCTSTR) sToolTip.c_str() );
+                m_ToolTip.rect = spControl->GetPos();
+                if( m_hwndTooltip == NULL ) {
+                    m_hwndTooltip = ::CreateWindowEx(0, TOOLTIPS_CLASS, NULL, WS_POPUP | TTS_NOPREFIX | TTS_ALWAYSTIP, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, m_hWndPaint, NULL, g_hInstance, NULL);
+                    ::SendMessage(m_hwndTooltip, TTM_ADDTOOL, 0, (LPARAM) &m_ToolTip);
+                }
+                ::SendMessage( m_hwndTooltip,TTM_SETMAXTIPWIDTH,0, spControl->GetToolTipWidth());
+                ::SendMessage(m_hwndTooltip, TTM_SETTOOLINFO, 0, (LPARAM) &m_ToolTip);
+                ::SendMessage(m_hwndTooltip, TTM_TRACKACTIVATE, TRUE, (LPARAM) &m_ToolTip);
+
+            }
+            return true;
+            break;
+        case WM_MOUSELEAVE:
+            {
+                if( m_hwndTooltip != NULL ) ::SendMessage(m_hwndTooltip, TTM_TRACKACTIVATE, FALSE, (LPARAM) &m_ToolTip);
+                if( m_bMouseTracking ) ::SendMessage(m_hWndPaint, WM_MOUSEMOVE, 0, (LPARAM) -1);
+                m_bMouseTracking = false;
+            }
+            break;
+        case WM_MOUSEMOVE:
+            {
+                if(! m_bMouseTracking )
+                {
+                    TRACKMOUSEEVENT tme = { 0 };
+                    tme.cbSize = sizeof(TRACKMOUSEEVENT);
+                    tme.dwFlags = TME_HOVER | TME_LEAVE;
+                    tme.hwndTrack = m_hWndPaint;
+                    tme.dwHoverTime = m_hwndTooltip == NULL ? 400UL : (DWORD) ::SendMessage(m_hwndTooltip, TTM_GETDELAYTIME, TTDT_INITIAL, 0L);
+                    _TrackMouseEvent(&tme);
+                    m_bMouseTracking = true;
+                }
+                POINT pt= { GET_X_LPARAM( lParam) ,GET_Y_LPARAM(lParam) };
+                m_ptLastMousePos = pt;
+                std::shared_ptr<ControlUI> spNewHover = FindControl(pt);
+                if( spNewHover != NULL && spNewHover->GetManager() != this->shared_from_this() )
+                    break;
+                ControlEvent eve;
+                eve.m_ptMouse = pt;
+                eve.m_dwTimestamp = ::GetTickCount();
+                if(spNewHover != m_pEventHover && m_pEventHover)
+                {
+                    eve.m_Type = UIEVENT_MOUSELEAVE;
+                    eve.m_pSender = m_pEventHover;
+                    m_pEventHover->Event(eve);
+                    m_pEventHover = NULL;
+                    if( m_hwndTooltip != NULL )
+                        ::SendMessage(m_hwndTooltip, TTM_TRACKACTIVATE, FALSE, (LPARAM) &m_ToolTip);
+                }
+                if(spNewHover != m_pEventHover && spNewHover)
+                {
+                    eve.m_Type= UIEVENT_MOUSEENTER;
+                    eve.m_pSender = spNewHover;
+                    spNewHover->Event(eve);
+                    m_pEventHover = spNewHover;
+                }
+                if(m_pEventClick != NULL )
+                {
+                    eve.m_Type = UIEVENT_MOUSEMOVE;
+                    eve.m_pSender = m_pEventClick;
+                    m_pEventClick->Event(eve);
+                }
+                else if( spNewHover )
+                {
+                    eve.m_Type = UIEVENT_MOUSEMOVE;
+                    eve.m_pSender  = spNewHover;
+                    spNewHover->Event(eve);
+                }
                 
             }
             break;
+        case WM_LBUTTONDOWN:
+            {
+                ::SetFocus(m_hWndPaint);
+                POINT pt= { GET_X_LPARAM(lParam),GET_Y_LPARAM(lParam)};
+                m_ptLastMousePos = pt;
+                auto spControl = FindControl(pt);
+                if( spControl == NULL )
+                    return;
+                if( spControl->GetManager() != shared_from_this())
+                    break;
+                m_pEventClick = spControl;
+                spControl->SetFocus();
+                SetCapture();
+                ControlEvent eve;
+                eve.m_Type = UIEVENT_BUTTONDOWN;
+                eve.m_pSender = spControl;
+                eve.m_wParam = wParam;
+                eve.m_lParam = lParam;
+                eve.m_ptMouse = pt;
+                eve.m_wKeyState = (WORD )wParam;
+                eve.m_dwTimestamp = ::GetTickCount();
+                spControl->Event(eve);
+            }
+            break;
+        case WM_LBUTTONDBLCLK:
+            {
+                ::SetFocus(m_hWndPaint);
+                POINT pt= { GET_X_LPARAM(lParam),GET_Y_LPARAM(lParam)};
+                m_ptLastMousePos = pt;
+                auto spControl = FindControl(pt);
+                if( spControl == NULL )
+                    return;
+                if( spControl->GetManager() != shared_from_this())
+                    break;
+                SetCapture();
+                ControlEvent eve;
+                eve.m_Type = UIEVENT_DBLCLICK;
+                eve.m_pSender = spControl;
+                eve.m_ptMouse = pt;
+                eve.m_wKeyState = (WORD )wParam;
+                eve.m_dwTimestamp = ::GetTickCount();
+                spControl->Event(eve);
+                m_pEventClick = spControl;
+            }
+            break;
+        case WM_RBUTTONDOWN:
+            {
+                ::SetFocus(m_hWndPaint);
+                POINT pt= { GET_X_LPARAM(lParam),GET_Y_LPARAM(lParam)};
+                m_ptLastMousePos = pt;
+                auto spControl = FindControl(pt);
+                if( spControl == NULL )
+                    return;
+                if( spControl->GetManager() != shared_from_this())
+                    break;
+                spControl->SetFocus();
+                SetCapture();
+                ControlEvent eve;
+                eve.m_Type = UIEVENT_RBUTTONDOWN;
+                eve.m_pSender = spControl;
+                eve.m_wParam = wParam;
+                eve.m_lParam = lParam;
+                eve.m_ptMouse = pt;
+                eve.m_wKeyState = (WORD )wParam;
+                eve.m_dwTimestamp = ::GetTickCount();
+                spControl->Event(eve);
+                eve.m_lParam = lParam;
+                m_pEventClick = spControl;
+            }
+            break;
+        case WM_CONTEXTMENU:
+            {
+                POINT pt = { GET_X_LPARAM(lParam),GET_Y_LPARAM(lParam)};
+                ::ScreenToClient(m_hWndPaint,&pt);
+                m_ptLastMousePos = pt;
+                if( m_pEventClick == NULL )
+                    break;
+                ReleaseCapture();
+                ControlEvent eve;
+                eve.m_Type = UIEVENT_CONTEXTMENU;
+                eve.m_pSender = m_pEventClick;
+                eve.m_ptMouse  = pt;
+                eve.m_wKeyState = (WORD)wParam;
+                eve.m_lParam = (LPARAM) m_pEventClick.get();
+                eve.m_dwTimestamp = ::GetTickCount();
+                m_pEventClick->Event( eve );
+                m_pEventClick = NULL;
+            }
         default:
             break;
         }
     }
 
-    void YPaintManagerUI::SendNotify(NotifyMsg &Msg, bool bAsync /*= false */)
+    void PaintManagerUI::SendNotify(NotifyMsg &Msg, bool bAsync /*= false */)
     {
         assert(0 && "废弃的接口");
     }
 
-    void YPaintManagerUI::SendNotify(std::shared_ptr<YControlUI>& spControl,YString strMessage,WPARAM wParam /*=0*/, LPARAM lParam /*=0*/,bool bAsync /*= false */)
+    void PaintManagerUI::SendNotify(std::shared_ptr<ControlUI>& spControl,YString strMessage,WPARAM wParam /*=0*/, LPARAM lParam /*=0*/,bool bAsync /*= false */)
     {
         NotifyMsg msg;
         msg.pSender = spControl;
@@ -712,14 +909,66 @@ namespace YYCOM
         }
     }
 
-    bool YPaintManagerUI::SetNextTabControl(bool bForward/*= true*/)
+    bool PaintManagerUI::SetNextTabControl(bool bForward/*= true*/)
     {
         return false;
     }
 
+    std::shared_ptr<ControlUI> PaintManagerUI::FindControl(POINT pt) const
+    {
+        return std::shared_ptr<ControlUI>();
+    }
+
+    void PaintManagerUI::SetFocus(std::shared_ptr<ControlUI> &pControl)
+    {
+        HWND hFocusWnd = ::GetFocus();
+        if( hFocusWnd != m_hWndPaint && pControl != m_pFocus)
+        {
+            ::SetFocus(m_hWndPaint);
+        }
+        if( pControl == m_pFocus )
+            return;
+        if( m_pFocus )
+        {
+            ControlEvent eve;
+            eve.m_Type = UIEVENT_KILLFOCUS;
+            eve.m_pSender = pControl;
+            eve.m_dwTimestamp = ::GetTickCount();
+            m_pFocus->Event(eve);
+            SendNotify(m_pFocus,MSG_KillFocus);
+            m_pFocus = nullptr;
+        }
+        if( !pControl)
+            return;
+        if( pControl  && pControl->GetManager() == shared_from_this()
+                       && pControl->IsVisible()
+                       && pControl->IsEnable())
+        {
+            m_pFocus = pControl;
+            ControlEvent eve;
+            eve.m_Type = UIEVENT_SETFOCUS;
+            eve.m_pSender = pControl;
+            eve.m_dwTimestamp = ::GetTickCount();
+            m_pFocus->Event(eve);
+            SendNotify(m_pFocus,MSG_SetFocus);
+        }
+    }
+
+    void PaintManagerUI::SetCapture()
+    {
+        ::SetCapture( m_hWndPaint );
+        m_bMouseCapture = true;
+    }
+
+    void PaintManagerUI::ReleaseCapture()
+    {
+        ::ReleaseCapture();
+        m_bMouseCapture = false;
+    }
 
 
-    HINSTANCE YYCOM::YPaintManagerUI::GetInstance()
+
+    HINSTANCE YUI::PaintManagerUI::GetInstance()
     {
         return g_hInstance;
     }

@@ -1,12 +1,12 @@
 #pragma once
-#include "YYUI.h"
-#include "YControlUI.h"
+#include "YUI.h"
+#include "ControlUI.h"
 #include <string>
 #include <unordered_map>
 #include <functional>
 #include <wingdi.h>
 
-namespace YYCOM
+namespace YUI
 {
     struct YStrStr
     {

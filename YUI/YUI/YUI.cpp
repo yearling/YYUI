@@ -3,12 +3,10 @@
 
 #include "stdafx.h"
 #include "YUI.h"
-
-#include "YYUI.h"
-#include "YWindowWnd.h"
-#include "YPaintManagerUI.h"
-using namespace YYCOM;
-class MyWindow : public YWindowWnd
+#include "WindowWnd.h"
+#include "PaintManagerUI.h"
+using namespace YUI;
+class MyWindow : public WindowWnd
 {
 public:
     MyWindow(){};
@@ -19,7 +17,7 @@ protected:
 
 int APIENTRY _tWinMain( __in HINSTANCE hInstance, __in_opt HINSTANCE hPrevInstance, __in LPTSTR lpCmdLine, __in int nShowCmd )
 {
-	YPaintManagerUI::SetInstance(hInstance);
+	PaintManagerUI::SetInstance(hInstance);
 	MyWindow duiFrame;
 	duiFrame.Create(NULL,_T("DUIWND"),WS_OVERLAPPEDWINDOW,WS_EX_WINDOWEDGE);
 	duiFrame.CenterWindow();

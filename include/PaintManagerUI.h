@@ -4,12 +4,12 @@
 
 #pragma once
 
-#include "YYUI.h"
-#include "YYUtility.h"
+#include "YUI.h"
+#include "UIUtility.h"
 #include <commctrl.h>
-#include "YYUIDef.h"
+#include "UIDef.h"
 
-namespace YYCOM
+namespace YUI
 {
     
 
@@ -31,15 +31,15 @@ namespace YYCOM
         virtual LRESULT                 TranslateAccelerator(MSG *pMsg) = 0;
     };
 
-    typedef std::function<YControlUI *(const YString &) > funCreateControl;
-    typedef YControlUI* (*pfnCreateControl)(const YString &);
+    typedef std::function<ControlUI *(const YString &) > funCreateControl;
+    typedef ControlUI* (*pfnCreateControl)(const YString &);
 
 
-    class YPaintManagerUI:public std::enable_shared_from_this<YPaintManagerUI>
+    class PaintManagerUI:public std::enable_shared_from_this<PaintManagerUI>
     {
     public:    
-        YPaintManagerUI();
-        ~YPaintManagerUI();
+        PaintManagerUI();
+        ~PaintManagerUI();
 
     public:
         void                            Init(HWND hWnd);
@@ -70,10 +70,12 @@ namespace YYCOM
         void                            SetShowUpdateRect(bool bShow);
         void                            ReloadAllImages();
         bool                            SetNextTabControl(bool bForward= true);
-
+        std::shared_ptr<ControlUI>      FindControl(POINT pt) const;
         bool                            MessageHandler(UINT uMesg, WPARAM wParam, LPARAM lParam, LRESULT &lRes);
         void                            SendNotify(NotifyMsg &Msg, bool bAsync = false );
-        void                            SendNotify(std::shared_ptr<YControlUI>& spControl,YString strMessage,WPARAM wParam =0, LPARAM lParam =0,bool bAsync = false );
+        void                            SendNotify(std::shared_ptr<ControlUI>& spControl,YString strMessage,WPARAM wParam =0, LPARAM lParam =0,bool bAsync = false );
+        void                            SetFocus(std::shared_ptr<ControlUI> &pControl);
+        void                            SetCapture();
     public:
         bool                            PreMessageHandler(UINT uMsg,WPARAM wParam,LPARAM lParam,LRESULT &lRes);
     public:
@@ -113,11 +115,11 @@ namespace YYCOM
         TOOLINFO                        m_ToolTip;
         bool                            m_bShowUpdateRect;
         
-        std::shared_ptr<YControlUI>     m_pRoot;
-        std::weak_ptr<YControlUI>       m_pFocus;
-        std::shared_ptr<YControlUI>     m_pEventHover;
-        std::shared_ptr<YControlUI>     m_pEventClick;
-        std::shared_ptr<YControlUI>     m_pEventKey;
+        std::shared_ptr<ControlUI>      m_pRoot;
+        std::shared_ptr<ControlUI>      m_pFocus;
+        std::shared_ptr<ControlUI>      m_pEventHover;
+        std::shared_ptr<ControlUI>      m_pEventClick;
+        std::shared_ptr<ControlUI>      m_pEventKey;
 
         POINT                           m_ptLastMousePos;
         SIZE                            m_szMinWindow;
@@ -139,11 +141,11 @@ namespace YYCOM
 
         std::vector<std::weak_ptr<INotifyUI>>            
                                         m_vecNotifiers;
-        std::vector<YTimer>              m_vecTimers;
+        std::vector<TimerInfo>              m_vecTimers;
         std::vector<void*>              m_vecPreMessageFilers;
         std::vector<std::weak_ptr<IMessageFilterUI>>             
                                         m_vecMessageFilters;
-        std::vector<std::weak_ptr<YControlUI> >              
+        std::vector<std::weak_ptr<ControlUI> >              
                                         m_vecPostPaintControls;
         std::vector<void*>              m_vecDelayedCleanup;
         std::list<NotifyMsg>            m_ListAsyncNotify;
@@ -152,13 +154,13 @@ namespace YYCOM
         std::map<YString,void*>         m_mapNameHash;
         std::map<YString,void*>         m_mapOptionGroup;
 
-        std::weak_ptr<YPaintManagerUI>  m_wpParentResourcePM;
+        std::weak_ptr<PaintManagerUI>   m_wpParentResourcePM;
         DWORD                           m_dwDefaultDisabledColor;
         DWORD                           m_dwDefaultFontColor;
         DWORD                           m_dwDefaultLinkFontColor;
         DWORD                           m_dwDefaultLinkHoverFontColor;
         DWORD                           m_dwDefaultSelectedBKColor;
-        tagTFontInfo                    m_DefaultFontInfo;
+        FontInfo                        m_DefaultFontInfo;
         std::vector<void*>              m_vecCustomFonts;
 
         std::map<YString,void*>         m_mapImageHash;
@@ -173,7 +175,7 @@ namespace YYCOM
         static short                    g_H;
         static short                    g_S;
         static short                    g_L;
-        static std::vector< std::weak_ptr<YPaintManagerUI> >       
+        static std::vector< std::weak_ptr<PaintManagerUI> >       
                                         g_vecPreMessages;
 #if 0
         static std::unordered_set<funCreateControl>        g_setPlugins;  

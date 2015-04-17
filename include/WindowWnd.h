@@ -3,10 +3,10 @@
 //////////////////////////////////////////////////////////////////////////
 
 #pragma once
-#include "YYUI.h"
-#include "YYUIDef.h"
+#include "YUI.h"
+#include "UIDef.h"
 #include <map>
-namespace YYCOM
+namespace YUI
 {
 
 #define UI_WNDSTYLE_CONTAINER  (0)
@@ -22,20 +22,20 @@ namespace YYCOM
 #define UI_CLASSSTYLE_CHILD      (CS_VREDRAW | CS_HREDRAW | CS_DBLCLKS | CS_SAVEBITS)
 #define UI_CLASSSTYLE_DIALOG     (CS_VREDRAW | CS_HREDRAW | CS_DBLCLKS | CS_SAVEBITS)
 
-    class YMsgHandleChain:public std::enable_shared_from_this<YMsgHandleChain>
+    class MsgHandleChain:public std::enable_shared_from_this<MsgHandleChain>
     {
     public:
-           YMsgHandleChain();
+           MsgHandleChain();
            virtual void                 HandleMsg(const NotifyMsg & msg);
-           void                         SetSuccessor(std::shared_ptr<YMsgHandleChain> & sp);
+           void                         SetSuccessor(std::shared_ptr<MsgHandleChain> & sp);
     private:
-        std::weak_ptr<YMsgHandleChain>  m_wpSuccessor;
+        std::weak_ptr<MsgHandleChain>  m_wpSuccessor;
     };
 
-    class YNotifyPump: public YMsgHandleChain  
+    class INotifyPump: public MsgHandleChain  
     {
     public:
-        bool                            AddVirtualWnd(YString strName, YNotifyPump* pObject);
+        bool                            AddVirtualWnd(YString strName, INotifyPump* pObject);
         bool                            RemoveVirtualWnd(YString strName);
         void                            NotifyPump( NotifyMsg & msg);
         bool                            LoopDispatch( NotifyMsg & msg);
@@ -45,11 +45,11 @@ namespace YYCOM
     private:
         std::map<YString, void *>   m_mapVWnd;
     };
-	class YWindowWnd
+	class WindowWnd
 	{
 	public:
-		                                YWindowWnd();
-		virtual                         ~YWindowWnd();
+		                                WindowWnd();
+		virtual                         ~WindowWnd();
 
     public:
         HWND                            GetHWND() const  { return m_hWnd; }
@@ -103,7 +103,7 @@ namespace YYCOM
 		WNDPROC							m_OldWndProc;
 		bool							m_bSubClassed; //用自己的WndProc代替了原有的Proc
     private:
-        YWindowWnd(const YWindowWnd &);
-        YWindowWnd & operator=(const YWindowWnd &);
+        WindowWnd(const WindowWnd &);
+        WindowWnd & operator=(const WindowWnd &);
 	};
 }
