@@ -11,7 +11,7 @@ namespace YYCOM
         return _T("");
     }
 
-    void YControlUI::Event(tagYEventUI& eve)
+    void YControlUI::Event(ControlEvent& eve)
     {
 
     }
@@ -34,6 +34,21 @@ namespace YYCOM
     YYCOM::YString YControlUI::GetVirtualWnd() const
     {
         return _T("");
+    }
+
+    void YControlUI::DoPaint(HDC hDC, const RECT& rcPaint)
+    {
+
+    }
+
+    void YControlUI::DoPostPaint(HDC hDC, const RECT& rcPaint)
+    {
+
+    }
+
+    void YControlUI::NeedUpdate()
+    {
+
     }
 
 }

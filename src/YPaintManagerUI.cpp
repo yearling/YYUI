@@ -488,7 +488,7 @@ namespace YYCOM
             }
         case WM_CLOSE:
             {
-                tagYEventUI eve = { 0 };
+                ControlEvent eve = { 0 };
                 eve.m_ptMouse = m_ptLastMousePos;
                 eve.m_dwTimestamp = ::GetTickCount();
                 if( m_pEventHover )
@@ -577,8 +577,97 @@ namespace YYCOM
                 //×¼±¸ÀëÏßbitmap
                 if( m_bOffscreenPaint && m_hbmpOffscreen == NULL )
                 {
-
+                    RECT rcClient = { 0 };
+                    ::GetClientRect(m_hWndPaint, &rcClient );
+                    m_hDCOffscreen = ::CreateCompatibleDC( m_hDCPaint );
+                    m_hbmpOffscreen = ::CreateCompatibleBitmap(m_hDCPaint, rcClient.right-rcClient.left,rcClient.bottom - rcClient.top );
+                    assert( m_hDCOffscreen);
+                    assert( m_hbmpOffscreen);
                 }
+                //begin render
+                PAINTSTRUCT ps = { 0 };
+                ::BeginPaint(m_hWndPaint,&ps);
+                if( m_bOffscreenPaint )
+                {
+                    HBITMAP hOldBitmap = (HBITMAP )::SelectObject(m_hDCOffscreen,m_hbmpOffscreen);
+                    int iSaveDC = ::SaveDC( m_hDCOffscreen );
+                    if( m_bAlphaBackGround )
+                    {
+                        if( m_hbmpBackground == NULL )
+                        {
+                            RECT rcClient = { 0 };
+                            ::GetClientRect( m_hWndPaint, &rcClient );
+                            m_hDCBackground = ::CreateCompatibleDC( m_hDCPaint );
+                            m_hbmpBackground = ::CreateCompatibleBitmap( m_hDCPaint,rcClient.right-rcClient.left, rcClient.bottom - rcClient.top );
+                            ::SelectObject(m_hDCBackground, m_hbmpBackground);
+                            ::BitBlt(m_hDCBackground,ps.rcPaint.left,ps.rcPaint.top ,ps.rcPaint.right-ps.rcPaint.left,ps.rcPaint.bottom-ps.rcPaint.top ,ps.hdc,ps.rcPaint.left,ps.rcPaint.top,SRCCOPY);
+                        }
+                        else
+                            ::SelectObject(m_hDCBackground, m_hbmpBackground);
+                     ::BitBlt(m_hDCOffscreen,ps.rcPaint.left,ps.rcPaint.top ,ps.rcPaint.right-ps.rcPaint.left,ps.rcPaint.bottom-ps.rcPaint.top ,m_hDCBackground,ps.rcPaint.left,ps.rcPaint.top,SRCCOPY);
+                    }
+                    m_pRoot->DoPaint(m_hDCOffscreen,ps.rcPaint);
+                    for(auto  iter : m_vecPostPaintControls)
+                    {
+                        auto spControl  = iter.lock();
+                        if( spControl )
+                        {
+                            spControl->DoPostPaint(m_hDCOffscreen,ps.rcPaint);
+                        }
+                    }
+                    ::RestoreDC(m_hDCOffscreen,iSaveDC);
+                    ::BitBlt(ps.hdc, ps.rcPaint.left, ps.rcPaint.top, ps.rcPaint.right - ps.rcPaint.left,
+                        ps.rcPaint.bottom - ps.rcPaint.top, m_hDCOffscreen, ps.rcPaint.left, ps.rcPaint.top, SRCCOPY);
+                    if( m_bShowUpdateRect )
+                    {
+                        HPEN hOldPen = (HPEN)::SelectObject(ps.hdc, g_hUpdateRectPen);
+                        ::SelectObject(ps.hdc, ::GetStockObject(HOLLOW_BRUSH));
+                        ::Rectangle(ps.hdc, rcPaint.left, rcPaint.top, rcPaint.right, rcPaint.bottom);
+                        ::SelectObject(ps.hdc, hOldPen);
+                    }
+                }
+                else
+                {
+                    int iSaveDc = ::SaveDC(ps.hdc);
+                    m_pRoot->DoPaint(ps.hdc,ps.rcPaint);
+                    ::RestoreDC(ps.hdc, iSaveDc);
+                }
+                ::EndPaint( m_hWndPaint, &ps );
+            }
+            if( m_bUpdateNeeded )
+                ::InvalidateRect(m_hWndPaint, NULL ,FALSE );
+            return true;
+
+        case WM_PRINTCLIENT:
+                break;
+        case WM_GETMINMAXINFO:
+            {
+                LPMINMAXINFO lpMMI = (LPMINMAXINFO) lParam;
+                if( m_szMinWindow.cx > 0 ) lpMMI->ptMinTrackSize.x = m_szMinWindow.cx;
+                if( m_szMinWindow.cy > 0 ) lpMMI->ptMinTrackSize.y = m_szMinWindow.cy;
+                if( m_szMaxWindow.cx > 0 ) lpMMI->ptMaxTrackSize.x = m_szMaxWindow.cx;
+                if( m_szMaxWindow.cy > 0 ) lpMMI->ptMaxTrackSize.y = m_szMaxWindow.cy;
+            }
+            break;
+        case WM_SIZE:
+            {
+                auto spControlFocus = m_pFocus.lock();
+                if(spControlFocus)
+                {
+                    ControlEvent eve =  { 0 };
+                    eve.m_Type = UIEVENT_WINDOWSIZE;
+                    eve.m_pSender = m_pFocus;
+                    eve.m_dwTimestamp = ::GetTickCount();
+                    spControlFocus->Event(eve);
+                }
+                if( m_pRoot )
+                    m_pRoot->NeedUpdate();
+            }
+            return true;
+
+        case WM_TIMER:
+            {
+                
             }
             break;
         default:

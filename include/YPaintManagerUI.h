@@ -139,11 +139,12 @@ namespace YYCOM
 
         std::vector<std::weak_ptr<INotifyUI>>            
                                         m_vecNotifiers;
-        std::vector<void*>              m_vecTimers;
+        std::vector<YTimer>              m_vecTimers;
         std::vector<void*>              m_vecPreMessageFilers;
         std::vector<std::weak_ptr<IMessageFilterUI>>             
                                         m_vecMessageFilters;
-        std::vector<void*>              m_vecPostPaintControls;
+        std::vector<std::weak_ptr<YControlUI> >              
+                                        m_vecPostPaintControls;
         std::vector<void*>              m_vecDelayedCleanup;
         std::list<NotifyMsg>            m_ListAsyncNotify;
         std::vector<void*>              m_vecFoundCountrols;

@@ -101,8 +101,15 @@ namespace YYCOM
         YString                     m_strResType;
         DWORD                           m_dwMask;
     };
-
-    struct tagYEventUI
+    struct YTimer
+    {
+        std::weak_ptr<YControlUI>       pSender;
+        UINT                            nLocalID;
+        HWND                            hWnd;
+        UINT                            uWinTimer;
+        bool                            bKilled;
+    };
+    struct ControlEvent
     {
         int                             m_Type;
         std::weak_ptr<YControlUI>       m_pSender;
