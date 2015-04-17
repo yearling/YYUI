@@ -28,7 +28,19 @@ namespace YYCOM
     YString FormatGetLastError();
     YString FormatGetLastError(DWORD dwErr);
 
+    //////////////////////////////////////////////////////////////////////////
+    //文件名操作
+    //得到文件的扩展名,
+    //@strFileNameOrPath,可以是文件的名子，也可以是相对或绝对路径
+    YString GetFileExtension( const YString & strFileNameOrPath);
 
+    //得到文件所在的目录,不带"\/"
+    //@strFilePath,文件的相对或绝对路径
+    YString GetFileDir(const YString & strFilePath);
+    
+    //得到文件名
+    //@strFilePath,文件的相对或绝对路径,不带"\/"
+    YString GetFileName(const YString & strFilePath);
     //////////////////////////////////////////////////////////////////////////
     class YRect : public RECT
     {
@@ -48,5 +60,13 @@ namespace YYCOM
         void                            Inflate(int cx,int cy);
         void                            Defalte(int cx,int cy);
         void                            Union(YRect & rc);
+    };
+    class YSize: public tagSIZE
+    {
+    public:
+        YSize();
+        YSize(const SIZE & src);
+        YSize(const RECT rc);
+        YSize(int cx, int cy);
     };
 }

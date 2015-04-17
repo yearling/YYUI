@@ -60,17 +60,17 @@ namespace YYCOM
         return UILIB_FILE;
     }
 
-    std::string WindowImpl::GetZIPFileName() const
+    YString WindowImpl::GetZIPFileName() const
     {
-        return "";
+        return _T("");
     }
 
-    std::string WindowImpl::GetResourceID() const
+    YString WindowImpl::GetResourceID() const
     {
-        return "";
+        return _T("");
     }
 
-    std::shared_ptr<YControlUI> WindowImpl::CreateControl(const std::string & strClassName)
+    std::shared_ptr<YControlUI> WindowImpl::CreateControl(const YString & strClassName)
     {
         return nullptr;
     }

@@ -75,9 +75,6 @@
     <ClInclude Include="..\..\include\YWindowWnd.h">
       <Filter>YYUI\include\base</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\YYUtility.h">
-      <Filter>YYUI\include\base</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\YPaintManagerUI.h">
       <Filter>YYUI\include\base</Filter>
     </ClInclude>
@@ -91,6 +88,9 @@
       <Filter>YYUI\include\base</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\YYUIDef.h">
+      <Filter>YYUI\include\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\YYUtility.h">
       <Filter>YYUI\include\base</Filter>
     </ClInclude>
   </ItemGroup>
@@ -117,6 +117,9 @@
       <Filter>YYUI\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\YWindowImpl.cpp">
+      <Filter>YYUI\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\YYUI.cpp">
       <Filter>YYUI\src</Filter>
     </ClCompile>
   </ItemGroup>

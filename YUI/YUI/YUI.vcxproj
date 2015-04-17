@@ -163,7 +163,7 @@
     <ClInclude Include="..\..\include\YYThrowException.h" />
     <ClInclude Include="..\..\include\YYUI.h" />
     <ClInclude Include="..\..\include\YYUIDef.h" />
-    <ClInclude Include="..\..\src\YYUtility.h" />
+    <ClInclude Include="..\..\include\YYUtility.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -175,6 +175,7 @@
     <ClCompile Include="..\..\src\YUIDlgBuilder.cpp" />
     <ClCompile Include="..\..\src\YWindowImpl.cpp" />
     <ClCompile Include="..\..\src\YWindowWnd.cpp" />
+    <ClCompile Include="..\..\src\YYUI.cpp" />
     <ClCompile Include="..\..\src\YYUtility.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

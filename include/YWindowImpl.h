@@ -32,8 +32,8 @@ namespace YYCOM
         virtual void                    OnClick(NotifyMsg & msg);
 
     protected:
-        virtual std::string             GetSkinFolder() = 0 ;
-        virtual std::string             GetSkinFile() =0 ;
+        virtual YString                 GetSkinFolder() = 0 ;
+        virtual YString                 GetSkinFile() =0 ;
         virtual LPCTSTR                 GetWindowClassName(void) const= 0;
         virtual LRESULT                 ResponseDefaultKeyEvent(WPARAM wParam);
 
@@ -42,9 +42,9 @@ namespace YYCOM
     public:
         virtual UINT                    GetClassStyle() const;
         virtual UILIB_RESOURCETYPE      GetResourceType() const;
-        virtual std::string             GetZIPFileName() const;
-        virtual std::string             GetResourceID() const;
-        virtual std::shared_ptr<YControlUI> CreateControl(const std::string & strClassName);
+        virtual YString                 GetZIPFileName() const;
+        virtual YString                 GetResourceID() const;
+        virtual std::shared_ptr<YControlUI> CreateControl(const YString & strClassName);
         virtual LRESULT                 MessageHandler(UINT uMsg, WPARAM wParam, LPARAM /*lParam*/, bool& /*bHandled*/);
         virtual LRESULT                 OnClose(UINT uMsg, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled);
         virtual LRESULT                 OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled);

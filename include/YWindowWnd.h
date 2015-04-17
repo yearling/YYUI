@@ -35,15 +35,15 @@ namespace YYCOM
     class YNotifyPump: public YMsgHandleChain  
     {
     public:
-        bool                            AddVirtualWnd(std::string strName, YNotifyPump* pObject);
-        bool                            RemoveVirtualWnd(std::string strName);
+        bool                            AddVirtualWnd(YString strName, YNotifyPump* pObject);
+        bool                            RemoveVirtualWnd(YString strName);
         void                            NotifyPump( NotifyMsg & msg);
         bool                            LoopDispatch( NotifyMsg & msg);
         virtual void                    HandleMsg(const NotifyMsg & msg);
     private:   
         YMessageHash                    m_MessageMap;      
     private:
-        std::map<std::string, void *>   m_mapVWnd;
+        std::map<YString, void *>   m_mapVWnd;
     };
 	class YWindowWnd
 	{

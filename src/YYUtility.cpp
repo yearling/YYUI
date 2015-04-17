@@ -157,4 +157,55 @@ namespace YYCOM
         return ( left == 0 && right == 0 && top == 0 && bottom == 0);
     }
 
+    YYCOM::YString GetFileExtension(const YString & str)
+    {
+        auto pos = str.find_last_of(_T('.'));
+        if( pos == YString::npos)
+            return _T("");
+
+        return str.substr(pos+1);
+    }
+
+    YYCOM::YString GetFileDir(const YString & strFilePath)
+    {
+        auto pos = strFilePath.find_last_of(_T("/\\"));
+        if( pos == YString::npos )
+            return YString();
+
+        return strFilePath.substr(0,pos);
+    }
+
+    YYCOM::YString GetFileName(const YString & strFilePath)
+    {
+        auto pos = strFilePath.find_last_of(_T("/\\"));
+        if( pos == YString::npos )
+            return YString();
+
+        return strFilePath.substr(pos+1);
+    }
+
+
+    YSize::YSize()
+    {
+        cx = cy = 0 ;
+    }
+
+    YSize::YSize(const SIZE & src)
+    {
+        cx = src.cx;
+        cy = src.cy;
+    }
+
+    YSize::YSize(const RECT rc)
+    {
+        cx = rc.right - rc.left;
+        cy = rc.bottom - rc.top;
+    }
+
+    YSize::YSize(int x, int y)
+    {
+         cx = x;
+         cy = y;
+    }
+
 }
