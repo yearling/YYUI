@@ -93,6 +93,12 @@
     <ClInclude Include="..\..\include\YUI.h">
       <Filter>YYUI\include\base</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\MutiScreen.h">
+      <Filter>YYUI\include\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\RenderDGI.h">
+      <Filter>YYUI\include\base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -117,6 +123,12 @@
       <Filter>YYUI\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\UIUtility.cpp">
+      <Filter>YYUI\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\MutiScreen.cpp">
+      <Filter>YYUI\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\RenderDGI.cpp">
       <Filter>YYUI\src</Filter>
     </ClCompile>
   </ItemGroup>

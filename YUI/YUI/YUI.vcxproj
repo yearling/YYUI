@@ -151,6 +151,7 @@
     <ClInclude Include="..\..\include\ControlUI.h" />
     <ClInclude Include="..\..\include\PaintManagerUI.h" />
     <ClInclude Include="..\..\include\DlgBuilder.h" />
+    <ClInclude Include="..\..\include\RenderDGI.h" />
     <ClInclude Include="..\..\include\WindowImpl.h" />
     <ClInclude Include="..\..\include\WindowWnd.h" />
     <ClInclude Include="..\..\include\YYDisableIf.h" />
@@ -160,6 +161,7 @@
     <ClInclude Include="..\..\include\YYExceptionInfo.hpp" />
     <ClInclude Include="..\..\include\YYExceptionToString.h" />
     <ClInclude Include="..\..\include\YYGetErrorInfo.h" />
+    <ClInclude Include="..\..\include\MutiScreen.h" />
     <ClInclude Include="..\..\include\YYThrowException.h" />
     <ClInclude Include="..\..\include\YUI.h" />
     <ClInclude Include="..\..\include\UIDef.h" />
@@ -173,9 +175,11 @@
     <ClCompile Include="..\..\src\ControlUI.cpp" />
     <ClCompile Include="..\..\src\PaintManagerUI.cpp" />
     <ClCompile Include="..\..\src\DlgBuilder.cpp" />
+    <ClCompile Include="..\..\src\RenderDGI.cpp" />
     <ClCompile Include="..\..\src\WindowImpl.cpp" />
     <ClCompile Include="..\..\src\WindowWnd.cpp" />
     <ClCompile Include="..\..\src\UIUtility.cpp" />
+    <ClCompile Include="..\..\src\MutiScreen.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

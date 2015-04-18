@@ -7,7 +7,9 @@
 #include "UIUtility.h"
 #include <commctrl.h>
 #include <WindowsX.h>
+#include <olectl.h>
 #pragma comment(lib,"comctl32.lib")
+
 namespace YUI
 {
 
@@ -87,11 +89,61 @@ namespace YUI
 
     bool YUI::PaintManagerUI::TranslateMessage(const LPMSG pMsg)
     {
+        // Pretranslate Message takes care of system-wide messages, such as
+        // tabbing and shortcut key-combos. We'll look for all messages for
+        // each window and any child control attached.
+        UINT uStyle = GetWindowStyle(pMsg->hwnd);
+        UINT uChildRes = uStyle & WS_CHILD;	
+        LRESULT lRes = 0;
+        if (uChildRes != 0)
+        {
+            HWND hWndParent = ::GetParent(pMsg->hwnd);
+
+            for( auto iter : g_vecPreMessages)
+            {
+                auto pT = iter.lock();
+                if(! pT)
+                    return false;
+                HWND hTempParent = hWndParent;
+                while(hTempParent)
+                {
+                    if(pMsg->hwnd == pT->GetPaintWindow() || hTempParent == pT->GetPaintWindow())
+                    {
+                        if (pT->TranslateAccelerator(pMsg))
+                            return true;
+
+                        if( pT->PreMessageHandler(pMsg->message, pMsg->wParam, pMsg->lParam, lRes) ) 
+                            return true;
+
+                        return false;
+                    }
+                    hTempParent = GetParent(hTempParent);
+                }
+            }
+        }
+        else
+        {
+            for( auto iter : g_vecPreMessages) 
+            {
+                auto  pT = iter.lock();
+                if( ! pT )
+                    return false;
+                if(pMsg->hwnd == pT->GetPaintWindow())
+                {
+                    if (pT->TranslateAccelerator(pMsg))
+                        return true;
+
+                    if( pT->PreMessageHandler(pMsg->message, pMsg->wParam, pMsg->lParam, lRes) ) 
+                        return true;
+
+                    return false;
+                }
+            }
+        }
         return false;
     }
     HINSTANCE YUI::PaintManagerUI::g_hInstance = NULL;
 
-    std::vector<void*> YUI::PaintManagerUI::g_vecTranslateAccelerator;
 
     YString YUI::PaintManagerUI::g_strDefaultFontName;
 
@@ -120,6 +172,7 @@ namespace YUI
     std::vector< std::weak_ptr<PaintManagerUI> > PaintManagerUI::g_vecPreMessages;
 
 
+    std::vector<std::weak_ptr<ITranslateAccelerator> > YUI::PaintManagerUI::g_vecTranslateAccelerator;
 
 
 
@@ -201,6 +254,11 @@ namespace YUI
     {
         //!todo 
         return;
+    }
+
+    void PaintManagerUI::SetResourceZip(const YString &strPath, bool bCachedResourceZip /*= false*/)
+    {
+        
     }
 
     void PaintManagerUI::ReloadSkin()
@@ -503,7 +561,7 @@ namespace YUI
                     eve.m_pSender = m_pEventClick;
                     m_pEventClick->Event(eve);
                 }
-                SetFocus(NULL);
+                ::SetFocus(NULL);
                 HWND hwndParent = GetWindowOwner( m_hWndPaint );
                 if( hwndParent != NULL )
                 {
@@ -651,7 +709,7 @@ namespace YUI
             break;
         case WM_SIZE:
             {
-                auto spControlFocus = m_pFocus.lock();
+                auto spControlFocus = m_pFocus;
                 if(spControlFocus)
                 {
                     ControlEvent eve;
@@ -786,7 +844,7 @@ namespace YUI
                 m_ptLastMousePos = pt;
                 auto spControl = FindControl(pt);
                 if( spControl == NULL )
-                    return;
+                    break;
                 if( spControl->GetManager() != shared_from_this())
                     break;
                 m_pEventClick = spControl;
@@ -810,7 +868,7 @@ namespace YUI
                 m_ptLastMousePos = pt;
                 auto spControl = FindControl(pt);
                 if( spControl == NULL )
-                    return;
+                    break;
                 if( spControl->GetManager() != shared_from_this())
                     break;
                 SetCapture();
@@ -831,7 +889,7 @@ namespace YUI
                 m_ptLastMousePos = pt;
                 auto spControl = FindControl(pt);
                 if( spControl == NULL )
-                    return;
+                    break;
                 if( spControl->GetManager() != shared_from_this())
                     break;
                 spControl->SetFocus();
@@ -867,9 +925,139 @@ namespace YUI
                 m_pEventClick->Event( eve );
                 m_pEventClick = NULL;
             }
+            break;
+        case WM_MOUSEWHEEL:
+            {
+                ::SetFocus(m_hWndPaint);
+                POINT pt= { GET_X_LPARAM(lParam),GET_Y_LPARAM(lParam)};
+                m_ptLastMousePos = pt;
+                auto spControl = FindControl(pt);
+                if( spControl == NULL )
+                    break;
+                if( spControl->GetManager() != shared_from_this())
+                    break;
+                int ZDelta = (int)(short)HIWORD(wParam);
+                ControlEvent eve;
+                eve.m_Type = UIEVENT_SCROLLWHEEL;
+                eve.m_pSender = spControl;
+                eve.m_wParam = MAKELPARAM( ZDelta <0 ? SB_LINEDOWN :SB_LINEUP  ,0 );
+                eve.m_lParam = lParam;
+                eve.m_wKeyState = MapKeyState();
+                eve.m_dwTimestamp = ::GetTickCount();
+                spControl->Event(eve);
+                // Let's make sure that the scroll item below the cursor is the same as before...
+                ::SendMessage(m_hWndPaint, WM_MOUSEMOVE, 0,(LPARAM)MAKELPARAM( m_ptLastMousePos.x, m_ptLastMousePos.y));
+            }
+            break;
+        case WM_CHAR:
+            {
+                if( ! m_pFocus )
+                    break;
+                ControlEvent eve;
+                eve.m_Type = UIEVENT_CHAR;
+                eve.m_chKey = (TCHAR)wParam;
+                eve.m_ptMouse = m_ptLastMousePos;
+                eve.m_wKeyState = MapKeyState();
+                eve.m_dwTimestamp = ::GetTickCount();
+                m_pFocus->Event(eve);
+            }
+            break;
+        case WM_KEYDOWN:
+            {
+                if( ! m_pFocus )
+                    break;
+                ControlEvent eve;
+                eve.m_Type = UIEVENT_KEYDOWN;
+                eve.m_chKey = (TCHAR)wParam;
+                eve.m_ptMouse = m_ptLastMousePos;
+                eve.m_wKeyState = MapKeyState();
+                eve.m_dwTimestamp = ::GetTickCount();
+                m_pFocus->Event(eve);
+
+            }
+            break;
+        case WM_KEYUP:
+            {
+                if( ! m_pFocus )
+                    break;
+                ControlEvent eve;
+                eve.m_Type = UIEVENT_KEYUP;
+                eve.m_chKey = (TCHAR)wParam;
+                eve.m_ptMouse = m_ptLastMousePos;
+                eve.m_wKeyState = MapKeyState();
+                eve.m_dwTimestamp = ::GetTickCount();
+                m_pFocus->Event(eve);
+            }
+            break;
+        case WM_SETCURSOR:
+            {
+                if( LOWORD(lParam) != HTCLIENT ) break;
+                if( m_bMouseCapture ) return true;
+
+                POINT pt = { 0 };
+                ::GetCursorPos(&pt);
+                ::ScreenToClient(m_hWndPaint, &pt);
+                auto spControl = FindControl(pt);
+                if( spControl == NULL )
+                    break;
+                if( (spControl->GetControlFlags() & UIFLAG_SETCURSOR) == 0 ) break;
+                ControlEvent eve;
+                eve.m_Type = UIEVENT_SETCURSOR;
+                eve.m_wParam = wParam;
+                eve.m_lParam = lParam;
+                eve.m_ptMouse = pt;
+                eve.m_wKeyState = MapKeyState();
+                eve.m_dwTimestamp = ::GetTickCount();
+                spControl->Event(eve);
+            }
+            break;
+        case WM_NOTIFY:
+            {
+                LPNMHDR lpNMHDR = (LPNMHDR) lParam;
+                if( lpNMHDR != NULL ) lRes = ::SendMessage(lpNMHDR->hwndFrom, OCM__BASE + uMesg, wParam, lParam);
+                return true;
+            }
+            break;
+        case WM_COMMAND:
+            {
+                if( lParam == 0 ) break;
+                HWND hWndChild = (HWND) lParam;
+                lRes = ::SendMessage(hWndChild, OCM__BASE + uMesg, wParam, lParam);
+                return true;
+            }
+            break;
+        case WM_CTLCOLOREDIT:
+        case WM_CTLCOLORSTATIC:
+            {
+                // Refer To: http://msdn.microsoft.com/en-us/library/bb761691(v=vs.85).aspx
+                // Read-only or disabled edit controls do not send the WM_CTLCOLOREDIT message; instead, they send the WM_CTLCOLORSTATIC message.
+                if( lParam == 0 ) break;
+                HWND hWndChild = (HWND) lParam;
+                lRes = ::SendMessage(hWndChild, OCM__BASE + uMesg, wParam, lParam);
+                return true;
+            }
+            break;
         default:
             break;
         }
+        for(auto iter = m_ListAsyncNotify.begin();
+            iter!= m_ListAsyncNotify.end();)
+        {
+            auto spSend= iter->pSender.lock();
+            if(spSend)
+            {
+                if(spSend->OnNotify)
+                    spSend->OnNotify(*iter);
+            }
+            for( auto notifyer : m_vecNotifiers)
+            {
+                auto spNotifyer = notifyer.lock();
+                if( spNotifyer )
+                    spNotifyer->Notify(*iter);
+            }
+            iter= m_ListAsyncNotify.erase(iter);
+        }
+        return false;
     }
 
     void PaintManagerUI::SendNotify(NotifyMsg &Msg, bool bAsync /*= false */)
@@ -919,6 +1107,11 @@ namespace YUI
         return std::shared_ptr<ControlUI>();
     }
 
+    std::shared_ptr<ControlUI> PaintManagerUI::FindControl(const YString & strControlName)
+    {
+        return std::shared_ptr<ControlUI>();
+    }
+
     void PaintManagerUI::SetFocus(std::shared_ptr<ControlUI> &pControl)
     {
         HWND hFocusWnd = ::GetFocus();
@@ -942,7 +1135,7 @@ namespace YUI
             return;
         if( pControl  && pControl->GetManager() == shared_from_this()
                        && pControl->IsVisible()
-                       && pControl->IsEnable())
+                       && pControl->IsEnabled())
         {
             m_pFocus = pControl;
             ControlEvent eve;
@@ -951,6 +1144,40 @@ namespace YUI
             eve.m_dwTimestamp = ::GetTickCount();
             m_pFocus->Event(eve);
             SendNotify(m_pFocus,MSG_SetFocus);
+        }
+    }
+
+    void PaintManagerUI::SetFocus(std::shared_ptr<ControlUI> pControl)
+    {
+        HWND hFocusWnd = ::GetFocus();
+        if( hFocusWnd != m_hWndPaint && pControl != m_pFocus ) ::SetFocus(m_hWndPaint);
+        // Already has focus?
+        if( pControl == m_pFocus ) return;
+        // Remove focus from old control
+        if( m_pFocus != NULL ) 
+        {
+            ControlEvent event ;
+            event.m_Type = UIEVENT_KILLFOCUS;
+            event.m_pSender = pControl;
+            event.m_dwTimestamp = ::GetTickCount();
+            m_pFocus->Event(event);
+            SendNotify(m_pFocus, MSG_KillFocus);
+            m_pFocus = NULL;
+        }
+        if( pControl == NULL ) return;
+        // Set focus to new control
+        if( pControl != NULL 
+            && pControl->GetManager() == shared_from_this() 
+            && pControl->IsVisible() 
+            && pControl->IsEnabled() ) 
+        {
+            m_pFocus = pControl;
+            ControlEvent event;
+            event.m_Type = UIEVENT_SETFOCUS;
+            event.m_pSender = pControl;
+            event.m_dwTimestamp = ::GetTickCount();
+            m_pFocus->Event(event);
+            SendNotify(m_pFocus, MSG_SetFocus);
         }
     }
 
@@ -966,11 +1193,82 @@ namespace YUI
         m_bMouseCapture = false;
     }
 
+    UINT PaintManagerUI::MapKeyState()
+    {
+        UINT uState = 0;
+        if( ::GetKeyState(VK_CONTROL) < 0 ) uState |= MK_CONTROL;
+        if( ::GetKeyState(VK_RBUTTON) < 0 ) uState |= MK_LBUTTON;
+        if( ::GetKeyState(VK_LBUTTON) < 0 ) uState |= MK_RBUTTON;
+        if( ::GetKeyState(VK_SHIFT) < 0 ) uState |= MK_SHIFT;
+        if( ::GetKeyState(VK_MENU) < 0 ) uState |= MK_ALT;
+        return uState;
+    }
+
+    void PaintManagerUI::NeedUpdate()
+    {
+        m_bUpdateNeeded = true;
+    }
+
+    void PaintManagerUI::Invalidate(const RECT & rcItem)
+    {
+        ::InvalidateRect(m_hWndPaint,&rcItem,FALSE);
+    }
+
+
+
+    void PaintManagerUI::MessageLoop()
+    {
+        MSG msg = { 0 };
+        while( ::GetMessage(&msg, NULL, 0, 0) ) {
+            if( !PaintManagerUI::TranslateMessage(&msg) )
+            {
+                ::TranslateMessage(&msg);
+                ::DispatchMessage(&msg);
+            }
+        }
+    }
+
+    void PaintManagerUI::AddPreMessageFilter(std::shared_ptr<IMessageFilterUI> & spFilter)
+    {
+       m_vecPreMessageFilers.push_back(spFilter); 
+    }
+
+    YUI::YString PaintManagerUI::GetResourcePath()
+    {
+        return g_strResourcePath;
+    }
+
+    std::shared_ptr<ControlUI> PaintManagerUI::GetFocus() const
+    {
+        return m_pFocus;
+    }
+
+    void PaintManagerUI::SetFocusNeeded(std::shared_ptr<ControlUI> pControl)
+    {
+
+    }
 
 
     HINSTANCE YUI::PaintManagerUI::GetInstance()
     {
         return g_hInstance;
     }
+
+    bool YUI::PaintManagerUI::TranslateAccelerator(LPMSG pMsg)
+    {
+        for(auto iter : g_vecTranslateAccelerator)
+        {
+            auto spTA= iter.lock();
+            if( spTA )
+            {
+                LRESULT hr=spTA->TranslateAccelerator(pMsg);
+                if(hr == S_OK )
+                    return true;
+            }
+        }
+         
+        return false;
+    }
+
 
 }

@@ -22,7 +22,7 @@ namespace YUI
 #define UI_CLASSSTYLE_CHILD      (CS_VREDRAW | CS_HREDRAW | CS_DBLCLKS | CS_SAVEBITS)
 #define UI_CLASSSTYLE_DIALOG     (CS_VREDRAW | CS_HREDRAW | CS_DBLCLKS | CS_SAVEBITS)
 
-    class MsgHandleChain:public std::enable_shared_from_this<MsgHandleChain>
+    class MsgHandleChain/*:public std::enable_shared_from_this<MsgHandleChain>*/
     {
     public:
            MsgHandleChain();

@@ -44,7 +44,7 @@ namespace YUI
     public:
         void                            Init(HWND hWnd);
         void                            NeedUpdate();
-        void                            Invalidate(RECT& rcItem);
+        void                            Invalidate(const RECT& rcItem);
         
         HDC                             GetPaintDC() const;
         HWND                            GetPaintWindow() const;
@@ -71,13 +71,20 @@ namespace YUI
         void                            ReloadAllImages();
         bool                            SetNextTabControl(bool bForward= true);
         std::shared_ptr<ControlUI>      FindControl(POINT pt) const;
+        std::shared_ptr<ControlUI>      FindControl(const YString & strControlName);
         bool                            MessageHandler(UINT uMesg, WPARAM wParam, LPARAM lParam, LRESULT &lRes);
         void                            SendNotify(NotifyMsg &Msg, bool bAsync = false );
         void                            SendNotify(std::shared_ptr<ControlUI>& spControl,YString strMessage,WPARAM wParam =0, LPARAM lParam =0,bool bAsync = false );
         void                            SetFocus(std::shared_ptr<ControlUI> &pControl);
         void                            SetCapture();
+        void                            ReleaseCapture();
+        bool                            TranslateAccelerator(LPMSG pMsg);
     public:
         bool                            PreMessageHandler(UINT uMsg,WPARAM wParam,LPARAM lParam,LRESULT &lRes);
+        void                            AddPreMessageFilter(std::shared_ptr<IMessageFilterUI> & spFilter );
+        std::shared_ptr<ControlUI>      GetFocus() const;
+        void                            SetFocus(std::shared_ptr<ControlUI> pControl);
+        void                            SetFocusNeeded(std::shared_ptr<ControlUI> pControl);
     public:
         static void                     SetInstance(HINSTANCE hInst);
         static YString                  GetInstancePath();
@@ -93,12 +100,12 @@ namespace YUI
         static void                     SetResourcePath(const YString &strPath);
         static void                     SetResoucePath(const YString &strPath);
         static void                     SetResourceZip(void);
+        static void                     SetResourceZip(const YString &, bool bCachedResourceZip = false);
         static void                     ReloadSkin();
         static bool                     LoadPlugin(const YString & strModuleName);
-
-
-
-
+        static UINT                     MapKeyState();
+        static void                     MessageLoop();
+        static YString                  GetResourcePath() ;
 
 
         static bool                     TranslateMessage(const LPMSG pMsg);
@@ -141,8 +148,9 @@ namespace YUI
 
         std::vector<std::weak_ptr<INotifyUI>>            
                                         m_vecNotifiers;
-        std::vector<TimerInfo>              m_vecTimers;
-        std::vector<void*>              m_vecPreMessageFilers;
+        std::vector<TimerInfo>          m_vecTimers;
+        std::vector<std::weak_ptr<IMessageFilterUI>>
+                                        m_vecPreMessageFilers;
         std::vector<std::weak_ptr<IMessageFilterUI>>             
                                         m_vecMessageFilters;
         std::vector<std::weak_ptr<ControlUI> >              
@@ -183,6 +191,7 @@ namespace YUI
 #endif
     public:
         static YString                  g_strDefaultFontName;
-        static  std::vector<void*>      g_vecTranslateAccelerator;
+        static  std::vector<std::weak_ptr<ITranslateAccelerator> >      
+                                        g_vecTranslateAccelerator;
     };
 }

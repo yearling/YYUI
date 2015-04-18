@@ -5,4 +5,10 @@
 namespace YUI
 {
 
+
+    DialogBuilder::DialogBuilder()
+    {
+
+    }
+
 }

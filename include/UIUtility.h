@@ -69,4 +69,15 @@ namespace YUI
         YSize(const RECT rc);
         YSize(int cx, int cy);
     };
+    //////////////////////////////////////////////////////////////////////////
+    class STRINGorID
+    {
+    public:
+        STRINGorID(LPCTSTR lpString) : m_lpstr(lpString)
+        { }
+        STRINGorID(UINT nID) : m_lpstr(MAKEINTRESOURCE(nID))
+        { }
+        LPCTSTR m_lpstr;
+    };
+
 }

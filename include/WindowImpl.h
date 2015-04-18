@@ -10,10 +10,10 @@ namespace YUI
 {
     enum UILIB_RESOURCETYPE
     {
-        UILIB_FILE=1,				// 来自磁盘文件
+        UILIB_FILE=1,				    // 来自磁盘文件
         UILIB_ZIP,						// 来自磁盘zip压缩包
-        UILIB_RESOURCE,			// 来自资源
-        UILIB_ZIPRESOURCE,	// 来自资源的zip压缩包
+        UILIB_RESOURCE,			        // 来自资源
+        UILIB_ZIPRESOURCE,	            // 来自资源的zip压缩包
     };
 
     class WindowImpl 
@@ -22,6 +22,7 @@ namespace YUI
         , public INotifyUI
         , public IMessageFilterUI
         , public IDialogBuilderCallBack
+        , public std::enable_shared_from_this<WindowImpl>
     {
     public:
                                         WindowImpl();
@@ -30,14 +31,13 @@ namespace YUI
         virtual void                    OnFinalMessage(HWND hWnd);
         virtual void                    Notify(NotifyMsg & msg);
         virtual void                    OnClick(NotifyMsg & msg);
-
     protected:
         virtual YString                 GetSkinFolder() = 0 ;
         virtual YString                 GetSkinFile() =0 ;
         virtual LPCTSTR                 GetWindowClassName(void) const= 0;
         virtual LRESULT                 ResponseDefaultKeyEvent(WPARAM wParam);
 
-        PaintManagerUI                 m_PaintManager;
+        std::shared_ptr<PaintManagerUI> m_spPaintManager;
 
     public:
         virtual UINT                    GetClassStyle() const;
@@ -52,22 +52,22 @@ namespace YUI
         virtual LRESULT                 OnNcCalcSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
         virtual LRESULT                 OnNcPaint(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
         virtual LRESULT                 OnNcHitTest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-        //virtual LRESULT                 OnGetMinMaxInfo(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-        //virtual LRESULT                 OnMouseWheel(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled);
-        //virtual LRESULT                 OnMouseHover(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-        //virtual LRESULT                 OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-        //virtual LRESULT                 OnChar(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-        //virtual LRESULT                 OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-        //virtual LRESULT                 OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-        //virtual LRESULT                 OnKeyDown(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled);
-        //virtual LRESULT                 OnKillFocus(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled);
-        //virtual LRESULT                 OnSetFocus(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled);
-        //virtual LRESULT                 OnLButtonDown(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled);
-        //virtual LRESULT                 OnLButtonUp(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled);
-        //virtual LRESULT                 OnMouseMove(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled);
-        //virtual LRESULT                 HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
-        //virtual LRESULT                 HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-        //virtual LONG                    GetStyle();              
+        virtual LRESULT                 OnGetMinMaxInfo(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+        virtual LRESULT                 OnMouseWheel(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled);
+        virtual LRESULT                 OnMouseHover(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+        virtual LRESULT                 OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+        virtual LRESULT                 OnChar(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+        virtual LRESULT                 OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+        virtual LRESULT                 OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+        virtual LRESULT                 OnKeyDown(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled);
+        virtual LRESULT                 OnKillFocus(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled);
+        virtual LRESULT                 OnSetFocus(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled);
+        virtual LRESULT                 OnLButtonDown(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled);
+        virtual LRESULT                 OnLButtonUp(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled);
+        virtual LRESULT                 OnMouseMove(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled);
+        virtual LRESULT                 HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
+        virtual LRESULT                 HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+        virtual LONG                    GetStyle();              
 
     };
 
