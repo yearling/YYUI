@@ -85,6 +85,22 @@ namespace YUI
         std::shared_ptr<ControlUI>      GetFocus() const;
         void                            SetFocus(std::shared_ptr<ControlUI> pControl);
         void                            SetFocusNeeded(std::shared_ptr<ControlUI> pControl);
+
+        std::shared_ptr<const ImageInfo>GetImage(const YString &bitmap);
+        std::shared_ptr<const ImageInfo>GetImageEx(const YString &bitmap, LPCTSTR type = NULL, DWORD mask = 0);
+        std::shared_ptr<ImageInfo>      AddImage(const YString &bitmap, LPCTSTR type = NULL, DWORD mask = 0);
+        std::shared_ptr<ImageInfo>      AddImage(const YString& bitmap, HBITMAP hBitmap, int iWidth, int iHeight, bool bAlpha);
+        bool                            RemoveImage(const YString& bitmap);
+        void                            RemoveAllImages();
+
+        std::shared_ptr<FontInfo>       GetDefaultFontInfo();
+        void                            SetDefaultFont(const YString &StrFontName, int nSize, bool bBold, bool bUnderline, bool bItalic);
+        DWORD                           GetCustomFontCount() const;
+        HFONT                           AddFont(const YString &StrFontName, int nSize, bool bBold, bool bUnderline, bool bItalic);
+        HFONT                           GetFont(const YString &StrFontName);
+        std::shared_ptr<FontInfo>       GetFontInfo(HFONT hFont);
+        bool                            RemoveFont(HFONT hFont);
+        void                            RemoveAllFonts();
     public:
         static void                     SetInstance(HINSTANCE hInst);
         static YString                  GetInstancePath();
@@ -168,10 +184,13 @@ namespace YUI
         DWORD                           m_dwDefaultLinkFontColor;
         DWORD                           m_dwDefaultLinkHoverFontColor;
         DWORD                           m_dwDefaultSelectedBKColor;
-        FontInfo                        m_DefaultFontInfo;
-        std::vector<void*>              m_vecCustomFonts;
+        std::shared_ptr<FontInfo>       m_DefaultFontInfo;
+        std::map<YString,std::shared_ptr<FontInfo> >              
+                                        m_mapCustomFonts;
 
-        std::map<YString,void*>         m_mapImageHash;
+        std::map<YString,std::shared_ptr<ImageInfo> > 
+                                        m_mapImageHash;
+
         std::map<YString,void*>         m_DefaultAttrHash;
 
         static HINSTANCE                g_hInstance;

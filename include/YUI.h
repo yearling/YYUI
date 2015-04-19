@@ -168,12 +168,18 @@ namespace YUI
     struct FontInfo
     {
         HFONT                           m_hFont;
-        YString                     m_strFontName;
+        YString                         m_strFontName;
         int                             m_nSize;
         bool                            m_bBold;                     
         bool                            m_bUnderline;
         bool                            m_bItalic;
         TEXTMETRIC                      m_tm;
+        static void                     FontInfoDeleter(FontInfo *pFont)
+        {
+            if(pFont->m_hFont)
+                ::DeleteObject(pFont->m_hFont);
+            delete pFont;
+        }
     };
 
     struct ImageInfo
@@ -182,8 +188,15 @@ namespace YUI
         int                             m_nX;
         int                             m_nY;
         bool                            m_alphaChannel;
-        YString                     m_strResType;
+        YString                         m_strResType;
         DWORD                           m_dwMask;
+
+        static void                     ImageInfoDeleter(ImageInfo * pImag )
+        {
+            if(pImag->m_hBitmap) 
+                ::DeleteObject(pImag->m_hBitmap);
+            delete pImag;
+        } 
     };
     struct TimerInfo
     {
@@ -192,6 +205,7 @@ namespace YUI
         HWND                            hWnd;
         UINT                            uWinTimer;
         bool                            bKilled;
+   
     };
     struct ControlEvent
     {

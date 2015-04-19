@@ -5,9 +5,11 @@
 #include "YUI.h"
 #include "PaintManagerUI.h"
 #include "UIUtility.h"
+#include "RenderDGI.h"
 #include <commctrl.h>
 #include <WindowsX.h>
 #include <olectl.h>
+#include <algorithm>
 #pragma comment(lib,"comctl32.lib")
 
 namespace YUI
@@ -51,13 +53,13 @@ namespace YUI
         {
             _tcscpy_s(lf.lfFaceName, LF_FACESIZE, g_strDefaultFontName.c_str());
             HFONT hDefaultFont = ::CreateFontIndirect( &lf );
-            m_DefaultFontInfo.m_hFont = hDefaultFont;
-            m_DefaultFontInfo.m_strFontName = (lf.lfFaceName);
-            m_DefaultFontInfo.m_nSize = -lf.lfHeight;
-            m_DefaultFontInfo.m_bBold = (lf.lfWeight >= FW_BOLD );
-            m_DefaultFontInfo.m_bUnderline = ( lf.lfUnderline == TRUE );
-            m_DefaultFontInfo.m_bItalic = (lf.lfItalic == TRUE );
-            memset( &m_DefaultFontInfo.m_tm,0,sizeof(m_DefaultFontInfo.m_tm) );
+            m_DefaultFontInfo->m_hFont = hDefaultFont;
+            m_DefaultFontInfo->m_strFontName = (lf.lfFaceName);
+            m_DefaultFontInfo->m_nSize = -lf.lfHeight;
+            m_DefaultFontInfo->m_bBold = (lf.lfWeight >= FW_BOLD );
+            m_DefaultFontInfo->m_bUnderline = ( lf.lfUnderline == TRUE );
+            m_DefaultFontInfo->m_bItalic = (lf.lfItalic == TRUE );
+            memset( &m_DefaultFontInfo->m_tm,0,sizeof(m_DefaultFontInfo->m_tm) );
 
             if(  g_hUpdateRectPen == NULL )
             {
@@ -1246,6 +1248,214 @@ namespace YUI
     void PaintManagerUI::SetFocusNeeded(std::shared_ptr<ControlUI> pControl)
     {
 
+    }
+
+    std::shared_ptr<const ImageInfo> PaintManagerUI::GetImage(const YString &bitmap)
+    {
+         if(m_mapImageHash.find(bitmap) != m_mapImageHash.end())
+             return m_mapImageHash[bitmap];
+        auto spParent = m_wpParentResourcePM.lock();
+        if(spParent)
+         {
+           return spParent->GetImage(bitmap); 
+         }
+         return std::shared_ptr<const ImageInfo>();
+    }
+
+    std::shared_ptr<const ImageInfo> PaintManagerUI::GetImageEx(const YString &bitmap, LPCTSTR type /*= NULL*/, DWORD mask /*= 0*/)
+    {
+        if( m_mapImageHash.find(bitmap) == m_mapImageHash.end())
+        {
+            return AddImage(bitmap,type,mask);
+        }
+        else
+        {
+            return m_mapImageHash[bitmap];
+        }
+    }
+
+    std::shared_ptr<ImageInfo> PaintManagerUI::AddImage(const YString &bitmap, LPCTSTR type /*= NULL*/, DWORD mask /*= 0*/)
+    {
+        auto data= RenderGDI::LoadImage(bitmap,type,mask);
+        if(data)
+        {
+            if(type != NULL)
+                data->m_strResType = type;
+            data->m_dwMask = mask;
+            m_mapImageHash[bitmap] = data;
+        }
+        return data;
+    }
+
+    std::shared_ptr<ImageInfo> PaintManagerUI::AddImage(const YString& bitmap, HBITMAP hBitmap, int iWidth, int iHeight, bool bAlpha)
+    {
+        if( hBitmap == NULL || iWidth <= 0 || iHeight <=0 )
+            return NULL;
+        auto data = std::shared_ptr<ImageInfo>(new ImageInfo,&ImageInfo::ImageInfoDeleter);
+        data->m_hBitmap = hBitmap;
+        data->m_nX = iWidth;
+        data->m_nY = iHeight;
+        data->m_alphaChannel = bAlpha;
+        data->m_strResType =_T("");
+        data->m_dwMask = 0;
+        m_mapImageHash[bitmap]=data;
+        return data;
+    }
+
+    bool PaintManagerUI::RemoveImage(const YString& bitmap)
+    {
+        auto pos = m_mapImageHash.find(bitmap);
+        if(pos != m_mapImageHash.end())
+        {
+            m_mapImageHash.erase(pos);
+            return true;
+        }
+        else
+            return false;
+    }
+
+    void PaintManagerUI::RemoveAllImages()
+    {
+        m_mapImageHash.clear();
+    }
+
+    void PaintManagerUI::ReloadAllImages()
+    {
+        bool bRedraw= false;
+        for(auto iter : m_mapImageHash )
+        {
+            auto spNewImage = RenderGDI::LoadImage(iter.first,NULL,iter.second->m_dwMask);
+            if( !spNewImage )
+                continue;
+            iter.second = spNewImage;
+            bRedraw = true;
+        }
+        if(bRedraw)
+            m_pRoot->Invalidate();
+    }
+
+    HFONT PaintManagerUI::AddFont(const YString &StrFontName, int nSize, bool bBold, bool bUnderline, bool bItalic)
+    {
+        LOGFONT lf = { 0 };
+        ::GetObject(::GetStockObject(DEFAULT_GUI_FONT), sizeof(LOGFONT), &lf);
+        _tcsncpy_s(lf.lfFaceName, StrFontName.c_str(), LF_FACESIZE);
+        lf.lfCharSet = DEFAULT_CHARSET;
+        lf.lfHeight = -nSize;
+        if( bBold ) lf.lfWeight += FW_BOLD;
+        if( bUnderline ) lf.lfUnderline = TRUE;
+        if( bItalic ) lf.lfItalic = TRUE;
+        HFONT hFont = ::CreateFontIndirect(&lf);
+        if( hFont == NULL ) return NULL;
+
+        auto pFontInfo = std::shared_ptr<FontInfo>(new FontInfo, &FontInfo::FontInfoDeleter);
+        if( !pFontInfo ) 
+            return NULL;
+        pFontInfo->m_hFont = hFont;
+        pFontInfo->m_strFontName = StrFontName;
+        pFontInfo->m_nSize = nSize;
+        pFontInfo->m_bBold = bBold;
+        pFontInfo->m_bUnderline = bUnderline;
+        pFontInfo->m_bItalic = bItalic;
+        if( m_hDCPaint ) {
+            HFONT hOldFont = (HFONT) ::SelectObject(m_hDCPaint, hFont);
+            ::GetTextMetrics(m_hDCPaint, &pFontInfo->m_tm);
+            ::SelectObject(m_hDCPaint, hOldFont);
+        }
+        m_mapCustomFonts[StrFontName] = pFontInfo;
+
+        return hFont;
+    }
+
+    HFONT PaintManagerUI::GetFont(const YString &StrFontName)
+    {
+        if(StrFontName.empty() || (m_mapCustomFonts.find(StrFontName)==m_mapCustomFonts.end()))
+            return GetDefaultFontInfo()->m_hFont;
+        return m_mapCustomFonts[StrFontName]->m_hFont;
+    }
+
+    std::shared_ptr<FontInfo> PaintManagerUI::GetDefaultFontInfo()
+    {
+        auto spParent = m_wpParentResourcePM.lock();
+        if(spParent)
+            spParent->GetDefaultFontInfo();
+
+        if(m_DefaultFontInfo->m_tm.tmHeight == 0)
+        {
+            HFONT hOldFont = (HFONT) ::SelectObject(m_hDCPaint, m_DefaultFontInfo->m_hFont);
+            ::GetTextMetrics(m_hDCPaint, &m_DefaultFontInfo->m_tm);
+            ::SelectObject(m_hDCPaint, hOldFont);
+        }
+        return m_DefaultFontInfo;
+    }
+
+    std::shared_ptr<FontInfo> PaintManagerUI::GetFontInfo(HFONT hFont)
+    {
+        auto iter = std::find_if(m_mapCustomFonts.begin(),
+                    m_mapCustomFonts.end(),
+                    [&]( std::map<YString,std::shared_ptr<FontInfo>>::value_type &p)
+                    {
+                        if(p.second->m_hFont== hFont )
+                            return true;
+                        else
+                            return false;
+                    });
+        if(iter!= m_mapCustomFonts.end())
+            return iter->second;
+        else
+        {
+            auto spParent = m_wpParentResourcePM.lock();
+            if(spParent)
+                return spParent->GetFontInfo(hFont);
+        }
+        return NULL;
+    }
+
+    bool PaintManagerUI::RemoveFont(HFONT hFont)
+    {
+        auto iter = std::find_if(m_mapCustomFonts.begin(),
+            m_mapCustomFonts.end(),
+            [&]( std::map<YString,std::shared_ptr<FontInfo>>::value_type &p)
+        {
+            if(p.second->m_hFont== hFont )
+                return true;
+            else
+                return false;
+        });
+        m_mapCustomFonts.erase(iter);
+        return true;
+    }
+
+    void PaintManagerUI::RemoveAllFonts()
+    {
+        m_mapCustomFonts.clear();
+    }
+
+    void PaintManagerUI::SetDefaultFont(const YString &StrFontName, int nSize, bool bBold, bool bUnderline, bool bItalic)
+    {
+        LOGFONT lf = { 0 };
+        ::GetObject(::GetStockObject(DEFAULT_GUI_FONT), sizeof(LOGFONT), &lf);
+        _tcsncpy_s(lf.lfFaceName, StrFontName.c_str(), LF_FACESIZE);
+        lf.lfCharSet = DEFAULT_CHARSET;
+        lf.lfHeight = -nSize;
+        if( bBold ) lf.lfWeight += FW_BOLD;
+        if( bUnderline ) lf.lfUnderline = TRUE;
+        if( bItalic ) lf.lfItalic = TRUE;
+        HFONT hFont = ::CreateFontIndirect(&lf);
+        if( hFont == NULL ) return;
+
+        ::DeleteObject(m_DefaultFontInfo->m_hFont);
+        m_DefaultFontInfo->m_hFont = hFont;
+        m_DefaultFontInfo->m_strFontName = StrFontName;
+        m_DefaultFontInfo->m_nSize = nSize;
+        m_DefaultFontInfo->m_bBold = bBold;
+        m_DefaultFontInfo->m_bUnderline = bUnderline;
+        m_DefaultFontInfo->m_bItalic = bItalic;
+        ::ZeroMemory(&m_DefaultFontInfo->m_tm, sizeof(m_DefaultFontInfo->m_tm));
+        if( m_hDCPaint ) {
+            HFONT hOldFont = (HFONT) ::SelectObject(m_hDCPaint, hFont);
+            ::GetTextMetrics(m_hDCPaint, &m_DefaultFontInfo->m_tm);
+            ::SelectObject(m_hDCPaint, hOldFont);
+        }
     }
 
 

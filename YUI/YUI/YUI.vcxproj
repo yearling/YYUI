@@ -176,6 +176,7 @@
     <ClCompile Include="..\..\src\PaintManagerUI.cpp" />
     <ClCompile Include="..\..\src\DlgBuilder.cpp" />
     <ClCompile Include="..\..\src\RenderDGI.cpp" />
+    <ClCompile Include="..\..\src\stb_image.c" />
     <ClCompile Include="..\..\src\WindowImpl.cpp" />
     <ClCompile Include="..\..\src\WindowWnd.cpp" />
     <ClCompile Include="..\..\src\UIUtility.cpp" />
