@@ -21,7 +21,7 @@ namespace YUI
         , public INotifyPump
         , public INotifyUI
         , public IMessageFilterUI
-        , public IDialogBuilderCallBack
+        , public IDialogBuilderCallback
         , public std::enable_shared_from_this<WindowImpl>
     {
     public:
@@ -31,6 +31,8 @@ namespace YUI
         virtual void                    OnFinalMessage(HWND hWnd);
         virtual void                    Notify(NotifyMsg & msg);
         virtual void                    OnClick(NotifyMsg & msg);
+        virtual std::shared_ptr<ControlUI> 
+                                        CreateControl(YString pstrClass);
     protected:
         virtual YString                 GetSkinFolder() = 0 ;
         virtual YString                 GetSkinFile() =0 ;

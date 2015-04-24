@@ -8,7 +8,7 @@ namespace YUI
 
     WindowImpl::WindowImpl()
     {
-
+        m_spPaintManager = std::make_shared<PaintManagerUI>();
     }
 
     WindowImpl::~WindowImpl()
@@ -99,6 +99,11 @@ namespace YUI
         return nullptr;
     }
 
+    std::shared_ptr<ControlUI> WindowImpl::CreateControl(YString pstrClass)
+    {
+        return NULL;
+    }
+
     LRESULT WindowImpl::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM /*lParam*/, bool& /*bHandled*/)
     {
         if (uMsg == WM_KEYDOWN)
@@ -135,15 +140,15 @@ namespace YUI
 
     LRESULT WindowImpl::OnNcCalcSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
     {
-        LPRECT  pRect = NULL;
-        if( wParam == TRUE )
+        LPRECT pRect=NULL;
+        if ( wParam == TRUE)
         {
-            LPNCCALCSIZE_PARAMS pParam = reinterpret_cast<LPNCCALCSIZE_PARAMS>(lParam);
-            pRect = &pParam->rgrc[0];
+            LPNCCALCSIZE_PARAMS pParam = (LPNCCALCSIZE_PARAMS)lParam;
+            pRect=&pParam->rgrc[0];
         }
         else
         {
-            pRect = reinterpret_cast<LPRECT>(lParam);
+            pRect=(LPRECT)lParam;
         }
 
         if( ::IsZoomed( m_hWnd ))
@@ -307,8 +312,8 @@ namespace YUI
         ::SetWindowPos(*this, NULL, rcClient.left, rcClient.top, rcClient.right - rcClient.left, rcClient.bottom - rcClient.top, SWP_FRAMECHANGED);
 
         m_spPaintManager->Init(m_hWnd);
-        m_spPaintManager->AddPreMessageFilter(std::static_pointer_cast<IMessageFilterUI>(this->shared_from_this()));
-
+        m_spPaintManager->AddPreMessageFilter(shared_from_this());
+        
         DialogBuilder builder;
         if (m_spPaintManager->GetResourcePath().empty())
         {	// 允许更灵活的资源路径定义
@@ -349,16 +354,26 @@ namespace YUI
             }
             break;
         }
-
-        std::shared_ptr<ControlUI> pRoot;
-#if 0
-        if (GetResourceType()==UILIB_RESOURCE)
+        try
         {
-            STRINGorID xml(_ttoi(GetSkinFile().c_str()));
-            pRoot = builder.Create(xml, _T("xml"), this, &m_PaintManager);
+
+            std::shared_ptr<ControlUI> pRoot;
+            std::shared_ptr<ControlUI> spNull;
+            if (GetResourceType()==UILIB_RESOURCE)
+            {
+
+                pRoot = builder.Create(GetSkinFile(), _T("xml"),NULL, m_spPaintManager,spNull);
+            }
+            else
+                pRoot = builder.Create(GetSkinFile(), (UINT)0, NULL, m_spPaintManager,spNull);
+        }        
+        catch(YYUIException &e)
+        {
+            UNREFERENCED_PARAMETER(e);
+            Ycout<<_T("catched in main")<<std::endl;
+            std::cout<<YYCOM::CurrentExceptionDiagnosticInformation();
         }
-        else
-            pRoot = builder.Create(GetSkinFile().GetData(), (UINT)0, this, &m_PaintManager);
+#if 0
         ASSERT(pRoot);
         if (pRoot==NULL)
         {
@@ -419,16 +434,14 @@ namespace YUI
         case WM_CREATE:			lRes = OnCreate(uMsg, wParam, lParam, bHandled); break;
         case WM_CLOSE:			lRes = OnClose(uMsg, wParam, lParam, bHandled); break;
         case WM_DESTROY:		lRes = OnDestroy(uMsg, wParam, lParam, bHandled); break;
-#if defined(WIN32) && !defined(UNDER_CE)
         case WM_NCACTIVATE:		lRes = OnNcActivate(uMsg, wParam, lParam, bHandled); break;
-        case WM_NCCALCSIZE:		lRes = OnNcCalcSize(uMsg, wParam, lParam, bHandled); break;
+        //case WM_NCCALCSIZE:		lRes = OnNcCalcSize(uMsg, wParam, lParam, bHandled); break;
         case WM_NCPAINT:		lRes = OnNcPaint(uMsg, wParam, lParam, bHandled); break;
         case WM_NCHITTEST:		lRes = OnNcHitTest(uMsg, wParam, lParam, bHandled); break;
         case WM_GETMINMAXINFO:	lRes = OnGetMinMaxInfo(uMsg, wParam, lParam, bHandled); break;
         case WM_MOUSEWHEEL:		lRes = OnMouseWheel(uMsg, wParam, lParam, bHandled); break;
-#endif
         case WM_SIZE:			lRes = OnSize(uMsg, wParam, lParam, bHandled); break;
-        case WM_CHAR:		lRes = OnChar(uMsg, wParam, lParam, bHandled); break;
+        case WM_CHAR:		    lRes = OnChar(uMsg, wParam, lParam, bHandled); break;
         case WM_SYSCOMMAND:		lRes = OnSysCommand(uMsg, wParam, lParam, bHandled); break;
         case WM_KEYDOWN:		lRes = OnKeyDown(uMsg, wParam, lParam, bHandled); break;
         case WM_KILLFOCUS:		lRes = OnKillFocus(uMsg, wParam, lParam, bHandled); break;
@@ -436,19 +449,20 @@ namespace YUI
         case WM_LBUTTONUP:		lRes = OnLButtonUp(uMsg, wParam, lParam, bHandled); break;
         case WM_LBUTTONDOWN:	lRes = OnLButtonDown(uMsg, wParam, lParam, bHandled); break;
         case WM_MOUSEMOVE:		lRes = OnMouseMove(uMsg, wParam, lParam, bHandled); break;
-        case WM_MOUSEHOVER:	lRes = OnMouseHover(uMsg, wParam, lParam, bHandled); break;
+        case WM_MOUSEHOVER:	    lRes = OnMouseHover(uMsg, wParam, lParam, bHandled); break;
         default:				bHandled = FALSE; break;
         }
+        
         if (bHandled) return lRes;
-
+        
         lRes = HandleCustomMessage(uMsg, wParam, lParam, bHandled);
         if (bHandled) return lRes;
-
+        
         if (m_spPaintManager->MessageHandler(uMsg, wParam, lParam, lRes))
             return lRes;
         return WindowWnd::HandleMessage(uMsg, wParam, lParam);
     }
-
+    
     LRESULT WindowImpl::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
     {
         bHandled = FALSE;

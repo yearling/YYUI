@@ -28,6 +28,21 @@
     <Filter Include="YYUI\include\Exception">
       <UniqueIdentifier>{e872dc81-75a6-4ea4-a6dc-fae8e2375c62}</UniqueIdentifier>
     </Filter>
+    <Filter Include="YYUI\include\tinnyxml2">
+      <UniqueIdentifier>{8d3666d0-c46e-4280-b6e5-ba83653a92f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="YYUI\include\Control">
+      <UniqueIdentifier>{5d1a1089-89c6-44b9-b27a-90b5babf5811}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="YYUI\src\Control">
+      <UniqueIdentifier>{83bcd38a-79e9-49e4-b241-4d1945e81014}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="YYUI\Layout">
+      <UniqueIdentifier>{c08d616b-b346-4330-ae33-b9d7ed7e07fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="YYUI\src\Layout">
+      <UniqueIdentifier>{d4189fbc-16ab-461e-ab00-c9968e12618f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -99,6 +114,33 @@
     <ClInclude Include="..\..\include\RenderDGI.h">
       <Filter>YYUI\include\base</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\thirdparty\tinyxml2\tinyxml2.h">
+      <Filter>YYUI\include\tinnyxml2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Button.h">
+      <Filter>YYUI\include\Control</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Label.h">
+      <Filter>YYUI\include\Control</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Container.h">
+      <Filter>YYUI\include\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\HorizontalLayout.h">
+      <Filter>YYUI\Layout</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\ChildLayout.h">
+      <Filter>YYUI\Layout</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\VerticalLayout.h">
+      <Filter>YYUI\Layout</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\TabLayout.h">
+      <Filter>YYUI\Layout</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\TileLayout.h">
+      <Filter>YYUI\Layout</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -133,6 +175,33 @@
     </ClCompile>
     <ClCompile Include="..\..\src\stb_image.c">
       <Filter>YYUI\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\thirdparty\tinyxml2\tinyxml2.cpp">
+      <Filter>YYUI\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Button.cpp">
+      <Filter>YYUI\src\Control</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Label.cpp">
+      <Filter>YYUI\src\Control</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Container.cpp">
+      <Filter>YYUI\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ChildLayout.cpp">
+      <Filter>YYUI\src\Layout</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\HorizontalLayout.cpp">
+      <Filter>YYUI\src\Layout</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TabLayout.cpp">
+      <Filter>YYUI\src\Layout</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TileLayout.cpp">
+      <Filter>YYUI\src\Layout</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\VerticalLayout.cpp">
+      <Filter>YYUI\src\Layout</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

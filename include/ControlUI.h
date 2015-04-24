@@ -27,8 +27,8 @@ namespace YUI
         virtual bool                    Activate();
         virtual std::shared_ptr<PaintManagerUI>
                                         GetManager() const;
-        virtual void                    SetManager(std::shared_ptr<PaintManagerUI> &pManager,
-                                                    std::weak_ptr<ControlUI> &pParent,
+        virtual void SetManager(std::shared_ptr<PaintManagerUI> &pManager,
+                                                    std::weak_ptr<ControlUI> pParent,
                                                     bool bInit=true);
         virtual std::weak_ptr<ControlUI>
                                         GetParent() const;
@@ -103,7 +103,7 @@ namespace YUI
 
 
 
-        void                            SetPos(RECT &rc);
+        virtual void                    SetPos(RECT &rc);
 
         virtual UINT                    GetControlFlags() const;
 
@@ -146,7 +146,8 @@ namespace YUI
         //find
         virtual std::shared_ptr<ControlUI>
                                         FindControlFromPoint(POINT pt,UINT flag);
-
+        virtual std::shared_ptr<ControlUI>&
+                                        FindControlFromName(const YString & strName);
         void                            Invalidate();
         bool                            IsUpdateNeeded() const;
         void                            NeedUpdate();

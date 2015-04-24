@@ -236,7 +236,7 @@ namespace YYCOM
 		//¼ûhttp://stackoverflow.com/questions/18914506/doing-a-stdendl-before-allocconsole-causes-no-display-of-stdcout
 		wcout.clear();
 		CMutiScreen *pMS=GetMutiScreen();
-		pMS->Init();
+		//pMS->Init();
 		if(pMS==NULL)
 			return;
 		
@@ -353,7 +353,7 @@ namespace YYCOM
 		if(pMS->m_nNumber>=2)
 		{
 			RECT rc=pMS->GetRect(pMS->m_hOther);
-			LPCTSTR title=L"DebugConsole";
+			LPCTSTR title=_T("DebugConsole");
 			SetConsoleTitle(title);
 			HWND hWnd= FindWindow(NULL,title);
 			hWnd=GetConsoleWindow();

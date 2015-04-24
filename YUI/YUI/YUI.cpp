@@ -6,6 +6,8 @@
 #include "WindowWnd.h"
 #include "PaintManagerUI.h"
 #include "MutiScreen.h"
+#include "WindowImpl.h"
+#include <iostream>
 using namespace YUI;
 class MyWindow : public WindowWnd
 {
@@ -16,15 +18,35 @@ protected:
 
 };
 
+class TestWindow:public WindowImpl
+{
+public:
+    virtual LPCTSTR GetWindowClassName() const { return _T("DUIMainFrame");}
+    virtual YString GetSkinFile()  { return _T("duilib.xml");}
+    virtual YString GetSkinFolder() { return _T("");}
+};
 int APIENTRY _tWinMain( __in HINSTANCE hInstance, __in_opt HINSTANCE hPrevInstance, __in LPTSTR lpCmdLine, __in int nShowCmd )
 {
+    try{
     YYCOM::YYSetConsoleA();
 	PaintManagerUI::SetInstance(hInstance);
-	MyWindow duiFrame;
-	duiFrame.Create(NULL,_T("DUIWND"),WS_OVERLAPPEDWINDOW,WS_EX_WINDOWEDGE);
-	duiFrame.CenterWindow();
-    duiFrame.SetIcon(IDI_ICON1);
-	duiFrame.ShowModal();
-    
+	//MyWindow duiFrame;
+	//duiFrame.Create(NULL,_T("DUIWND"),WS_OVERLAPPEDWINDOW,WS_EX_WINDOWEDGE);
+	//duiFrame.CenterWindow();
+ //   duiFrame.SetIcon(IDI_ICON1);
+	//duiFrame.ShowModal();
+    std::shared_ptr<TestWindow> spWindow= std::make_shared<TestWindow>();
+    spWindow->Create(NULL,_T("DUIWND"),WS_OVERLAPPEDWINDOW,WS_EX_WINDOWEDGE);
+    spWindow->CenterWindow();
+    spWindow->SetIcon(IDI_ICON1);
+    spWindow->ShowModal();
+    } 
+    catch(YYUIException &e)
+    {
+        UNREFERENCED_PARAMETER(e);
+        Ycout<<"catched in main"<<std::endl;
+        std::cout<<YYCOM::CurrentExceptionDiagnosticInformation();
+    }
 	return 0; 
 }
+

@@ -52,35 +52,36 @@ namespace YUI
         if( !PaintManagerUI::g_strDefaultFontName.empty() )
         {
             _tcscpy_s(lf.lfFaceName, LF_FACESIZE, g_strDefaultFontName.c_str());
-            HFONT hDefaultFont = ::CreateFontIndirect( &lf );
-            m_DefaultFontInfo->m_hFont = hDefaultFont;
-            m_DefaultFontInfo->m_strFontName = (lf.lfFaceName);
-            m_DefaultFontInfo->m_nSize = -lf.lfHeight;
-            m_DefaultFontInfo->m_bBold = (lf.lfWeight >= FW_BOLD );
-            m_DefaultFontInfo->m_bUnderline = ( lf.lfUnderline == TRUE );
-            m_DefaultFontInfo->m_bItalic = (lf.lfItalic == TRUE );
-            memset( &m_DefaultFontInfo->m_tm,0,sizeof(m_DefaultFontInfo->m_tm) );
-
-            if(  g_hUpdateRectPen == NULL )
-            {
-                //指示哪些地方在被更新，调试用
-                g_hUpdateRectPen = ::CreatePen(PS_SOLID, 1, RGB(220, 0, 0));
-                // Boot Windows Common Controls (for the ToolTip control)
-                ::InitCommonControls();
-                ::LoadLibrary(_T("msimg32.dll"));
-            }
-
-            m_szMinWindow.cx = 0;
-            m_szMinWindow.cy = 0;
-            m_szMaxWindow.cx = 0;
-            m_szMaxWindow.cy = 0;
-            m_szInitWindowSize.cx = 0;
-            m_szInitWindowSize.cy = 0;
-            m_szRoundCorner.cx = m_szRoundCorner.cy = 0;
-            ZeroMemory(&m_rcSizeBox, sizeof(m_rcSizeBox));
-            ZeroMemory(&m_rcCaption, sizeof(m_rcCaption));
-            m_ptLastMousePos.x = m_ptLastMousePos.y = -1;
         }
+        m_DefaultFontInfo = std::make_shared<FontInfo>();
+        HFONT hDefaultFont = ::CreateFontIndirect( &lf );
+        m_DefaultFontInfo->m_hFont = hDefaultFont;
+        m_DefaultFontInfo->m_strFontName = (lf.lfFaceName);
+        m_DefaultFontInfo->m_nSize = -lf.lfHeight;
+        m_DefaultFontInfo->m_bBold = (lf.lfWeight >= FW_BOLD );
+        m_DefaultFontInfo->m_bUnderline = ( lf.lfUnderline == TRUE );
+        m_DefaultFontInfo->m_bItalic = (lf.lfItalic == TRUE );
+        memset( &m_DefaultFontInfo->m_tm,0,sizeof(m_DefaultFontInfo->m_tm) );
+
+        if(  g_hUpdateRectPen == NULL )
+        {
+            //指示哪些地方在被更新，调试用
+            g_hUpdateRectPen = ::CreatePen(PS_SOLID, 1, RGB(220, 0, 0));
+            // Boot Windows Common Controls (for the ToolTip control)
+            ::InitCommonControls();
+            ::LoadLibrary(_T("msimg32.dll"));
+        }
+
+        m_szMinWindow.cx = 0;
+        m_szMinWindow.cy = 0;
+        m_szMaxWindow.cx = 0;
+        m_szMaxWindow.cy = 0;
+        m_szInitWindowSize.cx = 0;
+        m_szInitWindowSize.cy = 0;
+        m_szRoundCorner.cx = m_szRoundCorner.cy = 0;
+        ZeroMemory(&m_rcSizeBox, sizeof(m_rcSizeBox));
+        ZeroMemory(&m_rcCaption, sizeof(m_rcCaption));
+        m_ptLastMousePos.x = m_ptLastMousePos.y = -1;
     }
 
     YUI::PaintManagerUI::~PaintManagerUI()
@@ -585,7 +586,11 @@ namespace YUI
                 if( m_pRoot == NULL)
                 {
                     PAINTSTRUCT ps = { 0 };
-                    ::BeginPaint(m_hWndPaint, &ps);
+                    HDC dc=::BeginPaint(m_hWndPaint, &ps);
+                    HPEN  hPen = CreatePen( PS_SOLID , 3 , RGB( 255 , 0 , 0 ));
+                    HPEN  hPenOld = ( HPEN )SelectObject ( dc , hPen );
+                    ::MoveToEx(dc,0,0,NULL);
+                    ::LineTo(dc,100,0);
                     ::EndPaint(m_hWndPaint,&ps);
                     return true;
                 }
@@ -669,10 +674,10 @@ namespace YUI
                     m_pRoot->DoPaint(m_hDCOffscreen,ps.rcPaint);
                     for(auto  iter : m_vecPostPaintControls)
                     {
-                        auto spControl  = iter.lock();
-                        if( spControl )
+                       /* auto spControl  = iter.lock();*/
+                        if( iter )
                         {
-                            spControl->DoPostPaint(m_hDCOffscreen,ps.rcPaint);
+                            iter->DoPostPaint(m_hDCOffscreen,ps.rcPaint);
                         }
                     }
                     ::RestoreDC(m_hDCOffscreen,iSaveDC);
@@ -1230,7 +1235,7 @@ namespace YUI
         }
     }
 
-    void PaintManagerUI::AddPreMessageFilter(std::shared_ptr<IMessageFilterUI> & spFilter)
+    void PaintManagerUI::AddPreMessageFilter(std::shared_ptr<IMessageFilterUI> spFilter)
     {
        m_vecPreMessageFilers.push_back(spFilter); 
     }
@@ -1456,6 +1461,112 @@ namespace YUI
             ::GetTextMetrics(m_hDCPaint, &m_DefaultFontInfo->m_tm);
             ::SelectObject(m_hDCPaint, hOldFont);
         }
+    }
+
+    DWORD PaintManagerUI::GetDefaultDisabledColor() const
+    {
+        auto sp = m_wpParentResourcePM.lock();
+        if(sp)
+            return sp->GetDefaultDisabledColor();
+        return m_dwDefaultDisabledColor;
+    }
+
+    void PaintManagerUI::SetDefaultDisabledColor(DWORD dwColor)
+    {
+        m_dwDefaultDisabledColor = dwColor;
+    }
+
+    DWORD PaintManagerUI::GetDefaultFontColor() const
+    {
+        auto sp = m_wpParentResourcePM.lock();
+        if(sp)
+            return sp->GetDefaultFontColor();
+        return m_dwDefaultFontColor;
+    }
+
+    void PaintManagerUI::SetDefaultFontColor(DWORD dwColor)
+    {
+        m_dwDefaultFontColor = dwColor;
+    }
+
+    DWORD PaintManagerUI::GetDefaultLinkFontColor() const
+    {
+        auto sp = m_wpParentResourcePM.lock();
+        if(sp)
+            return sp->GetDefaultLinkFontColor();
+        return m_dwDefaultLinkFontColor;
+    }
+
+    void PaintManagerUI::SetDefaultLinkFontColor(DWORD dwColor)
+    {
+        m_dwDefaultLinkFontColor = dwColor;
+    }
+
+    DWORD PaintManagerUI::GetDefaultLinkHoverFontColor() const
+    {
+        auto sp = m_wpParentResourcePM.lock();
+        if(sp)
+            return sp->GetDefaultLinkHoverFontColor();
+        return m_dwDefaultLinkHoverFontColor;
+    }
+
+    void PaintManagerUI::SetDefaultLinkHoverFontColor(DWORD dwColor)
+    {
+        m_dwDefaultLinkHoverFontColor = dwColor;
+    }
+
+    DWORD PaintManagerUI::GetDefaultSelectedBkColor() const
+    {
+        auto sp = m_wpParentResourcePM.lock();
+        if(sp)
+            return sp->GetDefaultSelectedBkColor();
+        return m_dwDefaultSelectedBKColor;
+    }
+
+    void PaintManagerUI::SetDefaultSelectedBkColor(DWORD dwColor)
+    {
+        m_dwDefaultSelectedBKColor = dwColor;
+    }
+
+    bool PaintManagerUI::InitControls(std::shared_ptr<ControlUI> &pControl,std::weak_ptr<ControlUI> parent)
+    {
+        assert(pControl);
+        if( !pControl )
+            return false;
+        if(parent.lock())
+            pControl->SetManager(this->shared_from_this(),parent,true);
+        else
+            pControl->SetManager(this->shared_from_this(),pControl->GetParent(),true);
+        return true;
+    }
+
+    std::shared_ptr<ControlUI> PaintManagerUI::GetRoot() const
+    {
+        return m_pRoot;
+    }
+
+    int PaintManagerUI::GetPostPaintCount() const
+    {
+        return m_vecPostPaintControls.size();
+    }
+
+    bool PaintManagerUI::AddPostPaint(std::shared_ptr<ControlUI> pControl)
+    {
+        m_vecPostPaintControls.push_back(pControl);
+        return true;
+    }
+
+    bool PaintManagerUI::RemovePostPaint(std::shared_ptr<ControlUI> pControl)
+    {
+        m_vecPostPaintControls.erase(std::remove(m_vecPostPaintControls.begin(),m_vecPostPaintControls.end(),pControl),m_vecPostPaintControls.end());
+        return true;
+    }
+
+    bool PaintManagerUI::SetPostPaintIndex(std::shared_ptr<ControlUI> pContro)
+    {
+       RemovePostPaint(pContro);
+       m_vecPostPaintControls.push_back(pContro);
+       return true;
     }
 
 

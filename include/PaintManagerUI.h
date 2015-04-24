@@ -68,6 +68,18 @@ namespace YUI
         void                            SetBackgroundTransparent(bool bTrans);
         bool                            IsShowUpdateRect() const;
         void                            SetShowUpdateRect(bool bShow);
+
+        DWORD                           GetDefaultDisabledColor() const;
+        void                            SetDefaultDisabledColor(DWORD dwColor);
+        DWORD                           GetDefaultFontColor() const;
+        void                            SetDefaultFontColor(DWORD dwColor);
+        DWORD                           GetDefaultLinkFontColor() const;
+        void                            SetDefaultLinkFontColor(DWORD dwColor);
+        DWORD                           GetDefaultLinkHoverFontColor() const;
+        void                            SetDefaultLinkHoverFontColor(DWORD dwColor);
+        DWORD                           GetDefaultSelectedBkColor() const;
+        void                            SetDefaultSelectedBkColor(DWORD dwColor);
+
         void                            ReloadAllImages();
         bool                            SetNextTabControl(bool bForward= true);
         std::shared_ptr<ControlUI>      FindControl(POINT pt) const;
@@ -79,9 +91,10 @@ namespace YUI
         void                            SetCapture();
         void                            ReleaseCapture();
         bool                            TranslateAccelerator(LPMSG pMsg);
+        bool                            InitControls(std::shared_ptr<ControlUI> &pControl,std::weak_ptr<ControlUI> parent);
     public:
         bool                            PreMessageHandler(UINT uMsg,WPARAM wParam,LPARAM lParam,LRESULT &lRes);
-        void                            AddPreMessageFilter(std::shared_ptr<IMessageFilterUI> & spFilter );
+        void                            AddPreMessageFilter(std::shared_ptr<IMessageFilterUI> spFilter );
         std::shared_ptr<ControlUI>      GetFocus() const;
         void                            SetFocus(std::shared_ptr<ControlUI> pControl);
         void                            SetFocusNeeded(std::shared_ptr<ControlUI> pControl);
@@ -101,6 +114,13 @@ namespace YUI
         std::shared_ptr<FontInfo>       GetFontInfo(HFONT hFont);
         bool                            RemoveFont(HFONT hFont);
         void                            RemoveAllFonts();
+
+        std::shared_ptr<ControlUI>      GetRoot() const;
+
+        int                             GetPostPaintCount() const;
+        bool                            AddPostPaint(std::shared_ptr<ControlUI> pControl);
+        bool                            RemovePostPaint(std::shared_ptr<ControlUI> pControl);
+        bool                            SetPostPaintIndex(std::shared_ptr<ControlUI> pContro);
     public:
         static void                     SetInstance(HINSTANCE hInst);
         static YString                  GetInstancePath();
@@ -169,7 +189,8 @@ namespace YUI
                                         m_vecPreMessageFilers;
         std::vector<std::weak_ptr<IMessageFilterUI>>             
                                         m_vecMessageFilters;
-        std::vector<std::weak_ptr<ControlUI> >              
+        //have bugs!!! 
+        std::vector<std::shared_ptr<ControlUI> >              
                                         m_vecPostPaintControls;
         std::vector<void*>              m_vecDelayedCleanup;
         std::list<NotifyMsg>            m_ListAsyncNotify;

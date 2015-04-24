@@ -14,6 +14,7 @@
 #include <vector>
 #include <map>
 #include <unordered_map>
+#include <iostream>
 using YYCOM::Exception;
 using YYCOM::ThrowException;
 using YYCOM::ErrorInfo;
@@ -22,13 +23,16 @@ namespace YUI
     //YString 用的就是标准string
 #if defined UNICODE || defined _UNICODE
     typedef std::wstring                YString;
+#define Ycout std::wcout
 #else
     typedef std::string                 YString;
+#define  Ycout std::cout
 #endif
 
     //定义异常基类
 	struct YYUIException : virtual YYCOM::Exception, virtual std::exception{};
 	typedef YYCOM::ErrorInfo<struct tag_err_str,YString> UIErrorStr;
+
 
     //定义消息名
 #define  MSG_WindowInit                 (_T("windowinit"))
@@ -36,53 +40,55 @@ namespace YUI
 #define  MSG_SetFocus                   (_T("setfocus"))
 #define  MSG_TIMER                      (_T("timer"))
 #define  MSG_MENU                       (_T("menu"))
+#define  MSG_TABSELECT                  (_T("tabselect"))
+#define  MSG_Click                      (_T("click"))
     //定义控件名
-#define  CTR_EDIT                       (_T("Edit"))
-#define  CTR_LIST                       (_T("List"))
-#define  CTR_TEXT                       (_T("Text"))
+#define  CTR_EDIT                       (("Edit"))
+#define  CTR_LIST                       (("List"))
+#define  CTREXT                         (("Text"))
 
-#define  CTR_COMBO                      (_T("Combo"))
-#define  CTR_LABEL                      (_T("Label"))
-#define  CTR_FLASH						(_T("Flash"))
+#define  CTR_COMBO                      (("Combo"))
+#define  CTR_LABEL                      (("Label"))
+#define  CTR_FLASH						(("Flash"))
 
-#define  CTR_BUTTON                     (_T("Button"))
-#define  CTR_OPTION                     (_T("Option"))
-#define  CTR_SLIDER                     (_T("Slider"))
+#define  CTR_BUTTON                     (("Button"))
+#define  CTR_OPTION                     (("Option"))
+#define  CTR_SLIDER                     (("Slider"))
 
-#define  CTR_CONTROL                    (_T("Control"))
-#define  CTR_ACTIVEX                    (_T("ActiveX"))
+#define  CTR_CONTROL                    (("Control"))
+#define  CTR_ACTIVEX                    (("ActiveX"))
 
-#define  CTR_LISTITEM                   (_T("ListItem"))
-#define  CTR_PROGRESS                   (_T("Progress"))
-#define  CTR_RICHEDIT                   (_T("RichEdit"))
-#define  CTR_CHECKBOX                   (_T("CheckBox"))
-#define  CTR_COMBOBOX                   (_T("ComboBox"))
-#define  CTR_DATETIME                   (_T("DateTime"))
-#define  CTR_TREEVIEW                   (_T("TreeView"))
-#define  CTR_TREENODE                   (_T("TreeNode"))
+#define  CTR_LISTITEM                   (("ListItem"))
+#define  CTR_PROGRESS                   (("Progress"))
+#define  CTR_RICHEDIT                   (("RichEdit"))
+#define  CTR_CHECKBOX                   (("CheckBox"))
+#define  CTR_COMBOBOX                   (("ComboBox"))
+#define  CTR_DATETIME                   (("DateTime"))
+#define  CTR_TREEVIEW                     (("TreeView"))
+#define  CTR_TREENODE                     (("TreeNode"))
 
-#define  CTR_CONTAINER                  (_T("Container"))
-#define  CTR_TABLAYOUT                  (_T("TabLayout"))
-#define  CTR_SCROLLBAR                  (_T("ScrollBar"))
+#define  CTR_CONTAINER                  (("Container"))
+#define  CTR_TABLAYOUT                    (("TabLayout"))
+#define  CTR_SCROLLBAR                  (("ScrollBar"))
 
-#define  CTR_LISTHEADER                 (_T("ListHeader"))
-#define  CTR_TILELAYOUT                 (_T("TileLayout"))
-#define  CTR_WEBBROWSER                 (_T("WebBrowser"))
+#define  CTR_LISTHEADER                 (("ListHeader"))
+#define  CTR_TILELAYOUT                   (("TileLayout"))
+#define  CTR_WEBBROWSER                 (("WebBrowser"))
 
-#define  CTR_CHILDLAYOUT                (_T("ChildLayout"))
-#define  CTR_LISTELEMENT                (_T("ListElement"))
+#define  CTR_CHILDLAYOUT                (("ChildLayout"))
+#define  CTR_LISTELEMENT                (("ListElement"))
 
-#define  CTR_DIALOGLAYOUT               (_T("DialogLayout"))
+#define  CTR_DIALOGLAYOUT               (("DialogLayout"))
 
-#define  CTR_VERTICALLAYOUT             (_T("VerticalLayout"))
-#define  CTR_LISTHEADERITEM             (_T("ListHeaderItem"))
+#define  CTR_VERTICALLAYOUT             (("VerticalLayout"))
+#define  CTR_LISTHEADERITEM             (("ListHeaderItem"))
 
-#define  CTR_LISTTEXTELEMENT            (_T("ListTextElement"))
+#define  CTR_LISTTEXTELEMENT            (("ListTextElement"))
 
-#define  CTR_HORIZONTALLAYOUT           (_T("HorizontalLayout"))
-#define  CTR_LISTLABELELEMENT           (_T("ListLabelElement"))
+#define  CTR_HORIZONTALLAYOUT           (("HorizontalLayout"))
+#define  CTR_LISTLABELELEMENT           (("ListLabelElement"))
 
-#define  CTR_LISTCONTAINERELEMENT       (_T("ListContainerElement"))
+#define  CTR_LISTCONTAINERELEMENT       (("ListContainerElement"))
 
     //前置定义
     class ControlUI;

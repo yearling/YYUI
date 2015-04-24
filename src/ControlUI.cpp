@@ -82,7 +82,7 @@ namespace YUI
         return m_pManager;
     }
 
-    void ControlUI::SetManager(std::shared_ptr<PaintManagerUI> &pManager, std::weak_ptr<ControlUI> &pParent, bool bInit/*=true*/)
+    void ControlUI::SetManager(std::shared_ptr<PaintManagerUI> &pManager, std::weak_ptr<ControlUI> pParent, bool bInit/*=true*/)
     {
         m_pManager=pManager;
         m_pParent=pParent;
@@ -995,6 +995,14 @@ namespace YUI
     ControlUI::~ControlUI()
     {
 
+    }
+
+    std::shared_ptr<ControlUI>& ControlUI::FindControlFromName(const YString & strName)
+    {
+        if(strName == GetName() )
+            return shared_from_this();
+        else
+            return std::shared_ptr<ControlUI>();
     }
 
 
