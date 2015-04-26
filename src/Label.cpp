@@ -59,11 +59,11 @@ namespace YUI
         return _T("LabelUI");
     }
 
-    std::shared_ptr<ControlUI> Label::GetInterface(const YString & strName)
+    std::shared_ptr<ControlUI> Label::QueryInterface(const YString & strName)
     {
         if( strName ==  _T("Label")) 
             return shared_from_this();
-        return ControlUI::GetInterface(strName);
+        return ControlUI::QueryInterface(strName);
     }
 
     void Label::SetTextStyle(UINT uStyle)

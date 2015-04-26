@@ -14,8 +14,7 @@ namespace YUI
         void                            SetChildLayoutXML(const YString& pXML);
         YString                         GetChildLayoutXML();
         virtual LPCTSTR                 GetClass() const;
-        virtual std::shared_ptr<ControlUI>                  
-                                        GetInterface(const YString & strName);
+        virtual std::shared_ptr<ControlUI> QueryInterface(const YString & strName);
 
     private:
         YString                         m_pstrXMLFile;

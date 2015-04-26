@@ -9,8 +9,7 @@ namespace YUI
     public:     
         HorizontalLayout();
         LPCTSTR                         GetClass() const;
-        virtual std::shared_ptr<ControlUI>                  
-                                        GetInterface(const YString & strName);
+        virtual std::shared_ptr<ControlUI> QueryInterface(const YString & strName);
         UINT                            GetControlFlags() const;
 
         void                            SetSepWidth(int iWidth);

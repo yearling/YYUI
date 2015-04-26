@@ -353,12 +353,13 @@ namespace YUI
 #endif
             }
             break;
-        }
+		}
+		std::shared_ptr<ControlUI> pRoot;
+		std::shared_ptr<ControlUI> spNull;
         try
         {
 
-            std::shared_ptr<ControlUI> pRoot;
-            std::shared_ptr<ControlUI> spNull;
+           
             if (GetResourceType()==UILIB_RESOURCE)
             {
 
@@ -373,18 +374,16 @@ namespace YUI
             Ycout<<_T("catched in main")<<std::endl;
             std::cout<<YYCOM::CurrentExceptionDiagnosticInformation();
         }
-#if 0
-        ASSERT(pRoot);
+        assert(pRoot);
         if (pRoot==NULL)
         {
             MessageBox(NULL,_T("加载资源文件失败"),_T("Duilib"),MB_OK|MB_ICONERROR);
             ExitProcess(1);
             return 0;
         }
-        m_PaintManager.AttachDialog(pRoot);
-        m_PaintManager.AddNotifier(this);
-        m_PaintManager.SetBackgroundTransparent(TRUE);
-#endif
+        m_spPaintManager->AttachDialog(pRoot);
+        m_spPaintManager->AddNotifier(shared_from_this());
+        m_spPaintManager->SetBackgroundTransparent(TRUE);
         InitWindow();
         return 0;
     }
@@ -435,7 +434,7 @@ namespace YUI
         case WM_CLOSE:			lRes = OnClose(uMsg, wParam, lParam, bHandled); break;
         case WM_DESTROY:		lRes = OnDestroy(uMsg, wParam, lParam, bHandled); break;
         case WM_NCACTIVATE:		lRes = OnNcActivate(uMsg, wParam, lParam, bHandled); break;
-        //case WM_NCCALCSIZE:		lRes = OnNcCalcSize(uMsg, wParam, lParam, bHandled); break;
+        case WM_NCCALCSIZE:		lRes = OnNcCalcSize(uMsg, wParam, lParam, bHandled); break;
         case WM_NCPAINT:		lRes = OnNcPaint(uMsg, wParam, lParam, bHandled); break;
         case WM_NCHITTEST:		lRes = OnNcHitTest(uMsg, wParam, lParam, bHandled); break;
         case WM_GETMINMAXINFO:	lRes = OnGetMinMaxInfo(uMsg, wParam, lParam, bHandled); break;

@@ -116,7 +116,8 @@ namespace YUI
         void                            RemoveAllFonts();
 
         std::shared_ptr<ControlUI>      GetRoot() const;
-
+		bool							AttachDialog(std::shared_ptr<ControlUI> pControl);
+		bool							AddNotifier(std::shared_ptr<INotifyUI> pControl);
         int                             GetPostPaintCount() const;
         bool                            AddPostPaint(std::shared_ptr<ControlUI> pControl);
         bool                            RemovePostPaint(std::shared_ptr<ControlUI> pControl);

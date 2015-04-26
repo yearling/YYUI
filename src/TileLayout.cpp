@@ -33,11 +33,11 @@ namespace YUI
         return _T("TileLayoutUI");
     }
 
-    std::shared_ptr<ControlUI> TileLayout::GetInterface(const YString & strName)
+    std::shared_ptr<ControlUI> TileLayout::QueryInterface(const YString & strName)
     {
         if( strName == CTR_TILELAYOUT ) 
             return this->shared_from_this();
-        return Container::GetInterface(strName);
+        return Container::QueryInterface(strName);
     }
 
     void TileLayout::SetPos(RECT rc)

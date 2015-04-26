@@ -20,11 +20,11 @@ namespace YUI
         return _T("HorizontalLayoutUI");
     }
 
-    std::shared_ptr<ControlUI> HorizontalLayout::GetInterface(const YString & strName)
+    std::shared_ptr<ControlUI> HorizontalLayout::QueryInterface(const YString & strName)
     {
         if( strName == CTR_HORIZONTALLAYOUT) 
             return shared_from_this();
-        return Container::GetInterface(strName);
+        return Container::QueryInterface(strName);
     }
 
     UINT HorizontalLayout::GetControlFlags() const

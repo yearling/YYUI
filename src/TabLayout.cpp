@@ -25,11 +25,11 @@ namespace YUI
         return _T("TabLayoutUI");
     }
 
-    std::shared_ptr<ControlUI> TabLayout::GetInterface(const YString & strName)
+    std::shared_ptr<ControlUI> TabLayout::QueryInterface(const YString & strName)
     {
         if( strName == CTR_TABLAYOUT ) 
             return this->shared_from_this();
-        return Container::GetInterface(strName);
+        return Container::QueryInterface(strName);
     }
 
     bool TabLayout::Add(std::shared_ptr<ControlUI>& pControl)

@@ -1,3 +1,4 @@
+#pragma once
 #include "YUI.h"
 #include "ControlUI.h"
 #include <set>
@@ -7,8 +8,6 @@ namespace YUI
     class IContainer
     {
     public:
-        virtual std::shared_ptr<ControlUI> GetItemAt(int iIndex) const = 0;
-
         virtual int                     GetCount() const = 0;
         virtual bool                    Add(std::shared_ptr<ControlUI>& pControl) = 0;
 
@@ -23,8 +22,7 @@ namespace YUI
         virtual ~Container();
     public:
         virtual LPCTSTR                 GetClass() const;
-        virtual std::shared_ptr<ControlUI>                  
-                                        GetInterface(const YString & strName);
+        virtual std::shared_ptr<ControlUI> QueryInterface(const YString & strName);
 
 
 

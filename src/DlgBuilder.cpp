@@ -8,6 +8,9 @@
 #include "Button.h"
 
 #include <iostream>
+#include "Container.h"
+#include "VerticalLayout.h"
+#include "HorizontalLayout.h"
 using std::cout;
 using std::endl;
 using std::wcout;
@@ -96,7 +99,7 @@ namespace YUI
                     }
                     //caption
                     {
-                        pstrValue = pRoot->Attribute("sizebox");
+                        pstrValue = pRoot->Attribute("caption");
                         if(pstrValue)
                         {
                             RECT rcCaption = { 0 };
@@ -213,7 +216,7 @@ namespace YUI
     std::shared_ptr<ControlUI> DialogBuilder::Parse(tinyxml2::XMLNode* pRoot, std::weak_ptr<ControlUI> pParent , std::shared_ptr<PaintManagerUI> pManager)
     {
         //ContainerUI* pContainer = NULL;
-        ControlUI* pReturn = NULL;
+        std::shared_ptr<ControlUI> pReturn;
         for( XMLElement *pChild = pRoot->FirstChildElement();pChild;pChild= pChild->NextSiblingElement())
         {
             const char *pstrClass = pChild->Name();
@@ -236,10 +239,46 @@ namespace YUI
             {
                 if(strcmp(pstrClass,CTR_BUTTON)== 0)
                     pControl = std::make_shared<Button>();
-
-            }
+				else if(strcmp(pstrClass,CTR_CONTAINER) == 0)
+					pControl = std::make_shared<Container>();
+				else if(strcmp(pstrClass,CTR_VERTICALLAYOUT) == 0)
+					pControl = std::make_shared<VerticalLayout>();
+				else if(strcmp(pstrClass,CTR_HORIZONTALLAYOUT) == 0)
+					pControl = std::make_shared<HorizontalLayout>();
+				if( !pControl )
+				{
+					//load from plugin;
+					//not implement;
+					assert( 0 && "not implement");
+				}
+				if( pControl == NULL && m_pCallback != NULL ) 
+				{
+					pControl = m_pCallback->CreateControl(pstrClass);
+				}
+				assert(pControl);
+				if( !pChild->NoChildren() )
+				{
+					Parse(pChild,pControl,pManager);
+				}
+				//attach to parent
+				auto spParent = pParent.lock();
+				if(spParent)
+				{
+					//std::shared_ptr<IContainer> pContianer = static_cast<std::shared_ptr<IContainer>>(spParent->QueryInterface(_T("IContainer")));
+					std::shared_ptr<IContainer> pContianer = std::dynamic_pointer_cast<IContainer >(spParent);
+					if(!pContianer)
+						return nullptr;
+					pContianer->Add(pControl);
+				}
+				for(const XMLAttribute *pAttribue = pChild->FirstAttribute();pAttribue;pAttribue= pAttribue->Next())
+				{
+					pControl->SetAttribute(pAttribue->Name(),pAttribue->Value());
+				}
+			}
+			if(pReturn == nullptr )
+				pReturn = pControl;
         }
-        return NULL;
+        return pReturn;
     }
 
 }

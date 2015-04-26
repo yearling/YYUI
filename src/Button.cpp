@@ -27,11 +27,11 @@ namespace YUI
         return _T("ButtonUI");
     }
 
-    std::shared_ptr<ControlUI> Button::GetInterface(const YString & strName)
+    std::shared_ptr<ControlUI> Button::QueryInterface(const YString & strName)
     {
         if( strName ==  CTR_BUTTON  ) 
             return shared_from_this();
-        return Label::GetInterface(strName);
+        return Label::QueryInterface(strName);
     }
 
     UINT Button::GetControlFlags() const

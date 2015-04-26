@@ -10,8 +10,8 @@ namespace YUI
         TabLayout();
         virtual void                    SetAttribute(const YString &pstrName, const YString& pstrValue);
         virtual LPCTSTR                 GetClass() const;
-        virtual std::shared_ptr<ControlUI>                  
-                                        GetInterface(const YString & strName);
+        virtual std::shared_ptr<ControlUI>
+										QueryInterface(const YString & strName);
         virtual bool                    Add(std::shared_ptr<ControlUI>& pControl);
 
         virtual bool                    Remove(std::shared_ptr<ControlUI> &pControl) ;

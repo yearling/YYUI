@@ -20,11 +20,11 @@ namespace YUI
         return _T("VerticalLayoutUI");
     }
 
-    std::shared_ptr<ControlUI> VerticalLayout::GetInterface(const YString & strName)
+    std::shared_ptr<ControlUI> VerticalLayout::QueryInterface(const YString & strName)
     {
         if( strName == CTR_VERTICALLAYOUT)
             return shared_from_this();
-        return Container::GetInterface(strName);
+        return Container::QueryInterface(strName);
     }
 
     void VerticalLayout::SetAttribute(const YString &pstrName, const YString& pstrValue)

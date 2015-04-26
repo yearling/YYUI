@@ -17,8 +17,7 @@ namespace YUI
         Label();
         virtual ~Label();
         LPCTSTR                         GetClass() const;
-        virtual std::shared_ptr<ControlUI>                  
-            GetInterface(const YString & strName);
+        virtual std::shared_ptr<ControlUI> QueryInterface(const YString & strName);
 
         void                            SetTextStyle(UINT uStyle);
         UINT                            GetTextStyle() const;

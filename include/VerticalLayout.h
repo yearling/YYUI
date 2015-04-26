@@ -8,8 +8,7 @@ namespace YUI
     public:    
         VerticalLayout();
         virtual LPCTSTR                 GetClass() const;
-        virtual std::shared_ptr<ControlUI>                  
-                                        GetInterface(const YString & strName);
+        virtual std::shared_ptr<ControlUI> QueryInterface(const YString & strName);
         virtual void                    SetAttribute(const YString &pstrName, const YString& pstrValue);
         virtual UINT                    GetControlFlags() const;
         virtual void                    DoEvent(ControlEvent& eve);

@@ -35,7 +35,7 @@ namespace YUI
         m_cxyBorderRound.cx = m_cxyBorderRound.cy = 0;
         ZeroMemory(&m_rcPaint,sizeof(RECT));
         ZeroMemory(&m_rcItem, sizeof(RECT));
-        ZeroMemory(&m_rcPaint, sizeof(RECT));
+        ZeroMemory(&m_rcPadding, sizeof(RECT));
         ZeroMemory(&m_rcBorderSize ,sizeof(RECT));
         ZeroMemory(&m_RelativePos,sizeof(RelativePosUI));
     }
@@ -56,7 +56,7 @@ namespace YUI
         m_strName = strName;
     }
 
-    std::shared_ptr<ControlUI> ControlUI::GetInterface(const YString & strName)
+    std::shared_ptr<ControlUI> ControlUI::QueryInterface(const YString & strName)
     {
         if( strName == CTR_CONTROL )
             return this->shared_from_this();

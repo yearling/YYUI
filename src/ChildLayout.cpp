@@ -53,11 +53,11 @@ namespace YUI
 
     }
 
-    std::shared_ptr<ControlUI> ChildLayout::GetInterface(const YString & strName)
+    std::shared_ptr<ControlUI> ChildLayout::QueryInterface(const YString & strName)
     {
         if( strName == CTR_CHILDLAYOUT ) 
             return this->shared_from_this();
-        return Container::GetInterface(strName);
+        return Container::QueryInterface(strName);
     }
 
 }

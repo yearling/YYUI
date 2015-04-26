@@ -22,9 +22,8 @@ namespace YUI
 
     void WindowWnd::RegisterWindowClass()
     {
-        WNDCLASSEX wc;
+        WNDCLASS wc;
         ZeroMemory(&wc,sizeof(wc));
-        wc.cbSize = sizeof(wc);
         wc.style = GetClassStyle();
         wc.lpfnWndProc = WindowWnd::WndProc; //用自己的WndProc
         wc.cbClsExtra = 0;
@@ -35,9 +34,8 @@ namespace YUI
         wc.hbrBackground = NULL;
         wc.lpszMenuName = NULL;
         wc.lpszClassName = GetWindowClassName();
-        wc.hIconSm = NULL;
 
-        ATOM ret = ::RegisterClassEx( &wc );
+        ATOM ret = ::RegisterClass( &wc );
 
         DWORD err = ::GetLastError();
         assert( ret !=0  || err == ERROR_CLASS_ALREADY_EXISTS );

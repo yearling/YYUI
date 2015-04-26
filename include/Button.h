@@ -12,8 +12,7 @@ namespace YUI
         Button();
         virtual ~Button();
         LPCTSTR                         GetClass() const;
-        virtual std::shared_ptr<ControlUI>                  
-                                        GetInterface(const YString & strName);
+        virtual std::shared_ptr<ControlUI> QueryInterface(const YString & strName);
         virtual UINT                    GetControlFlags() const;
         virtual bool                    Activate();
         virtual void                    SetEnabled(bool bEnable = true);

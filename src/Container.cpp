@@ -29,10 +29,11 @@ namespace YUI
         return _T("Container");
     }
 
-    std::shared_ptr<ControlUI> Container::GetInterface(const YString & strName)
+    std::shared_ptr<ControlUI> Container::QueryInterface(const YString & strName)
     {
-        if( _tcscmp(strName.c_str(), CTR_CONTAINER) == 0 ) return this->shared_from_this();
-        return ControlUI::GetInterface(strName);
+        if( strName == CTR_CONTAINER ) 
+			return this->shared_from_this();
+        return ControlUI::QueryInterface(strName);
     }
 
     

@@ -22,8 +22,7 @@ namespace YUI
         virtual YString                 GetName() const;
         virtual void                    SetName(const YString & strName);
         virtual LPCTSTR                 GetClass() const;
-        virtual std::shared_ptr<ControlUI>                  
-                                        GetInterface(const YString & strName);
+        virtual std::shared_ptr<ControlUI> QueryInterface(const YString & strName);
         virtual bool                    Activate();
         virtual std::shared_ptr<PaintManagerUI>
                                         GetManager() const;

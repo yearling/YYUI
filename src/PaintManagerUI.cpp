@@ -1569,6 +1569,28 @@ namespace YUI
        return true;
     }
 
+	bool PaintManagerUI::AttachDialog(std::shared_ptr<ControlUI> pControl)
+	{
+		assert( ::IsWindow(m_hWndPaint) );
+		::SetFocus(NULL);
+		m_pEventKey = NULL;
+		m_pEventHover = NULL;
+		m_pEventClick = NULL;
+		if( m_pRoot != NULL )
+			m_vecPostPaintControls.clear();
+		m_pRoot = pControl;
+		m_bUpdateNeeded = true;
+		m_bFirstLayout = true;
+		m_bFocusNeeded = true;
+		return InitControls(pControl,std::shared_ptr<ControlUI>());
+	}
+
+	bool PaintManagerUI::AddNotifier(std::shared_ptr<INotifyUI> pControl)
+	{
+		m_vecNotifiers.push_back(pControl);
+		return true;
+	}
+
 
     HINSTANCE YUI::PaintManagerUI::GetInstance()
     {
