@@ -24,8 +24,8 @@ namespace YUI
     YUI::PaintManagerUI::PaintManagerUI():
         m_hWndPaint( NULL )
         ,m_hDCPaint( NULL)
-        ,m_hDCOffscreen( NULL )
-        ,m_hDCBackground( NULL )
+        ,m_hDcOffscreen( NULL )
+        ,m_hDcBackground( NULL )
         ,m_hbmpOffscreen( NULL )
         ,m_hbmpBackground( NULL )
         ,m_hwndTooltip( NULL )
@@ -595,114 +595,120 @@ namespace YUI
                     return true;
                 }
 
-                if( m_bUpdateNeeded )
-                {
-                    m_bUpdateNeeded = false;
-                    RECT rcClient = { 0 };
-                    ::GetClientRect(m_hWndPaint, &rcClient );
-                    if( !::IsRectEmpty(&rcClient) )
-                    {
-                        if( m_pRoot->IsUpdateNeeded())
-                        {
-                            m_pRoot->SetPos(rcClient);
-                            if( m_hDCOffscreen != NULL )
-                                ::DeleteDC(m_hDCOffscreen);
-                            if( m_hDCBackground != NULL )
-                                ::DeleteDC(m_hDCBackground);
-                            if( m_hbmpOffscreen != NULL )
-                                ::DeleteObject(m_hbmpOffscreen);
-                            if( m_hbmpBackground != NULL )
-                                ::DeleteObject(m_hbmpBackground);
-                            m_hDCOffscreen = NULL;
-                            m_hDCBackground = NULL;
-                            m_hbmpBackground = NULL;
-                            m_hbmpBackground = NULL;
-                        }
-                        else
-                        {
-#if 0 
-                            std::weak_ptr<YControlUI> wp;
-                            typedef std::function<std::weak_ptr<YControlUI>(std::weak_ptr<YControlUI>) > funcFindControl;
-                            funcFindControl func= []()
-                            while(wp = m_pRoot->FindControl([]()))
-#endif 
-                        }
-                        if( m_bFirstLayout )
-                        {
-                            m_bFirstLayout = false;
-                           SendNotify(m_pRoot,MSG_WindowInit,0,0,false);
-                        }
-                    }
-                }
+				if( m_bUpdateNeeded ) 
+				{
+					m_bUpdateNeeded = false;
+					RECT rcClient = { 0 };
+					::GetClientRect(m_hWndPaint, &rcClient);
+					if( !::IsRectEmpty(&rcClient) ) 
+					{
+						if( m_pRoot->IsUpdateNeeded() ) 
+						{
+							m_pRoot->SetPos(rcClient);
+							if( m_hDcOffscreen != NULL ) ::DeleteDC(m_hDcOffscreen);
+							if( m_hDcBackground != NULL ) ::DeleteDC(m_hDcBackground);
+							if( m_hbmpOffscreen != NULL ) ::DeleteObject(m_hbmpOffscreen);
+							if( m_hbmpBackground != NULL ) ::DeleteObject(m_hbmpBackground);
+							m_hDcOffscreen = NULL;
+							m_hDcBackground = NULL;
+							m_hbmpOffscreen = NULL;
+							m_hbmpBackground = NULL;
+						}
+						else 
+						{
+							/*	CControlUI* pControl = NULL;
+							while( pControl = m_pRoot->FindControl(__FindControlFromUpdate, NULL, UIFIND_VISIBLE | UIFIND_ME_FIRST) ) {
+							pControl->SetPos( pControl->GetPos() );
+							}*/
+						}
+						// We'll want to notify the window when it is first initialized
+						// with the correct layout. The window form would take the time
+						// to submit swipes/animations.
+						if( m_bFirstLayout ) 
+						{
+							m_bFirstLayout = false;
+							SendNotify(m_pRoot,MSG_WindowInit,  0, 0, false);
+						}
+					}
+				}
+				// Set focus to first control?
+				if( m_bFocusNeeded ) 
+				{
+					SetNextTabControl();
+				}
+				//
+				// Render screen
+				//
+				// Prepare offscreen bitmap?
+				if( m_bOffscreenPaint && m_hbmpOffscreen == NULL )
+				{
+					RECT rcClient = { 0 };
+					::GetClientRect(m_hWndPaint, &rcClient);
+					m_hDcOffscreen = ::CreateCompatibleDC(m_hDCPaint);
+					m_hbmpOffscreen = ::CreateCompatibleBitmap(m_hDCPaint, rcClient.right - rcClient.left, rcClient.bottom - rcClient.top); 
+					assert(m_hDcOffscreen);
+					assert(m_hbmpOffscreen);
+				}
+				// Begin Windows paint
+				PAINTSTRUCT ps = { 0 };
+				::BeginPaint(m_hWndPaint, &ps);
+				if( m_bOffscreenPaint )
+				{
+					HBITMAP hOldBitmap = (HBITMAP) ::SelectObject(m_hDcOffscreen, m_hbmpOffscreen);
+					int iSaveDC = ::SaveDC(m_hDcOffscreen);
+					if( m_bAlphaBackGround )
+					{
+						if( m_hbmpBackground == NULL ) 
+						{
+							RECT rcClient = { 0 };
+							::GetClientRect(m_hWndPaint, &rcClient);
+							m_hDcBackground = ::CreateCompatibleDC(m_hDCPaint);;
+							m_hbmpBackground = ::CreateCompatibleBitmap(m_hDCPaint, rcClient.right - rcClient.left, rcClient.bottom - rcClient.top); 
+							assert(m_hDcBackground);
+							assert(m_hbmpBackground);
+							::SelectObject(m_hDcBackground, m_hbmpBackground);
+							::BitBlt(m_hDcBackground, ps.rcPaint.left, ps.rcPaint.top, ps.rcPaint.right - ps.rcPaint.left,
+								ps.rcPaint.bottom - ps.rcPaint.top, ps.hdc, ps.rcPaint.left, ps.rcPaint.top, SRCCOPY);
+						}
+						else
+							::SelectObject(m_hDcBackground, m_hbmpBackground);
+						::BitBlt(m_hDcOffscreen, ps.rcPaint.left, ps.rcPaint.top, ps.rcPaint.right - ps.rcPaint.left,
+							ps.rcPaint.bottom - ps.rcPaint.top, m_hDcBackground, ps.rcPaint.left, ps.rcPaint.top, SRCCOPY);
+					}
+					m_pRoot->DoPaint(m_hDcOffscreen, ps.rcPaint);
+					/*for( int i = 0; i < m_aPostPaintControls.GetSize(); i++ ) {
+						CControlUI* pPostPaintControl = static_cast<CControlUI*>(m_aPostPaintControls[i]);
+						pPostPaintControl->DoPostPaint(m_hDcOffscreen, ps.rcPaint);
+					}*/
+					::RestoreDC(m_hDcOffscreen, iSaveDC);
+					::BitBlt(ps.hdc, ps.rcPaint.left, ps.rcPaint.top, ps.rcPaint.right - ps.rcPaint.left,
+						ps.rcPaint.bottom - ps.rcPaint.top, m_hDcOffscreen, ps.rcPaint.left, ps.rcPaint.top, SRCCOPY);
+					::SelectObject(m_hDcOffscreen, hOldBitmap);
 
-                if( m_bFocusNeeded )
-                    SetNextTabControl();
-
-                //渲染屏幕
-                //准备离线bitmap
-                if( m_bOffscreenPaint && m_hbmpOffscreen == NULL )
-                {
-                    RECT rcClient = { 0 };
-                    ::GetClientRect(m_hWndPaint, &rcClient );
-                    m_hDCOffscreen = ::CreateCompatibleDC( m_hDCPaint );
-                    m_hbmpOffscreen = ::CreateCompatibleBitmap(m_hDCPaint, rcClient.right-rcClient.left,rcClient.bottom - rcClient.top );
-                    assert( m_hDCOffscreen);
-                    assert( m_hbmpOffscreen);
-                }
-                //begin render
-                PAINTSTRUCT ps = { 0 };
-                ::BeginPaint(m_hWndPaint,&ps);
-                if( m_bOffscreenPaint )
-                {
-                    HBITMAP hOldBitmap = (HBITMAP )::SelectObject(m_hDCOffscreen,m_hbmpOffscreen);
-                    int iSaveDC = ::SaveDC( m_hDCOffscreen );
-                    if( m_bAlphaBackGround )
-                    {
-                        if( m_hbmpBackground == NULL )
-                        {
-                            RECT rcClient = { 0 };
-                            ::GetClientRect( m_hWndPaint, &rcClient );
-                            m_hDCBackground = ::CreateCompatibleDC( m_hDCPaint );
-                            m_hbmpBackground = ::CreateCompatibleBitmap( m_hDCPaint,rcClient.right-rcClient.left, rcClient.bottom - rcClient.top );
-                            ::SelectObject(m_hDCBackground, m_hbmpBackground);
-                            ::BitBlt(m_hDCBackground,ps.rcPaint.left,ps.rcPaint.top ,ps.rcPaint.right-ps.rcPaint.left,ps.rcPaint.bottom-ps.rcPaint.top ,ps.hdc,ps.rcPaint.left,ps.rcPaint.top,SRCCOPY);
-                        }
-                        else
-                            ::SelectObject(m_hDCBackground, m_hbmpBackground);
-                     ::BitBlt(m_hDCOffscreen,ps.rcPaint.left,ps.rcPaint.top ,ps.rcPaint.right-ps.rcPaint.left,ps.rcPaint.bottom-ps.rcPaint.top ,m_hDCBackground,ps.rcPaint.left,ps.rcPaint.top,SRCCOPY);
-                    }
-                    m_pRoot->DoPaint(m_hDCOffscreen,ps.rcPaint);
-                    for(auto  iter : m_vecPostPaintControls)
-                    {
-                       /* auto spControl  = iter.lock();*/
-                        if( iter )
-                        {
-                            iter->DoPostPaint(m_hDCOffscreen,ps.rcPaint);
-                        }
-                    }
-                    ::RestoreDC(m_hDCOffscreen,iSaveDC);
-                    ::BitBlt(ps.hdc, ps.rcPaint.left, ps.rcPaint.top, ps.rcPaint.right - ps.rcPaint.left,
-                        ps.rcPaint.bottom - ps.rcPaint.top, m_hDCOffscreen, ps.rcPaint.left, ps.rcPaint.top, SRCCOPY);
-                    if( m_bShowUpdateRect )
-                    {
-                        HPEN hOldPen = (HPEN)::SelectObject(ps.hdc, g_hUpdateRectPen);
-                        ::SelectObject(ps.hdc, ::GetStockObject(HOLLOW_BRUSH));
-                        ::Rectangle(ps.hdc, rcPaint.left, rcPaint.top, rcPaint.right, rcPaint.bottom);
-                        ::SelectObject(ps.hdc, hOldPen);
-                    }
-                }
-                else
-                {
-                    int iSaveDc = ::SaveDC(ps.hdc);
-                    m_pRoot->DoPaint(ps.hdc,ps.rcPaint);
-                    ::RestoreDC(ps.hdc, iSaveDc);
-                }
-                ::EndPaint( m_hWndPaint, &ps );
-            }
-            if( m_bUpdateNeeded )
-                ::InvalidateRect(m_hWndPaint, NULL ,FALSE );
-            return true;
-
+					if( m_bShowUpdateRect ) {
+					/*	HPEN hOldPen = (HPEN)::SelectObject(ps.hdc, m_bShowUpdateRect);
+						::SelectObject(ps.hdc, ::GetStockObject(HOLLOW_BRUSH));
+						::Rectangle(ps.hdc, rcPaint.left, rcPaint.top, rcPaint.right, rcPaint.bottom);
+						::SelectObject(ps.hdc, hOldPen);*/
+					}
+				}
+				else
+				{
+					// A standard paint job
+					int iSaveDC = ::SaveDC(ps.hdc);
+					m_pRoot->DoPaint(ps.hdc, ps.rcPaint);
+					::RestoreDC(ps.hdc, iSaveDC);
+				}
+				// All Done!
+				::EndPaint(m_hWndPaint, &ps);
+			}
+			// If any of the painting requested a resize again, we'll need
+			// to invalidate the entire window once more.
+			if( m_bUpdateNeeded ) 
+			{
+				::InvalidateRect(m_hWndPaint, NULL, FALSE);
+			}
+			return true;
         case WM_PRINTCLIENT:
                 break;
         case WM_GETMINMAXINFO:
@@ -1067,9 +1073,31 @@ namespace YUI
         return false;
     }
 
-    void PaintManagerUI::SendNotify(NotifyMsg &Msg, bool bAsync /*= false */)
+    void PaintManagerUI::SendNotify(NotifyMsg &msg, bool bAsync /*= false */)
     {
-        assert(0 && "废弃的接口");
+		msg.ptMouse = m_ptLastMousePos;
+		msg.lTimeStamp = ::GetTickCount();
+		auto spControl = msg.pSender.lock();
+		if( m_bUsedVirtualWnd )
+		{
+			msg.strVirtualWnd = spControl->GetVirtualWnd();
+		}
+		if( !bAsync )
+		{
+			if( spControl->OnNotify )
+			{
+				spControl->OnNotify(msg);
+			}
+			for( auto iter : m_vecNotifiers )
+			{
+				auto spNotifer= iter.lock();
+				spNotifer->Notify(msg);
+			}
+		}
+		else
+		{
+			m_ListAsyncNotify.push_back(msg);
+		}
     }
 
     void PaintManagerUI::SendNotify(std::shared_ptr<ControlUI>& spControl,YString strMessage,WPARAM wParam /*=0*/, LPARAM lParam /*=0*/,bool bAsync /*= false */)
@@ -1080,28 +1108,7 @@ namespace YUI
         msg.wParam = wParam;
         msg.lParam = lParam;
         SendNotify(msg,bAsync);
-        msg.ptMouse = m_ptLastMousePos;
-        msg.lTimeStamp = ::GetTickCount();
-        if( m_bUsedVirtualWnd )
-        {
-            msg.strVirtualWnd = spControl->GetVirtualWnd();
-        }
-        if( !bAsync )
-        {
-            if( spControl->OnNotify )
-            {
-                 spControl->OnNotify(msg);
-            }
-            for( auto iter : m_vecNotifiers )
-            {
-                auto spNotifer= iter.lock();
-                spNotifer->Notify(msg);
-            }
-        }
-        else
-        {
-            m_ListAsyncNotify.push_back(msg);
-        }
+       
     }
 
     bool PaintManagerUI::SetNextTabControl(bool bForward/*= true*/)
@@ -1405,15 +1412,41 @@ namespace YUI
                             return false;
                     });
         if(iter!= m_mapCustomFonts.end())
-            return iter->second;
+         {
+			 auto sp = iter->second;
+			 if(sp->m_tm.tmHeight == 0)
+			 {
+				 HFONT hOldFont = (HFONT) ::SelectObject(m_hDCPaint, sp->m_hFont);
+				 ::GetTextMetrics(m_hDCPaint, &sp->m_tm);
+				 ::SelectObject(m_hDCPaint, hOldFont);
+			 }
+			 return sp;
+		}
         else
         {
             auto spParent = m_wpParentResourcePM.lock();
             if(spParent)
                 return spParent->GetFontInfo(hFont);
         }
-        return NULL;
+        return GetDefaultFontInfo();
     }
+
+	std::shared_ptr<FontInfo> PaintManagerUI::GetFontInfo(const YString &StrFontName)
+	{
+		auto pos = m_mapCustomFonts.find(StrFontName);
+		if(pos == m_mapCustomFonts.end())
+			return GetDefaultFontInfo();
+		else
+		{
+			auto sp = m_mapCustomFonts[StrFontName];
+			if(sp->m_tm.tmHeight == 0)
+			{
+				HFONT hOldFont = (HFONT) ::SelectObject(m_hDCPaint, sp->m_hFont);
+				::GetTextMetrics(m_hDCPaint, &sp->m_tm);
+				::SelectObject(m_hDCPaint, hOldFont);
+			}
+		}
+	}
 
     bool PaintManagerUI::RemoveFont(HFONT hFont)
     {

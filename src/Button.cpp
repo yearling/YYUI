@@ -140,7 +140,7 @@ namespace YUI
 
     SIZE Button::EstimateSize(SIZE szAvailable)
     {
-        if( m_cXYFixed.cy == 0 ) return YSize(m_cXYFixed.cx, m_pManager->GetFontInfo((HFONT)_ttoi(GetFont().c_str()))->m_tm.tmHeight + 8);
+        if( m_cXYFixed.cy == 0 ) return YSize(m_cXYFixed.cx, m_pManager->GetFontInfo(GetFont())->m_tm.tmHeight + 8);
 		return ControlUI::EstimateSize(szAvailable);
     }
 

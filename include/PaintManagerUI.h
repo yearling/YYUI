@@ -112,6 +112,7 @@ namespace YUI
         HFONT                           AddFont(const YString &StrFontName, int nSize, bool bBold, bool bUnderline, bool bItalic);
         HFONT                           GetFont(const YString &StrFontName);
         std::shared_ptr<FontInfo>       GetFontInfo(HFONT hFont);
+        std::shared_ptr<FontInfo>       GetFontInfo(const YString &StrFontName);
         bool                            RemoveFont(HFONT hFont);
         void                            RemoveAllFonts();
 
@@ -151,8 +152,8 @@ namespace YUI
         HWND                            m_hWndPaint;
         int                             m_nOpacity;
         HDC                             m_hDCPaint;
-        HDC                             m_hDCOffscreen;
-        HDC                             m_hDCBackground;
+        HDC                             m_hDcOffscreen;
+        HDC                             m_hDcBackground;
         HBITMAP                         m_hbmpOffscreen;
         HBITMAP                         m_hbmpBackground;
         HWND                            m_hwndTooltip;
