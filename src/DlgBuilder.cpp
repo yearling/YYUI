@@ -245,10 +245,15 @@ namespace YUI
 					pControl = std::make_shared<VerticalLayout>();
 				else if(strcmp(pstrClass,CTR_HORIZONTALLAYOUT) == 0)
 					pControl = std::make_shared<HorizontalLayout>();
+                else if(strcmp(pstrClass,CTR_CONTROL) == 0)
+                    pControl = std::make_shared<ControlUI>();
+                else if(strcmp(pstrClass,CTR_CONTAINER) == 0)
+                    pControl = std::make_shared<Container>();
 				if( !pControl )
 				{
 					//load from plugin;
 					//not implement;
+                    cout<<pstrClass<<endl;
 					assert( 0 && "not implement");
 				}
 				if( pControl == NULL && m_pCallback != NULL ) 
