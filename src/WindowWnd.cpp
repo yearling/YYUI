@@ -382,6 +382,11 @@ namespace YUI
         }
     }
 
+    void INotifyPump::AddEntry(const YString &strType,const YString &strControlName,FunNofity fun)
+    {
+        m_MessageMap[YStrStr(strType,strControlName)] = fun;
+    }
+
 
     void MsgHandleChain::HandleMsg(const NotifyMsg & msg)
     {

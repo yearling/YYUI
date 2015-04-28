@@ -90,6 +90,13 @@ namespace YUI
 
 #define  CTR_LISTCONTAINERELEMENT       (("ListContainerElement"))
 
+// Flags for FindControl()
+#define UIFIND_ALL           0x00000000
+#define UIFIND_VISIBLE       0x00000001
+#define UIFIND_ENABLED       0x00000002
+#define UIFIND_HITTEST       0x00000004
+#define UIFIND_TOP_FIRST     0x00000008
+#define UIFIND_ME_FIRST      0x80000000
     //«∞÷√∂®“Â
     class ControlUI;
     class INotifyUI;

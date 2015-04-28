@@ -56,7 +56,8 @@ namespace YUI
 
     void Button::DoEvent(ControlEvent& eve)
     {
-        if( !IsMouseEnabled() && eve.m_Type > UIEVENT__MOUSEBEGIN && eve.m_Type < UIEVENT__MOUSEEND ) {
+        if( !IsMouseEnabled() && eve.m_Type > UIEVENT__MOUSEBEGIN && eve.m_Type < UIEVENT__MOUSEEND )
+        {
              auto spParent = m_pParent.lock();
             if( spParent )
                 spParent->DoEvent(eve);

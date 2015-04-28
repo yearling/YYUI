@@ -66,7 +66,8 @@ namespace YUI
         int                             GetSubControlFixedWdith(const YString& pstrSubControlName);
         YString                         GetSubControlUserData(LPCTSTR pstrSubControlName);
         std::shared_ptr<ControlUI>      FindSubControl(const YString& pstrSubControlName);
-
+        virtual std::shared_ptr<ControlUI>
+                                        FindControlFromPoint(POINT pt,UINT flag);
         virtual SIZE                    GetScrollPos() const;
         virtual SIZE                    GetScrollRange() const;
         virtual void                    SetScrollPos(SIZE szPos);

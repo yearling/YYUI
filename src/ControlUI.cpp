@@ -746,8 +746,8 @@ namespace YUI
 
     void ControlUI::Event(ControlEvent& eve)
     {
-        if(OnEvent && OnEvent(eve) )
-            DoEvent(eve);
+        //if(OnEvent && OnEvent(eve) )
+        DoEvent(eve);
     }
 
     void ControlUI::DoEvent(ControlEvent& eve)
@@ -949,32 +949,108 @@ namespace YUI
 
     void ControlUI::DoPaint(HDC hDC, const RECT& rcPaint)
     {
-        
+        if( !::IntersectRect(&m_rcPaint, &rcPaint, &m_rcItem) ) return;
+
+        // »æÖÆÑ­Ðò£º±³¾°ÑÕÉ«->±³¾°Í¼->×´Ì¬Í¼->ÎÄ±¾->±ß¿ò
+        if( m_cxyBorderRound.cx > 0 || m_cxyBorderRound.cy > 0 ) {
+            RenderClip roundClip;
+            RenderClip::GenerateRoundClip(hDC, m_rcPaint,  m_rcItem, m_cxyBorderRound.cx, m_cxyBorderRound.cy, roundClip);
+            PaintBkColor(hDC);
+            PaintBkImage(hDC);
+            PaintStatusImage(hDC);
+            PaintText(hDC);
+            PaintBorder(hDC);
+        }
+        else {
+            PaintBkColor(hDC);
+            PaintBkImage(hDC);
+            PaintStatusImage(hDC);
+            PaintText(hDC);
+            PaintBorder(hDC);
+        }
     }
 
     void ControlUI::PaintBkColor(HDC hDC)
     {
-
+        if( m_dwBackColor != 0 ) {
+            if( m_dwBackColor2 != 0 ) {
+                if( m_dwBackColor3 != 0 ) {
+                    RECT rc = m_rcItem;
+                    rc.bottom = (rc.bottom + rc.top) / 2;
+                    RenderGDI::DrawGradient(hDC, rc, GetAdjustColor(m_dwBackColor), GetAdjustColor(m_dwBackColor2), true, 8);
+                    rc.top = rc.bottom;
+                    rc.bottom = m_rcItem.bottom;
+                    RenderGDI::DrawGradient(hDC, rc, GetAdjustColor(m_dwBackColor2), GetAdjustColor(m_dwBackColor3), true, 8);
+                }
+                else 
+                    RenderGDI::DrawGradient(hDC, m_rcItem, GetAdjustColor(m_dwBackColor), GetAdjustColor(m_dwBackColor2), true, 16);
+            }
+            else if( m_dwBackColor >= 0xFF000000 ) RenderGDI::DrawColor(hDC, m_rcPaint, GetAdjustColor(m_dwBackColor));
+            else RenderGDI::DrawColor(hDC, m_rcItem, GetAdjustColor(m_dwBackColor));
+        }
     }
 
     void ControlUI::PaintBkImage(HDC hDC)
     {
-
+        if( m_strBKImage.empty() ) return;
+        if( !DrawImage(hDC, m_strBKImage )) 
+            m_strBKImage.clear();
     }
 
     void ControlUI::PaintStatusImage(HDC hDC)
     {
-
+        return ;
     }
 
     void ControlUI::PaintText(HDC hDC)
     {
-
+        return;
     }
 
     void ControlUI::PaintBorder(HDC hDC)
     {
+        if(m_dwBorderColor != 0 || m_dwFocusBorderColor != 0)
+        {
+            if(m_nBorderSize > 0 && ( m_cxyBorderRound.cx > 0 || m_cxyBorderRound.cy > 0 ))//»­Ô²½Ç±ß¿ò
+            {
+                if (IsFocused() && m_dwFocusBorderColor != 0)
+                    RenderGDI::DrawRoundRect(hDC, m_rcItem, m_nBorderSize, m_cxyBorderRound.cx, m_cxyBorderRound.cy, GetAdjustColor(m_dwFocusBorderColor));
+                else
+                    RenderGDI::DrawRoundRect(hDC, m_rcItem, m_nBorderSize, m_cxyBorderRound.cx, m_cxyBorderRound.cy, GetAdjustColor(m_dwBorderColor));
+            }
+            else
+            {
+                if (IsFocused() && m_dwFocusBorderColor != 0 && m_nBorderSize > 0)
+                    RenderGDI::DrawRect(hDC, m_rcItem, m_nBorderSize, GetAdjustColor(m_dwFocusBorderColor));
+                else if(m_rcBorderSize.left > 0 || m_rcBorderSize.top > 0 || m_rcBorderSize.right > 0 || m_rcBorderSize.bottom > 0)
+                {
+                    RECT rcBorder;
 
+                    if(m_rcBorderSize.left > 0){
+                        rcBorder		= m_rcItem;
+                        rcBorder.right	= m_rcItem.left;
+                        RenderGDI::DrawLine(hDC,rcBorder,m_rcBorderSize.left,GetAdjustColor(m_dwBorderColor),m_nBorderStyle);
+                    }
+                    if(m_rcBorderSize.top > 0){
+                        rcBorder		= m_rcItem;
+                        rcBorder.bottom	= m_rcItem.top;
+                        RenderGDI::DrawLine(hDC,rcBorder,m_rcBorderSize.top,GetAdjustColor(m_dwBorderColor),m_nBorderStyle);
+                    }
+                    if(m_rcBorderSize.right > 0){
+                        rcBorder		= m_rcItem;
+                        rcBorder.left	= m_rcItem.right;
+                        RenderGDI::DrawLine(hDC,rcBorder,m_rcBorderSize.right,GetAdjustColor(m_dwBorderColor),m_nBorderStyle);
+                    }
+                    if(m_rcBorderSize.bottom > 0){
+                        rcBorder		= m_rcItem;
+                        rcBorder.top	= m_rcItem.bottom;
+                        RenderGDI::DrawLine(hDC,rcBorder,m_rcBorderSize.bottom,GetAdjustColor(m_dwBorderColor),m_nBorderStyle);
+                    }
+                }
+                else if(m_nBorderSize > 0)
+                    RenderGDI::DrawRect(hDC, m_rcItem, m_nBorderSize, GetAdjustColor(m_dwBorderColor));
+            }
+        }
     }
 
     void ControlUI::DoPostPaint(HDC hDC, const RECT& rcPaint)

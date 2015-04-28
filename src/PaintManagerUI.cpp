@@ -656,25 +656,25 @@ namespace YUI
 				{
 					HBITMAP hOldBitmap = (HBITMAP) ::SelectObject(m_hDcOffscreen, m_hbmpOffscreen);
 					int iSaveDC = ::SaveDC(m_hDcOffscreen);
-					if( m_bAlphaBackGround )
-					{
-						if( m_hbmpBackground == NULL ) 
-						{
-							RECT rcClient = { 0 };
-							::GetClientRect(m_hWndPaint, &rcClient);
-							m_hDcBackground = ::CreateCompatibleDC(m_hDCPaint);;
-							m_hbmpBackground = ::CreateCompatibleBitmap(m_hDCPaint, rcClient.right - rcClient.left, rcClient.bottom - rcClient.top); 
-							assert(m_hDcBackground);
-							assert(m_hbmpBackground);
-							::SelectObject(m_hDcBackground, m_hbmpBackground);
-							::BitBlt(m_hDcBackground, ps.rcPaint.left, ps.rcPaint.top, ps.rcPaint.right - ps.rcPaint.left,
-								ps.rcPaint.bottom - ps.rcPaint.top, ps.hdc, ps.rcPaint.left, ps.rcPaint.top, SRCCOPY);
-						}
-						else
-							::SelectObject(m_hDcBackground, m_hbmpBackground);
-						::BitBlt(m_hDcOffscreen, ps.rcPaint.left, ps.rcPaint.top, ps.rcPaint.right - ps.rcPaint.left,
-							ps.rcPaint.bottom - ps.rcPaint.top, m_hDcBackground, ps.rcPaint.left, ps.rcPaint.top, SRCCOPY);
-					}
+					//if( m_bAlphaBackGround )
+					//{
+					//	if( m_hbmpBackground == NULL ) 
+					//	{
+					//		RECT rcClient = { 0 };
+					//		::GetClientRect(m_hWndPaint, &rcClient);
+					//		m_hDcBackground = ::CreateCompatibleDC(m_hDCPaint);;
+					//		m_hbmpBackground = ::CreateCompatibleBitmap(m_hDCPaint, rcClient.right - rcClient.left, rcClient.bottom - rcClient.top); 
+					//		assert(m_hDcBackground);
+					//		assert(m_hbmpBackground);
+					//		::SelectObject(m_hDcBackground, m_hbmpBackground);
+					//		//::BitBlt(m_hDcBackground, ps.rcPaint.left, ps.rcPaint.top, ps.rcPaint.right - ps.rcPaint.left,
+					//			//ps.rcPaint.bottom - ps.rcPaint.top, ps.hdc, ps.rcPaint.left, ps.rcPaint.top, SRCCOPY);
+					//	}
+					//	else
+					//		::SelectObject(m_hDcBackground, m_hbmpBackground);
+					//	::BitBlt(m_hDcOffscreen, ps.rcPaint.left, ps.rcPaint.top, ps.rcPaint.right - ps.rcPaint.left,
+					//		ps.rcPaint.bottom - ps.rcPaint.top, m_hDcBackground, ps.rcPaint.left, ps.rcPaint.top, SRCCOPY);
+					//}
 					m_pRoot->DoPaint(m_hDcOffscreen, ps.rcPaint);
 					/*for( int i = 0; i < m_aPostPaintControls.GetSize(); i++ ) {
 						CControlUI* pPostPaintControl = static_cast<CControlUI*>(m_aPostPaintControls[i]);
@@ -895,6 +895,23 @@ namespace YUI
                 m_pEventClick = spControl;
             }
             break;
+        case WM_LBUTTONUP:
+            {
+                POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
+                m_ptLastMousePos = pt;
+                if( m_pEventClick == NULL ) break;
+                ReleaseCapture();
+                ControlEvent eve ;
+                eve.m_Type = UIEVENT_BUTTONUP;
+                eve.m_pSender = m_pEventClick;
+                eve.m_wParam = wParam;
+                eve.m_lParam = lParam;
+                eve.m_ptMouse = pt;
+                eve.m_wKeyState = (WORD)wParam;
+                eve.m_dwTimestamp = ::GetTickCount();
+                m_pEventClick->Event(eve);
+                m_pEventClick = NULL;
+            }
         case WM_RBUTTONDOWN:
             {
                 ::SetFocus(m_hWndPaint);
@@ -1075,6 +1092,7 @@ namespace YUI
 
     void PaintManagerUI::SendNotify(NotifyMsg &msg, bool bAsync /*= false */)
     {
+        //return;
 		msg.ptMouse = m_ptLastMousePos;
 		msg.lTimeStamp = ::GetTickCount();
 		auto spControl = msg.pSender.lock();
@@ -1118,7 +1136,8 @@ namespace YUI
 
     std::shared_ptr<ControlUI> PaintManagerUI::FindControl(POINT pt) const
     {
-        return std::shared_ptr<ControlUI>();
+        assert(m_pRoot);
+        return m_pRoot->FindControlFromPoint(pt,UIFIND_VISIBLE | UIFIND_HITTEST | UIFIND_TOP_FIRST);
     }
 
     std::shared_ptr<ControlUI> PaintManagerUI::FindControl(const YString & strControlName)

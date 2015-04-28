@@ -23,8 +23,15 @@ class TestWindow:public WindowImpl
 public:
     virtual LPCTSTR GetWindowClassName() const { return _T("DUIMainFrame");}
     virtual YString GetSkinFile()  { return _T("duilib.xml");}
-    virtual YString GetSkinFolder() { return _T("");}
+    virtual YString GetSkinFolder() { return _T("click");}
+    virtual void                       InitWindow()
+    {
+        AddEntry(MSG_Click,_T("closebtn"),[&](const NotifyMsg& msg){Close();});
+        AddEntry(MSG_Click,_T("btnHello"),[&](const NotifyMsg& msg){::MessageBox(NULL,"button","push button",NULL);});
+    }
 };
+
+
 int APIENTRY _tWinMain( __in HINSTANCE hInstance, __in_opt HINSTANCE hPrevInstance, __in LPTSTR lpCmdLine, __in int nShowCmd )
 {
     try{

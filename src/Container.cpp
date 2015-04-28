@@ -663,4 +663,75 @@ namespace YUI
 
     }
 
+    std::shared_ptr<ControlUI> Container::FindControlFromPoint(POINT pt,UINT flag)
+    {  
+        std::shared_ptr<ControlUI> pResult ;
+        if( (flag & UIFIND_VISIBLE) != 0 && !IsVisible() ) return NULL;
+        if( (flag & UIFIND_ENABLED) != 0 && !IsEnabled() ) return NULL;
+        if( (flag & UIFIND_HITTEST) != 0 ) {
+            if( !::PtInRect(&m_rcItem, pt) ) return NULL;
+            if( !m_bMouseChildEnabled ) {
+             /*   if( m_pVerticalScrollBar != NULL ) pResult = m_pVerticalScrollBar->FindControl(Proc, pData, uFlags);
+                if( pResult == NULL && m_pHorizontalScrollBar != NULL ) pResult = m_pHorizontalScrollBar->FindControl(Proc, pData, uFlags);*/
+                if( pResult == NULL ) pResult = ControlUI::FindControlFromPoint(pt,flag);
+                return pResult;
+            }
+        }
+      
+        /*if( m_pVerticalScrollBar != NULL ) pResult = m_pVerticalScrollBar->FindControl(Proc, pData, uFlags);
+        if( pResult == NULL && m_pHorizontalScrollBar != NULL ) pResult = m_pHorizontalScrollBar->FindControl(Proc, pData, uFlags);*/
+        if( pResult != NULL ) return pResult;
+
+        if( (flag & UIFIND_ME_FIRST) != 0 ) 
+        {
+            pResult = ControlUI::FindControlFromPoint(pt,flag);
+            if( pResult != NULL ) return pResult;
+        }
+        RECT rc = m_rcItem;
+        rc.left += m_rcInset.left;
+        rc.top += m_rcInset.top;
+        rc.right -= m_rcInset.right;
+        rc.bottom -= m_rcInset.bottom;
+       /* if( m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible() ) rc.right -= m_pVerticalScrollBar->GetFixedWidth();
+        if( m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible() ) rc.bottom -= m_pHorizontalScrollBar->GetFixedHeight();*/
+        //本身的m_items自带排序功能，按插入位置
+        if( (flag & UIFIND_TOP_FIRST) != 0 ) 
+        {
+           /* for( int it = m_items.GetSize() - 1; it >= 0; it-- ) {
+                CControlUI* pControl = static_cast<CControlUI*>(m_items[it])->FindControl(Proc, pData, uFlags);
+                if( pControl != NULL ) {
+                    if( (uFlags & UIFIND_HITTEST) != 0 && !pControl->IsFloat() && !::PtInRect(&rc, *(static_cast<LPPOINT>(pData))) )
+                        continue;
+                    else 
+                        return pControl;
+                }            
+            }*/
+            for(auto iter = m_SetItems.begin();iter!=m_SetItems.end();++iter)
+            {
+                pResult = (*iter)->FindControlFromPoint(pt,flag);
+                if( pResult != nullptr)
+                {
+                    if( (flag & UIFIND_HITTEST)!=0 && !pResult->IsFloat() &&!::PtInRect(&rc,pt) )
+                        continue;
+                    else
+                        return pResult;
+                }
+            }
+        }
+     /*   else {
+            for( int it = 0; it < m_items.GetSize(); it++ ) {
+                CControlUI* pControl = static_cast<CControlUI*>(m_items[it])->FindControl(Proc, pData, uFlags);
+                if( pControl != NULL ) {
+                    if( (uFlags & UIFIND_HITTEST) != 0 && !pControl->IsFloat() && !::PtInRect(&rc, *(static_cast<LPPOINT>(pData))) )
+                        continue;
+                    else 
+                        return pControl;
+                } 
+            }
+        }*/
+
+        if( pResult == NULL && (flag & UIFIND_ME_FIRST) == 0 ) pResult = ControlUI::FindControlFromPoint(pt,flag);
+        return pResult;
+    }
+
 }

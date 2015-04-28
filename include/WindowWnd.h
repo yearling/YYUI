@@ -28,6 +28,7 @@ namespace YUI
            MsgHandleChain();
            virtual void                 HandleMsg(const NotifyMsg & msg);
            void                         SetSuccessor(std::shared_ptr<MsgHandleChain> & sp);
+         
     private:
         std::weak_ptr<MsgHandleChain>  m_wpSuccessor;
     };
@@ -40,10 +41,11 @@ namespace YUI
         void                            NotifyPump( NotifyMsg & msg);
         bool                            LoopDispatch( NotifyMsg & msg);
         virtual void                    HandleMsg(const NotifyMsg & msg);
+        virtual void                    AddEntry(const YString &strType,const YString &strControlName,FunNofity );
     private:   
         YMessageHash                    m_MessageMap;      
     private:
-        std::map<YString, void *>   m_mapVWnd;
+        std::map<YString, void *>       m_mapVWnd;
     };
 	class WindowWnd
 	{
