@@ -202,7 +202,9 @@ namespace YUI
         }
 
         RECT rcCaption = m_spPaintManager->GetCaptionRect();
-        if( pt.x >= rcClient.left + rcCaption.left && pt.x < rcClient.right - rcCaption.right && pt.y >= rcCaption.top && pt.y < rcCaption.bottom ) {
+        //cout<<"hello"<<endl;
+        if( pt.x >= rcClient.left + rcCaption.left && pt.x < rcClient.right - rcCaption.right && pt.y >= rcCaption.top && pt.y < rcCaption.bottom )
+        {
                 auto pControl = m_spPaintManager->FindControl(pt);
                 if( pControl && _tcsicmp(pControl->GetClass(), _T("ButtonUI")) != 0 && 
                     _tcsicmp(pControl->GetClass(), _T("OptionUI")) != 0 &&

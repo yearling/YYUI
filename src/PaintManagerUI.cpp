@@ -912,6 +912,7 @@ namespace YUI
                 m_pEventClick->Event(eve);
                 m_pEventClick = NULL;
             }
+            break;
         case WM_RBUTTONDOWN:
             {
                 ::SetFocus(m_hWndPaint);
