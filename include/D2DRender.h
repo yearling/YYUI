@@ -8,9 +8,24 @@
 #include <dwrite.h>
 #include <wincodec.h>
 #include <atlcomcli.h>
+#include "ControlUI.h"
 namespace YUI
 {
 	struct D2DException: public YYUIException {};
+	
+	class CWndUI: public ControlUI
+	{
+	public:
+		CWndUI(): m_hWnd(NULL){}
+		virtual void SetInternVisible(bool bVisible = true);
+		virtual void SetPos(RECT &rc);
+		BOOL Attach(HWND hWndNew);
+		HWND Detach();
+	
+	protected:
+		HWND m_hWnd;
+	};
+
 	class D2DWnd: public WindowWnd, public std::enable_shared_from_this<D2DWnd>
 	{
 	public:

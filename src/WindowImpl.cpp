@@ -368,7 +368,7 @@ namespace YUI
                 pRoot = builder.Create(GetSkinFile(), _T("xml"),NULL, m_spPaintManager,spNull);
             }
             else
-                pRoot = builder.Create(GetSkinFile(), (UINT)0, NULL, m_spPaintManager,spNull);
+                pRoot = builder.Create(GetSkinFile(), (UINT)0, this, m_spPaintManager,spNull);
         }        
         catch(YYUIException &e)
         {

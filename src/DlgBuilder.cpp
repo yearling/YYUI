@@ -249,13 +249,13 @@ namespace YUI
                     pControl = std::make_shared<ControlUI>();
                 else if(strcmp(pstrClass,CTR_CONTAINER) == 0)
                     pControl = std::make_shared<Container>();
-				if( !pControl )
-				{
-					//load from plugin;
-					//not implement;
-                    cout<<pstrClass<<endl;
-					assert( 0 && "not implement");
-				}
+				//if( !pControl )
+				//{
+				//	//load from plugin;
+				//	//not implement;
+    //                cout<<pstrClass<<endl;
+				//	assert( 0 && "not implement");
+				//}
 				if( pControl == NULL && m_pCallback != NULL ) 
 				{
 					pControl = m_pCallback->CreateControl(pstrClass);
@@ -280,9 +280,12 @@ namespace YUI
 					pControl->SetAttribute(pAttribue->Name(),pAttribue->Value());
 				}
 			}
-			if(pReturn == nullptr )
+			if( pReturn == nullptr)
+			{
 				pReturn = pControl;
+			}
         }
+		
         return pReturn;
     }
 

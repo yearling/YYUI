@@ -7,7 +7,6 @@ namespace YUI
 
 	D2DWnd::D2DWnd()
 	{
-
 	}
 
 	D2DWnd::~D2DWnd()
@@ -88,12 +87,15 @@ namespace YUI
 
 	void D2DWnd::OnResize(unsigned int width,unsigned int height)
 	{
+		
 		if(m_pRenderTarget)
 		{
 			D2D1_SIZE_U size;
 			size.width = width;
 			size.height = height;
-			m_pRenderTarget->Resize(size);
+			auto LastSize = m_pRenderTarget->GetSize();
+			if( width != LastSize.width || height != LastSize.height)
+				m_pRenderTarget->Resize(size);
 		}
 	}
 
@@ -177,6 +179,39 @@ namespace YUI
 	{
 		m_pRenderTarget = nullptr;
 		m_pBlackBrush = nullptr;
+	}
+
+
+	void CWndUI::SetInternVisible(bool bVisible /*= true*/)
+	{
+			__super::SetInternVisible(bVisible);
+			::ShowWindow(m_hWnd, bVisible);
+	}
+
+	void CWndUI::SetPos(RECT &rc)
+	{
+			__super::SetPos(rc);
+			::SetWindowPos(m_hWnd, NULL, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, SWP_NOZORDER | SWP_NOACTIVATE);
+
+	}
+
+	BOOL CWndUI::Attach(HWND hWndNew)
+	{
+		
+			if (! ::IsWindow(hWndNew))
+			{
+				return FALSE;
+			}
+
+			m_hWnd = hWndNew;
+			return TRUE;
+	}
+
+	HWND CWndUI::Detach()
+	{
+			HWND hWnd = m_hWnd;
+			m_hWnd = NULL;
+			return hWnd;
 	}
 
 }
