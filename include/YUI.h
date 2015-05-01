@@ -32,7 +32,7 @@ namespace YUI
     //定义异常基类
 	struct YYUIException : virtual YYCOM::Exception, virtual std::exception{};
 	typedef YYCOM::ErrorInfo<struct tag_err_str,YString> UIErrorStr;
-
+	typedef YYCOM::ErrorInfo<struct tag_err_hr,HRESULT>	 UIErrorHr;
 
     //定义消息名
 #define  MSG_WindowInit                 (_T("windowinit"))
@@ -104,18 +104,31 @@ namespace YUI
     class ITranslateAccelerator;
     class PaintManagerUI;
 
+	typedef std::shared_ptr<ControlUI>  SPControlUI;
+	typedef std::weak_ptr<ControlUI>	WPControlUI;
+
     //定义消息体
     struct NotifyMsg
     {
         YString                         strType;
         YString                         strVirtualWnd;
-        std::weak_ptr<ControlUI>       pSender;
+        std::weak_ptr<ControlUI>		pSender;
         unsigned long                   lTimeStamp;
         POINT                           ptMouse;
         WPARAM                          wParam;
         LPARAM                          lParam;
     };
+	struct MsgWrap
+	{
+		YString							strType;
+		SPControlUI						pSender;
+		unsigned long					lTimeStamp;
+		POINT							ptMouse;
+		WPARAM							wParam;
+		LPARAM							lParam;
+	};
     typedef std::function<void(const NotifyMsg&)> FunNofity;
+    typedef std::function<void(const MsgWrap&)> FucHandleMsg;
 
     typedef enum EVENTTYPE_UI
     {

@@ -151,6 +151,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>Dwrite.lib;D2D1.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>
@@ -223,6 +224,7 @@
     <ClInclude Include="..\..\include\ChildLayout.h" />
     <ClInclude Include="..\..\include\Container.h" />
     <ClInclude Include="..\..\include\ControlUI.h" />
+    <ClInclude Include="..\..\include\D2DRender.h" />
     <ClInclude Include="..\..\include\HorizontalLayout.h" />
     <ClInclude Include="..\..\include\Label.h" />
     <ClInclude Include="..\..\include\PaintManagerUI.h" />
@@ -249,7 +251,6 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="YUI.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\include\thirdparty\tinyxml2\tinyxml2.cpp" />
@@ -257,6 +258,7 @@
     <ClCompile Include="..\..\src\ChildLayout.cpp" />
     <ClCompile Include="..\..\src\Container.cpp" />
     <ClCompile Include="..\..\src\ControlUI.cpp" />
+    <ClCompile Include="..\..\src\D2DRender.cpp" />
     <ClCompile Include="..\..\src\HorizontalLayout.cpp" />
     <ClCompile Include="..\..\src\Label.cpp" />
     <ClCompile Include="..\..\src\PaintManagerUI.cpp" />

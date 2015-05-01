@@ -22,18 +22,20 @@ namespace YUI
 #define UI_CLASSSTYLE_CHILD      (CS_VREDRAW | CS_HREDRAW | CS_DBLCLKS | CS_SAVEBITS)
 #define UI_CLASSSTYLE_DIALOG     (CS_VREDRAW | CS_HREDRAW | CS_DBLCLKS | CS_SAVEBITS)
 
-    class MsgHandleChain/*:public std::enable_shared_from_this<MsgHandleChain>*/
+    class MsgHandleChainBase
     {
     public:
-           MsgHandleChain();
-           virtual void                 HandleMsg(const NotifyMsg & msg);
-           void                         SetSuccessor(std::shared_ptr<MsgHandleChain> & sp);
+           MsgHandleChainBase();
+		   virtual ~MsgHandleChainBase();
+           virtual void                 HandleMsg(const NotifyMsg & msg)throw();
+		   virtual void					HandleMsg(const MsgWrap & msg)throw();
+           void                         SetSuccessor(std::shared_ptr<MsgHandleChainBase> & sp);
          
     private:
-        std::weak_ptr<MsgHandleChain>  m_wpSuccessor;
+        std::weak_ptr<MsgHandleChainBase>  m_wpSuccessor;
     };
 
-    class INotifyPump: public MsgHandleChain  
+    class INotifyPump: public MsgHandleChainBase  
     {
     public:
         bool                            AddVirtualWnd(YString strName, INotifyPump* pObject);
@@ -47,6 +49,19 @@ namespace YUI
     private:
         std::map<YString, void *>       m_mapVWnd;
     };
+	class IMsgHandler : public MsgHandleChainBase
+	{
+	public:
+		typedef std::multimap<const YString,FucHandleMsg> MsgMap;
+	public:
+		IMsgHandler();
+		virtual ~IMsgHandler();
+		virtual void					HandleMsg(const MsgWrap & msg)throw();	
+		void							AddEntry(const YString &strType,FucHandleMsg & );
+		void							DeleteEntry(const YString &strType,FucHandleMsg );	
+	private:   
+		MsgMap							m_MessageMap;  
+	};
 	class WindowWnd
 	{
 	public:
