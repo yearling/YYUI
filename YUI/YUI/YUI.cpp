@@ -36,12 +36,8 @@ public:
 	{
 		if (_tcsicmp(pstrClass.c_str(), _T("Wnd")) == 0)
 		{
-			auto pUI  = std::make_shared<CWndUI>();           
-			//HWND    hWnd  = CreateWindow(_T("BUTTON"), _T("win32"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 0, 0, 0, 0, m_spPaintManager->GetPaintWindow(), NULL, NULL, NULL);
-			auto pD2DWindow = new D2DWnd();
-			pD2DWindow->Init();
-			HWND hWnd = pD2DWindow->Create(m_hWnd,_T("D2DWnd"),UI_WNDSTYLE_CHILD,WS_EX_WINDOWEDGE);
-			pUI->Attach(hWnd);  
+			auto pUI  = std::make_shared<D2DWnd>();           
+            pUI->Create(m_hWnd,_T("D2D"),UI_WNDSTYLE_CHILD,WS_EX_WINDOWEDGE);
 			return pUI;
 		}
 

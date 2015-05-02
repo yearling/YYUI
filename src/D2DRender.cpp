@@ -42,6 +42,7 @@ namespace YUI
 			{
 				OnResize(LOWORD(lParam),HIWORD(lParam));
 			}
+            break;
 		default:
 			break;
 		}
@@ -181,7 +182,19 @@ namespace YUI
 		m_pBlackBrush = nullptr;
 	}
 
+    void D2DWnd::SetInternVisible(bool bVisible /*= true*/)
+    {
+        __super::SetInternVisible(bVisible);
+        ::ShowWindow(m_hWnd, bVisible);
+    }
 
+    void D2DWnd::SetPos(RECT &rc)
+    {
+        __super::SetPos(rc);
+        ::SetWindowPos(m_hWnd, NULL, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, SWP_NOZORDER | SWP_NOACTIVATE);
+    }
+
+    
 	void CWndUI::SetInternVisible(bool bVisible /*= true*/)
 	{
 			__super::SetInternVisible(bVisible);

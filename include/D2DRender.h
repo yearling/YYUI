@@ -26,11 +26,13 @@ namespace YUI
 		HWND m_hWnd;
 	};
 
-	class D2DWnd: public WindowWnd, public std::enable_shared_from_this<D2DWnd>
+	class D2DWnd: public WindowWnd, public ControlUI
 	{
 	public:
 		D2DWnd();
 		virtual ~D2DWnd();
+        virtual void                    SetInternVisible(bool bVisible = true);
+        virtual void                    SetPos(RECT &rc);
 		virtual UINT                    GetClassStyle() const;
 		virtual LPCTSTR                 GetWindowClassName() const ;
 		virtual void                    OnFinalMessage(HWND hWnd);
@@ -40,7 +42,7 @@ namespace YUI
 		virtual void					OnResize(unsigned int width,unsigned int height);
 		virtual void					OnRender();
 		void							CreateDeviceDependResource();
-		void DiscardDeviceResources();
+		void                            DiscardDeviceResources();
 	protected:
 		CComPtr<ID2D1Factory>			m_pD2DFactory;
 		CComPtr<IWICImagingFactory>		m_pWICFactory;
@@ -49,4 +51,12 @@ namespace YUI
 		CComPtr<IDWriteTextFormat>		m_pTextFormat;
 		CComPtr<ID2D1SolidColorBrush>	m_pBlackBrush;
 	};
+
+    /*class D3DWnd: public WindowWnd, public std::enable_shared_from_this<D3DWnd>
+    {
+    public:
+        D3DWnd();
+        virtual ~D3DWnd();
+
+    };*/
 }
