@@ -26,6 +26,10 @@ public:
     virtual LPCTSTR						GetWindowClassName() const { return _T("DUIMainFrame");}
     virtual YString						GetSkinFile()  { return _T("duilib.xml");}
     virtual YString						GetSkinFolder() { return _T("click");}
+    virtual void                        OnFinalMessage(HWND hWnd)
+    {
+        ::PostQuitMessage(0);
+    }
     virtual void						InitWindow()
     {
         AddEntry(MSG_Click,_T("closebtn"),[&](const NotifyMsg& msg){Close();});
@@ -62,7 +66,8 @@ int APIENTRY _tWinMain( __in HINSTANCE hInstance, __in_opt HINSTANCE hPrevInstan
     spWindow->Create(NULL,_T("DUIWND"),UI_WNDSTYLE_FRAME,WS_EX_WINDOWEDGE);
     spWindow->CenterWindow();
     spWindow->SetIcon(IDI_ICON1);
-    spWindow->ShowModal();
+    //spWindow->ShowModal();
+    PaintManagerUI::MessageLoop();
 	 
 		/*std::shared_ptr<D2DWnd> spD2D = std::make_shared<D2DWnd>();
 		spD2D->Init();

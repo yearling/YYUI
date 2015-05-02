@@ -1253,11 +1253,14 @@ namespace YUI
     void PaintManagerUI::MessageLoop()
     {
         MSG msg = { 0 };
-        while( ::GetMessage(&msg, NULL, 0, 0) ) {
+        while( ::GetMessage(&msg, NULL, 0, 0) ) 
+        {
             if( !PaintManagerUI::TranslateMessage(&msg) )
             {
                 ::TranslateMessage(&msg);
                 ::DispatchMessage(&msg);
+                if( msg.message == WM_QUIT )
+                    break;
             }
         }
     }
