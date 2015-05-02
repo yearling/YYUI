@@ -52,11 +52,20 @@ namespace YUI
 		CComPtr<ID2D1SolidColorBrush>	m_pBlackBrush;
 	};
 
-    /*class D3DWnd: public WindowWnd, public std::enable_shared_from_this<D3DWnd>
+    class D3DWnd: public WindowWnd, public ControlUI
     {
     public:
         D3DWnd();
         virtual ~D3DWnd();
-
-    };*/
+        virtual void                    SetInternVisible(bool bVisible = true);
+        virtual void                    SetPos(RECT &rc);
+        virtual UINT                    GetClassStyle() const;
+        virtual LPCTSTR                 GetWindowClassName() const ;
+        virtual void                    OnFinalMessage(HWND hWnd);
+        virtual LRESULT                 HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
+    public:
+        virtual void					Init();
+        virtual void					OnResize(unsigned int width,unsigned int height);
+        virtual void					OnRender();
+    };
 }

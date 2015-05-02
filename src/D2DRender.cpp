@@ -227,4 +227,77 @@ namespace YUI
 			return hWnd;
 	}
 
+
+    D3DWnd::D3DWnd()
+    {
+
+    }
+
+    D3DWnd::~D3DWnd()
+    {
+
+    }
+
+    void D3DWnd::SetInternVisible(bool bVisible /*= true*/)
+    {
+        __super::SetInternVisible(bVisible);
+        ::ShowWindow(m_hWnd, bVisible);
+    }
+
+    void D3DWnd::SetPos(RECT &rc)
+    {
+        __super::SetPos(rc);
+        ::SetWindowPos(m_hWnd, NULL, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, SWP_NOZORDER | SWP_NOACTIVATE);
+    }
+
+    UINT D3DWnd::GetClassStyle() const
+    {
+        return CS_DBLCLKS;
+    }
+
+    LPCTSTR D3DWnd::GetWindowClassName() const
+    {
+        return _T("D2DWnd");
+    }
+
+    void D3DWnd::OnFinalMessage(HWND hWnd)
+    {
+
+    }
+
+    LRESULT D3DWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
+    {
+        switch (uMsg)
+        {
+        case WM_PAINT:
+            {
+                OnRender();
+            }
+            break;
+        case WM_SIZE:
+            {
+                OnResize(LOWORD(lParam),HIWORD(lParam));
+            }
+            break;
+        default:
+            break;
+        }
+        return WindowWnd::HandleMessage(uMsg,wParam,lParam);
+    }
+
+    void D3DWnd::Init()
+    {
+
+    }
+
+    void D3DWnd::OnResize(unsigned int width,unsigned int height)
+    {
+
+    }
+
+    void D3DWnd::OnRender()
+    {
+
+    }
+
 }

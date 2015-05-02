@@ -167,12 +167,12 @@ namespace YUI
         std::shared_ptr<ControlUI>      m_pEventKey;
 
         POINT                           m_ptLastMousePos;
-        SIZE                            m_szMinWindow;
+        SIZE                            m_szMinWindow;      //窗口最小值
         SIZE                            m_szMaxWindow;
         SIZE                            m_szInitWindowSize;
-        RECT                            m_rcSizeBox;
+        RECT                            m_rcSizeBox;  //SizeBox就是边框指示区，鼠标放上面用来调整窗口大小
         SIZE                            m_szRoundCorner;
-        RECT                            m_rcCaption;
+        RECT                            m_rcCaption;  //标题栏大小
         UINT                            m_uTimerID;
 
         bool                            m_bFirstLayout;

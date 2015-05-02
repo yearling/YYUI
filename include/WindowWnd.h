@@ -21,18 +21,20 @@ namespace YUI
 #define UI_CLASSSTYLE_FRAME      (CS_VREDRAW | CS_HREDRAW)
 #define UI_CLASSSTYLE_CHILD      (CS_VREDRAW | CS_HREDRAW | CS_DBLCLKS | CS_SAVEBITS)
 #define UI_CLASSSTYLE_DIALOG     (CS_VREDRAW | CS_HREDRAW | CS_DBLCLKS | CS_SAVEBITS)
-
+    
+    //消息链设计模式
     class MsgHandleChainBase
     {
     public:
-           MsgHandleChainBase();
-		   virtual ~MsgHandleChainBase();
+                                        MsgHandleChainBase();
+		   virtual                      ~MsgHandleChainBase();
            virtual void                 HandleMsg(const NotifyMsg & msg)throw();
 		   virtual void					HandleMsg(const MsgWrap & msg)throw();
+           //设计继承的对象，就是下一步要交给处理的对像
            void                         SetSuccessor(std::shared_ptr<MsgHandleChainBase> & sp);
          
     private:
-        std::weak_ptr<MsgHandleChainBase>  m_wpSuccessor;
+        std::weak_ptr<MsgHandleChainBase>  m_wpSuccessor;//下一个要交给的处理的对像
     };
 
     class INotifyPump: public MsgHandleChainBase  
@@ -49,6 +51,7 @@ namespace YUI
     private:
         std::map<YString, void *>       m_mapVWnd;
     };
+
 	class IMsgHandler : public MsgHandleChainBase
 	{
 	public:
@@ -60,7 +63,7 @@ namespace YUI
 		void							AddEntry(const YString &strType,FucHandleMsg & );
 		void							DeleteEntry(const YString &strType,FucHandleMsg );	
 	private:   
-		MsgMap							m_MessageMap;  
+		MsgMap							m_MessageMap;  //每个控件处理自己的消息 
 	};
 	class WindowWnd
 	{

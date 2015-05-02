@@ -31,6 +31,7 @@ namespace YUI
         virtual void                    OnFinalMessage(HWND hWnd);
         virtual void                    Notify(NotifyMsg & msg);
         virtual void                    OnClick(NotifyMsg & msg);
+        //用来生成自定义的控件
         virtual std::shared_ptr<ControlUI> 
                                         CreateControl(YString pstrClass);
     protected:

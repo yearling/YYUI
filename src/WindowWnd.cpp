@@ -131,6 +131,7 @@ namespace YUI
         else
         {
             pWnd = reinterpret_cast< WindowWnd* >( ::GetWindowLongPtr( hWnd,GWLP_USERDATA ) );
+            //！！这里用的是WM_NCDESTROY，就是窗口即将消失的时候。这个消息在WM_CLOSE消息被正确处理后触发
             if(uMsg == WM_NCDESTROY && pWnd != NULL )
             {
                 //一般调用的是DefWindowProc
@@ -179,7 +180,7 @@ namespace YUI
 
     void WindowWnd::OnFinalMessage(HWND /*hWnd*/)
     {
-
+        //一般用来清理和PostQuitMessage
     }
 
     LRESULT WindowWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)

@@ -63,11 +63,12 @@ int APIENTRY _tWinMain( __in HINSTANCE hInstance, __in_opt HINSTANCE hPrevInstan
  //   duiFrame.SetIcon(IDI_ICON1);
 	//duiFrame.ShowModal();
     std::shared_ptr<TestWindow> spWindow= std::make_shared<TestWindow>();
-    spWindow->Create(NULL,_T("DUIWND"),UI_WNDSTYLE_FRAME,WS_EX_WINDOWEDGE);
+    //spWindow->Create(NULL,_T("DUIWND"),UI_WNDSTYLE_FRAME,WS_EX_WINDOWEDGE);
+    spWindow->Create(NULL,_T("DUIWND"),WS_CAPTION,WS_EX_WINDOWEDGE);
     spWindow->CenterWindow();
     spWindow->SetIcon(IDI_ICON1);
-    //spWindow->ShowModal();
-    PaintManagerUI::MessageLoop();
+    spWindow->ShowModal();
+    //PaintManagerUI::MessageLoop();
 	 
 		/*std::shared_ptr<D2DWnd> spD2D = std::make_shared<D2DWnd>();
 		spD2D->Init();

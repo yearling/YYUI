@@ -42,6 +42,8 @@ namespace YUI
 #define  MSG_MENU                       (_T("menu"))
 #define  MSG_TABSELECT                  (_T("tabselect"))
 #define  MSG_Click                      (_T("click"))
+
+
     //定义控件名
 #define  CTR_EDIT                       (("Edit"))
 #define  CTR_LIST                       (("List"))
@@ -64,8 +66,8 @@ namespace YUI
 #define  CTR_CHECKBOX                   (("CheckBox"))
 #define  CTR_COMBOBOX                   (("ComboBox"))
 #define  CTR_DATETIME                   (("DateTime"))
-#define  CTR_TREEVIEW                     (("TreeView"))
-#define  CTR_TREENODE                     (("TreeNode"))
+#define  CTR_TREEVIEW                   (("TreeView"))
+#define  CTR_TREENODE                   (("TreeNode"))
 
 #define  CTR_CONTAINER                  (("Container"))
 #define  CTR_TABLAYOUT                    (("TabLayout"))
@@ -118,6 +120,7 @@ namespace YUI
         WPARAM                          wParam;
         LPARAM                          lParam;
     };
+    //新的消息体
 	struct MsgWrap
 	{
 		YString							strType;
