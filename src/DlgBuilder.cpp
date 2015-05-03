@@ -90,10 +90,10 @@ namespace YUI
                         {
                             RECT rcSizeBox = { 0 };
                             pstr = nullptr;
-                            rcSizeBox.left = _tcstol(pstrValue, &pstr, 10);  assert(pstr);    
-                            rcSizeBox.top = _tcstol(pstr + 1, &pstr, 10);    assert(pstr);    
-                            rcSizeBox.right = _tcstol(pstr + 1, &pstr, 10);  assert(pstr);    
-                            rcSizeBox.bottom = _tcstol(pstr + 1, &pstr, 10); assert(pstr);   
+                            rcSizeBox.left = strtol(pstrValue, &pstr, 10);  assert(pstr);    
+                            rcSizeBox.top = strtol(pstr + 1, &pstr, 10);    assert(pstr);    
+                            rcSizeBox.right = strtol(pstr + 1, &pstr, 10);  assert(pstr);    
+                            rcSizeBox.bottom = strtol(pstr + 1, &pstr, 10); assert(pstr);   
                             pManager->SetSizeBox(rcSizeBox);
                         } 
                     }
@@ -104,10 +104,10 @@ namespace YUI
                         {
                             RECT rcCaption = { 0 };
                             pstr = NULL;
-                            rcCaption.left = _tcstol(pstrValue, &pstr, 10);  assert(pstr);    
-                            rcCaption.top = _tcstol(pstr + 1, &pstr, 10);    assert(pstr);    
-                            rcCaption.right = _tcstol(pstr + 1, &pstr, 10);  assert(pstr);    
-                            rcCaption.bottom = _tcstol(pstr + 1, &pstr, 10); assert(pstr);    
+                            rcCaption.left = strtol(pstrValue, &pstr, 10);  assert(pstr);    
+                            rcCaption.top = strtol(pstr + 1, &pstr, 10);    assert(pstr);    
+                            rcCaption.right = strtol(pstr + 1, &pstr, 10);  assert(pstr);    
+                            rcCaption.bottom = strtol(pstr + 1, &pstr, 10); assert(pstr);    
                             pManager->SetCaptionRect(rcCaption);
                         }
                     }
@@ -115,8 +115,8 @@ namespace YUI
                     {
                        if( pstrValue = pRoot->Attribute("roundcorner") )
                        {
-                           int cx = _tcstol(pstrValue, &pstr, 10);  assert(pstr);    
-                           int cy = _tcstol(pstr + 1, &pstr, 10);    assert(pstr); 
+                           int cx = strtol(pstrValue, &pstr, 10);  assert(pstr);    
+                           int cy = strtol(pstr + 1, &pstr, 10);    assert(pstr); 
                            pManager->SetRoundCorner(cx, cy); 
                        }
                     }
@@ -124,8 +124,8 @@ namespace YUI
                     {
                         if( pstrValue = pRoot->Attribute("mininfo") )
                         {
-                            int cx = _tcstol(pstrValue, &pstr, 10);  assert(pstr);    
-                            int cy = _tcstol(pstr + 1, &pstr, 10);    assert(pstr); 
+                            int cx = strtol(pstrValue, &pstr, 10);  assert(pstr);    
+                            int cy = strtol(pstr + 1, &pstr, 10);    assert(pstr); 
                             pManager->SetMinInfo(cx, cy);
                         }
                     }
@@ -133,8 +133,8 @@ namespace YUI
                     {
                         if( pstrValue = pRoot->Attribute("maxinfo") )
                         {
-                            int cx = _tcstol(pstrValue, &pstr, 10);  assert(pstr);    
-                            int cy = _tcstol(pstr + 1, &pstr, 10);    assert(pstr); 
+                            int cx = strtol(pstrValue, &pstr, 10);  assert(pstr);    
+                            int cy = strtol(pstr + 1, &pstr, 10);    assert(pstr); 
                             pManager->SetMinInfo(cx, cy);
                         }
                     }
@@ -163,8 +163,8 @@ namespace YUI
                     {
                         if(pstrValue = pRoot->Attribute("disabledfontcolor") )
                         {
-                            if( *pstrValue == '#') pstrValue = ::CharNext(pstrValue);
-                            LPTSTR pstr = NULL;
+                            if( *pstrValue == '#') pstrValue = ::CharNextA(pstrValue);
+                            LPSTR pstr = NULL;
                             DWORD clrColor = strtoul(pstrValue, &pstr, 16);
                             pManager->SetDefaultDisabledColor(clrColor);
                         }
@@ -173,7 +173,7 @@ namespace YUI
                     {
                         if(pstrValue = pRoot->Attribute("defaultfontcolor"))
                         {
-                            if( *pstrValue == '#') pstrValue = ::CharNext(pstrValue);
+                            if( *pstrValue == '#') pstrValue = ::CharNextA(pstrValue);
                             DWORD clrColor = strtoul(pstrValue, &pstr, 16);
                             pManager->SetDefaultFontColor(clrColor);
                         }
@@ -182,7 +182,7 @@ namespace YUI
                     {
                         if(pstrValue = pRoot->Attribute("linkfontcolor"))
                         {
-                            if( *pstrValue == '#') pstrValue = ::CharNext(pstrValue);
+                            if( *pstrValue == '#') pstrValue = ::CharNextA(pstrValue);
                             DWORD clrColor = strtoul(pstrValue, &pstr, 16);
                             pManager->SetDefaultLinkFontColor(clrColor);
                         }
@@ -191,7 +191,7 @@ namespace YUI
                     {
                         if(pstrValue = pRoot->Attribute("linkhoverfontcolor"))
                         {
-                            if( *pstrValue == '#') pstrValue = ::CharNext(pstrValue);
+                            if( *pstrValue == '#') pstrValue = ::CharNextA(pstrValue);
                             DWORD clrColor = strtoul(pstrValue, &pstr, 16);
                             pManager->SetDefaultLinkHoverFontColor(clrColor);
                         }
@@ -200,7 +200,7 @@ namespace YUI
                     {
                         if(pstrValue = pRoot->Attribute("linkhoverfontcolor"))
                         {
-                            if( *pstrValue == '#') pstrValue = ::CharNext(pstrValue);
+                            if( *pstrValue == '#') pstrValue = ::CharNextA(pstrValue);
                             DWORD clrColor = strtoul(pstrValue, &pstr, 16);
                             pManager->SetDefaultSelectedBkColor(clrColor);
                         }

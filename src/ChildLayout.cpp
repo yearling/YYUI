@@ -1,6 +1,7 @@
 #include "YUI.h"
 #include "ChildLayout.h"
 #include "DlgBuilder.h"
+#include "UIUtility.h"
 
 namespace YUI
 {
@@ -29,12 +30,16 @@ namespace YUI
         }
     }
 
-    void ChildLayout::SetAttribute(const YString &pstrName, const YString& pstrValue)
+    void ChildLayout::SetAttribute(const std::string &strName, const std::string& strValue)
     {
-        if(pstrName==_T("xmlfile"))
-            SetChildLayoutXML(pstrValue);
+        if(strName==("xmlfile"))
+#if defined _UNICODE | defined UNICODE
+            SetChildLayoutXML(Ansi2Wchar(strValue.c_str()));
+#else
+            SetChildLayoutXML(strValue);
+#endif
         else
-            Container::SetAttribute(pstrName,pstrValue);
+            Container::SetAttribute(strName,strValue);
     }
 
     void ChildLayout::SetChildLayoutXML(const YString& pXML)
@@ -43,7 +48,7 @@ namespace YUI
     }
 
     YUI::YString ChildLayout::GetChildLayoutXML()
-    {
+{
         return m_pstrXMLFile;
     }
 
@@ -53,7 +58,7 @@ namespace YUI
 
     }
 
-    std::shared_ptr<ControlUI> ChildLayout::QueryInterface(const YString & strName)
+    std::shared_ptr<ControlUI> ChildLayout::QueryInterface(const std::string & strName)
     {
         if( strName == CTR_CHILDLAYOUT ) 
             return this->shared_from_this();

@@ -59,9 +59,9 @@ namespace YUI
         return _T("LabelUI");
     }
 
-    std::shared_ptr<ControlUI> Label::QueryInterface(const YString & strName)
+    std::shared_ptr<ControlUI> Label::QueryInterface(const std::string & strName)
     {
-        if( strName ==  _T("Label")) 
+        if( strName ==  "Label") 
             return shared_from_this();
         return ControlUI::QueryInterface(strName);
     }
@@ -163,106 +163,111 @@ namespace YUI
         ControlUI::DoEvent(event);
     }
 
-    void Label::SetAttribute(const YString & strName, const YString & strValue)
+    void Label::SetAttribute(const std::string &strName, const std::string& strValue)
     {
-        LPCTSTR pstrName = strName.c_str();
-        LPCTSTR pstrValue = strValue.c_str();
-        if( _tcscmp(pstrName, _T("align")) == 0 ) {
-            if( _tcsstr(pstrValue, _T("left")) != NULL ) {
+        LPCSTR pstrName = strName.c_str();
+        LPCSTR pstrValue = strValue.c_str();
+        if( strcmp(pstrName, ("align")) == 0 ) {
+            if( strstr(pstrValue, ("left")) != NULL ) {
                 m_uTextStyle &= ~(DT_CENTER | DT_RIGHT | DT_VCENTER | DT_SINGLELINE);
                 m_uTextStyle |= DT_LEFT;
             }
-            if( _tcsstr(pstrValue, _T("center")) != NULL ) {
+            if( strstr(pstrValue, ("center")) != NULL ) {
                 m_uTextStyle &= ~(DT_LEFT | DT_RIGHT );
                 m_uTextStyle |= DT_CENTER;
             }
-            if( _tcsstr(pstrValue, _T("right")) != NULL ) {
+            if( strstr(pstrValue, ("right")) != NULL ) {
                 m_uTextStyle &= ~(DT_LEFT | DT_CENTER | DT_VCENTER | DT_SINGLELINE);
                 m_uTextStyle |= DT_RIGHT;
             }
-            if( _tcsstr(pstrValue, _T("top")) != NULL ) {
+            if( strstr(pstrValue, ("top")) != NULL ) {
                 m_uTextStyle &= ~(DT_BOTTOM | DT_VCENTER | DT_VCENTER);
                 m_uTextStyle |= (DT_TOP | DT_SINGLELINE);
             }
-            if( _tcsstr(pstrValue, _T("vcenter")) != NULL ) {
+            if( strstr(pstrValue, ("vcenter")) != NULL ) {
                 m_uTextStyle &= ~(DT_TOP | DT_BOTTOM );			
                 m_uTextStyle |= (DT_CENTER | DT_VCENTER | DT_SINGLELINE);
             }
-            if( _tcsstr(pstrValue, _T("bottom")) != NULL ) {
+            if( strstr(pstrValue, ("bottom")) != NULL ) {
                 m_uTextStyle &= ~(DT_TOP | DT_VCENTER | DT_VCENTER);
                 m_uTextStyle |= (DT_BOTTOM | DT_SINGLELINE);
             }
         }
-        else if( _tcscmp(pstrName, _T("endellipsis")) == 0 ) {
-            if( _tcscmp(pstrValue, _T("true")) == 0 ) m_uTextStyle |= DT_END_ELLIPSIS;
+        else if( strcmp(pstrName, ("endellipsis")) == 0 ) {
+            if( strcmp(pstrValue, ("true")) == 0 ) m_uTextStyle |= DT_END_ELLIPSIS;
             else m_uTextStyle &= ~DT_END_ELLIPSIS;
-        }    
-        else if( _tcscmp(pstrName, _T("font")) == 0 ) SetFont(pstrValue);
-        else if( _tcscmp(pstrName, _T("textcolor")) == 0 ) {
-            if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-            LPTSTR pstr = NULL;
-            DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
+        }  
+        else if( strcmp(pstrName, ("font")) == 0 )  
+#if defined _UNICODE | defined UNICODE
+        SetFont(Ansi2Wchar(pstrValue)); 
+#else 
+        SetFont(pstrValue);
+#endif
+        else if( strcmp(pstrName, ("textcolor")) == 0 ) {
+            if( *pstrValue == ('#')) pstrValue = ::CharNextA(pstrValue);
+            LPSTR pstr = NULL;
+            DWORD clrColor = strtoul(pstrValue, &pstr, 16);
             SetTextColor(clrColor);
         }
-        else if( _tcscmp(pstrName, _T("disabledtextcolor")) == 0 ) {
-            if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-            LPTSTR pstr = NULL;
-            DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
+        else if( strcmp(pstrName, ("disabledtextcolor")) == 0 ) {
+            if( *pstrValue == ('#')) pstrValue = ::CharNextA(pstrValue);
+            LPSTR pstr = NULL;
+            DWORD clrColor = strtoul(pstrValue, &pstr, 16);
             SetDisabledTextColor(clrColor);
         }
-        else if( _tcscmp(pstrName, _T("textpadding")) == 0 ) {
+        else if( strcmp(pstrName, ("textpadding")) == 0 ) {
             RECT rcTextPadding = { 0 };
-            LPTSTR pstr = NULL;
-            rcTextPadding.left = _tcstol(pstrValue, &pstr, 10);  assert(pstr);    
-            rcTextPadding.top = _tcstol(pstr + 1, &pstr, 10);    assert(pstr);    
-            rcTextPadding.right = _tcstol(pstr + 1, &pstr, 10);  assert(pstr);    
-            rcTextPadding.bottom = _tcstol(pstr + 1, &pstr, 10); assert(pstr);    
+            LPSTR pstr = NULL;
+            rcTextPadding.left = strtol(pstrValue, &pstr, 10);  assert(pstr);    
+            rcTextPadding.top = strtol(pstr + 1, &pstr, 10);    assert(pstr);    
+            rcTextPadding.right = strtol(pstr + 1, &pstr, 10);  assert(pstr);    
+            rcTextPadding.bottom = strtol(pstr + 1, &pstr, 10); assert(pstr);    
             SetTextPadding(rcTextPadding);
         }
-        else if( _tcscmp(pstrName, _T("showhtml")) == 0 ) SetShowHtml(_tcscmp(pstrValue, _T("true")) == 0);
+        else if( strcmp(pstrName, ("showhtml")) == 0 ) SetShowHtml(strcmp(pstrValue, ("true")) == 0);
 
-        else if( _tcscmp(pstrName, _T("enabledeffect")) == 0 ) SetEnabledEffect(_tcscmp(pstrValue, _T("true")) == 0);
-        else if( _tcscmp(pstrName, _T("rhaa")) == 0 ) SetTextRenderingHintAntiAlias(_ttoi(pstrValue));
-        else if( _tcscmp(pstrName, _T("transshadow")) == 0 ) SetTransShadow(_ttoi(pstrValue));
-        else if( _tcscmp(pstrName, _T("transtext")) == 0 ) SetTransText(_ttoi(pstrValue));
-        else if( _tcscmp(pstrName, _T("transshadow1")) == 0 ) SetTransShadow1(_ttoi(pstrValue));
-        else if( _tcscmp(pstrName, _T("transtext1")) == 0 ) SetTransText1(_ttoi(pstrValue));
-        else if( _tcscmp(pstrName, _T("gradientangle")) == 0 ) SetGradientAngle(_ttoi(pstrValue));
-        else if( _tcscmp(pstrName, _T("enabledstroke")) == 0 ) SetEnabledStroke(_tcscmp(pstrValue, _T("true")) == 0);
-        else if( _tcscmp(pstrName, _T("enabledshadow")) == 0 ) SetEnabledShadow(_tcscmp(pstrValue, _T("true")) == 0);
-        else if( _tcscmp(pstrName, _T("transstroke")) == 0 ) SetTransStroke(_ttoi(pstrValue));
-        else if( _tcscmp(pstrName, _T("gradientlength")) == 0 ) SetGradientLength(_ttoi(pstrValue));
-        else if( _tcscmp(pstrName, _T("shadowoffset")) == 0 ){
-            LPTSTR pstr = NULL;
-            int offsetx = _tcstol(pstrValue, &pstr, 10);	assert(pstr);    
-            int offsety = _tcstol(pstr + 1, &pstr, 10);		assert(pstr);
+        else if( strcmp(pstrName, ("enabledeffect")) == 0 ) SetEnabledEffect(strcmp(pstrValue, ("true")) == 0);
+        else if( strcmp(pstrName, ("rhaa")) == 0 ) SetTextRenderingHintAntiAlias(atoi(pstrValue));
+        else if( strcmp(pstrName, ("transshadow")) == 0 ) SetTransShadow(atoi(pstrValue));
+        else if( strcmp(pstrName, ("transtext")) == 0 ) SetTransText(atoi(pstrValue));
+        else if( strcmp(pstrName, ("transshadow1")) == 0 ) SetTransShadow1(atoi(pstrValue));
+        else if( strcmp(pstrName, ("transtext1")) == 0 ) SetTransText1(atoi(pstrValue));
+        else if( strcmp(pstrName, ("gradientangle")) == 0 ) SetGradientAngle(atoi(pstrValue));
+        else if( strcmp(pstrName, ("enabledstroke")) == 0 ) SetEnabledStroke(strcmp(pstrValue, ("true")) == 0);
+        else if( strcmp(pstrName, ("enabledshadow")) == 0 ) SetEnabledShadow(strcmp(pstrValue, ("true")) == 0);
+        else if( strcmp(pstrName, ("transstroke")) == 0 ) SetTransStroke(atoi(pstrValue));
+        else if( strcmp(pstrName, ("gradientlength")) == 0 ) SetGradientLength(atoi(pstrValue));
+        else if( strcmp(pstrName, ("shadowoffset")) == 0 ){
+            LPSTR pstr = NULL;
+            int offsetx = strtol(pstrValue, &pstr, 10);	assert(pstr);    
+            int offsety = strtol(pstr + 1, &pstr, 10);		assert(pstr);
             SetShadowOffset(offsetx,offsety);
         }
-        else if( _tcscmp(pstrName, _T("textcolor1")) == 0 ) {
-            if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-            LPTSTR pstr = NULL;
-            DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
+        else if( strcmp(pstrName, ("textcolor1")) == 0 ) {
+            if( *pstrValue == ('#')) pstrValue = ::CharNextA(pstrValue);
+            LPSTR pstr = NULL;
+            DWORD clrColor = strtoul(pstrValue, &pstr, 16);
             SetTextColor1(clrColor);
         }
-        else if( _tcscmp(pstrName, _T("textshadowcolora")) == 0 ) {
-            if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-            LPTSTR pstr = NULL;
-            DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
+        else if( strcmp(pstrName, ("textshadowcolora")) == 0 ) {
+            if( *pstrValue == ('#')) pstrValue = ::CharNextA(pstrValue);
+            LPSTR pstr = NULL;
+            DWORD clrColor = strtoul(pstrValue, &pstr, 16);
             SetTextShadowColorA(clrColor);
         }
-        else if( _tcscmp(pstrName, _T("textshadowcolorb")) == 0 ) {
-            if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-            LPTSTR pstr = NULL;
-            DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
+        else if( strcmp(pstrName, ("textshadowcolorb")) == 0 ) {
+            if( *pstrValue == ('#')) pstrValue = ::CharNextA(pstrValue);
+            LPSTR pstr = NULL;
+            DWORD clrColor = strtoul(pstrValue, &pstr, 16);
             SetTextShadowColorB(clrColor);
         }
-        else if( _tcscmp(pstrName, _T("strokecolor")) == 0 ) {
-            if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-            LPTSTR pstr = NULL;
-            DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
+        else if( strcmp(pstrName, ("strokecolor")) == 0 ) {
+            if( *pstrValue == ('#')) pstrValue = ::CharNextA(pstrValue);
+            LPSTR pstr = NULL;
+            DWORD clrColor = strtoul(pstrValue, &pstr, 16);
             SetStrokeColor(clrColor);
         }
-        else ControlUI::SetAttribute(strName, strValue);
+        else ControlUI::SetAttribute(pstrName, pstrValue);
     }
 
     void Label::PaintText(HDC hDC)
@@ -327,13 +332,13 @@ namespace YUI
 
 #ifdef _UNICODE
                 nRc.Offset(-1,0);
-                nGraphics.DrawString(m_TextValue,m_TextValue.GetLength(),&nFont,nRc,&format,&nLineGrBrushStroke);
+                nGraphics.DrawString(m_TextValue.c_str(),m_TextValue.length(),&nFont,nRc,&format,&nLineGrBrushStroke);
                 nRc.Offset(2,0);
-                nGraphics.DrawString(m_TextValue,m_TextValue.GetLength(),&nFont,nRc,&format,&nLineGrBrushStroke);
+                nGraphics.DrawString(m_TextValue.c_str(),m_TextValue.length(),&nFont,nRc,&format,&nLineGrBrushStroke);
                 nRc.Offset(-1,-1);
-                nGraphics.DrawString(m_TextValue,m_TextValue.GetLength(),&nFont,nRc,&format,&nLineGrBrushStroke);
+                nGraphics.DrawString(m_TextValue.c_str(),m_TextValue.length(),&nFont,nRc,&format,&nLineGrBrushStroke);
                 nRc.Offset(0,2);
-                nGraphics.DrawString(m_TextValue,m_TextValue.GetLength(),&nFont,nRc,&format,&nLineGrBrushStroke);
+                nGraphics.DrawString(m_TextValue.c_str(),m_TextValue.length(),&nFont,nRc,&format,&nLineGrBrushStroke);
                 nRc.Offset(0,-1);
 #else
                 USES_CONVERSION;
@@ -353,9 +358,9 @@ namespace YUI
             }
 #ifdef _UNICODE
             if(GetEnabledShadow() && (GetTextShadowColorA() > 0 || GetTextShadowColorB() > 0))
-                nGraphics.DrawString(m_TextValue,m_TextValue.GetLength(),&nFont,nShadowRc,&format,&nLineGrBrushA);
+                nGraphics.DrawString(m_TextValue.c_str(),m_TextValue.length(),&nFont,nShadowRc,&format,&nLineGrBrushA);
 
-            nGraphics.DrawString(m_TextValue,m_TextValue.GetLength(),&nFont,nRc,&format,&nLineGrBrushB);
+            nGraphics.DrawString(m_TextValue.c_str(),m_TextValue.length(),&nFont,nRc,&format,&nLineGrBrushB);
 #else
             USES_CONVERSION;
             std::wstring mTextValue = A2W(m_TextValue.c_str());
@@ -393,9 +398,9 @@ namespace YUI
         return m_TextValue;
     }
 
-    void Label::SetTransShadow(int _TransShadow)
+    void Label::SetTransShadow(int ransShadow)
     {
-        m_TransShadow = _TransShadow;
+        m_TransShadow = ransShadow;
     }
 
     int Label::GetTransShadow()
@@ -403,9 +408,9 @@ namespace YUI
         return m_TransShadow;
     }
 
-    void Label::SetTransShadow1(int _TransShadow)
+    void Label::SetTransShadow1(int ransShadow)
     {
-        m_TransShadow1	= _TransShadow;
+        m_TransShadow1	= ransShadow;
     }
 
     int Label::GetTransShadow1()
@@ -413,9 +418,9 @@ namespace YUI
         return m_TransShadow1;
     }
 
-    void Label::SetTransText(int _TransText)
+    void Label::SetTransText(int ransText)
     {
-        	m_TransText = _TransText;
+        	m_TransText = ransText;
     }
 
     int Label::GetTransText()
@@ -423,9 +428,9 @@ namespace YUI
         return m_TransText;
     }
 
-    void Label::SetTransText1(int _TransText)
+    void Label::SetTransText1(int ransText)
     {
-        m_TransText1	= _TransText;
+        m_TransText1	= ransText;
     }
 
     int Label::GetTransText1()
@@ -433,9 +438,9 @@ namespace YUI
         return m_TransText1;
     }
 
-    void Label::SetTransStroke(int _TransStroke)
+    void Label::SetTransStroke(int ransStroke)
     {
-        m_TransStroke = _TransStroke;
+        m_TransStroke = ransStroke;
     }
 
     int Label::GetTransStroke()
@@ -453,11 +458,11 @@ namespace YUI
        return m_GradientLength;
     }
 
-    void Label::SetTextRenderingHintAntiAlias(int _TextRenderingHintAntiAlias)
+    void Label::SetTextRenderingHintAntiAlias(int extRenderingHintAntiAlias)
     {
-        if(_TextRenderingHintAntiAlias < 0 || _TextRenderingHintAntiAlias > 5)
-            _TextRenderingHintAntiAlias = 0;
-        m_TextRenderingHintAntiAlias = (TextRenderingHint)_TextRenderingHintAntiAlias;
+        if(extRenderingHintAntiAlias < 0 || extRenderingHintAntiAlias > 5)
+            extRenderingHintAntiAlias = 0;
+        m_TextRenderingHintAntiAlias = (TextRenderingHint)extRenderingHintAntiAlias;
     }
 
     int Label::GetTextRenderingHintAntiAlias()
@@ -491,9 +496,9 @@ namespace YUI
         return m_ShadowOffset;
     }
 
-    void Label::SetTextColor1(DWORD _TextColor1)
+    void Label::SetTextColor1(DWORD extColor1)
     {
-        m_dwTextColor1	= _TextColor1;
+        m_dwTextColor1	= extColor1;
     }
 
     DWORD Label::GetTextColor1()
@@ -501,9 +506,9 @@ namespace YUI
         return m_dwTextColor1;
     }
 
-    void Label::SetTextShadowColorA(DWORD _TextShadowColorA)
+    void Label::SetTextShadowColorA(DWORD extShadowColorA)
     {
-        m_dwTextShadowColorA	= _TextShadowColorA;
+        m_dwTextShadowColorA	= extShadowColorA;
     }
 
     DWORD Label::GetTextShadowColorA()
@@ -511,9 +516,9 @@ namespace YUI
         return m_dwTextShadowColorA;
     }
 
-    void Label::SetTextShadowColorB(DWORD _TextShadowColorB)
+    void Label::SetTextShadowColorB(DWORD extShadowColorB)
     {
-        m_dwTextShadowColorB	= _TextShadowColorB;
+        m_dwTextShadowColorB	= extShadowColorB;
     }
 
     DWORD Label::GetTextShadowColorB()

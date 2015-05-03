@@ -12,13 +12,13 @@ namespace YUI
         Button();
         virtual ~Button();
         LPCTSTR                         GetClass() const;
-        virtual std::shared_ptr<ControlUI> QueryInterface(const YString & strName);
+        virtual std::shared_ptr<ControlUI> QueryInterface(const std::string & strName);
         virtual UINT                    GetControlFlags() const;
         virtual bool                    Activate();
         virtual void                    SetEnabled(bool bEnable = true);
         virtual void                    DoEvent(ControlEvent& eve);
         virtual SIZE                    EstimateSize(SIZE szAvailable);
-        virtual void                    SetAttribute(const YString &pstrName, const YString& pstrValue);
+        virtual void SetAttribute(const std::string &strName, const std::string& strValue);
         virtual void                    PaintText(HDC hDC);
         virtual void                    PaintStatusImage(HDC hDC);
         YString                         GetNormalImage();

@@ -31,9 +31,6 @@ namespace YUI
         virtual void                    OnFinalMessage(HWND hWnd);
         virtual void                    Notify(NotifyMsg & msg);
         virtual void                    OnClick(NotifyMsg & msg);
-        //用来生成自定义的控件
-        virtual std::shared_ptr<ControlUI> 
-                                        CreateControl(YString pstrClass);
     protected:
         virtual YString                 GetSkinFolder() = 0 ;
         virtual YString                 GetSkinFile() =0 ;
@@ -47,7 +44,7 @@ namespace YUI
         virtual UILIB_RESOURCETYPE      GetResourceType() const;
         virtual YString                 GetZIPFileName() const;
         virtual YString                 GetResourceID() const;
-        virtual std::shared_ptr<ControlUI> CreateControl(const YString & strClassName);
+       
         virtual LRESULT                 MessageHandler(UINT uMsg, WPARAM wParam, LPARAM /*lParam*/, bool& /*bHandled*/);
         virtual LRESULT                 OnClose(UINT uMsg, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled);
         virtual LRESULT                 OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled);

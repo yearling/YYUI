@@ -9,7 +9,7 @@
 #include "WindowImpl.h"
 #include "resource.h"
 #include <iostream>
-#include "D2DRender.h"
+#include "D2DWnd.h"
 using namespace YUI;
 class MyWindow : public WindowWnd
 {
@@ -35,10 +35,9 @@ public:
         AddEntry(MSG_Click,_T("closebtn"),[&](const NotifyMsg& msg){Close();});
         AddEntry(MSG_Click,_T("btnHello"),[&](const NotifyMsg& msg){::MessageBox(NULL, _T("button"),_T("push button"),NULL);});
     }
-	virtual std::shared_ptr<ControlUI> 
-										CreateControl(YString pstrClass)
+	virtual std::shared_ptr<ControlUI> CreateControl(std::string pstrClass)
 	{
-		if (_tcsicmp(pstrClass.c_str(), _T("Wnd")) == 0)
+		if (strcmp(pstrClass.c_str(), ("Wnd")) == 0)
 		{
 			auto pUI  = std::make_shared<D2DWnd>();           
             pUI->Create(m_hWnd,_T("D2D"),UI_WNDSTYLE_CHILD,WS_EX_WINDOWEDGE);
@@ -56,25 +55,23 @@ int APIENTRY _tWinMain( __in HINSTANCE hInstance, __in_opt HINSTANCE hPrevInstan
 		 if (FAILED(CoInitialize(NULL)))
 			 return 0;
     YYCOM::YYSetConsoleA();
-	PaintManagerUI::SetInstance(hInstance);
-	//MyWindow duiFrame;
-	//duiFrame.Create(NULL,_T("DUIWND"),WS_OVERLAPPEDWINDOW,WS_EX_WINDOWEDGE);
-	//duiFrame.CenterWindow();
- //   duiFrame.SetIcon(IDI_ICON1);
-	//duiFrame.ShowModal();
-    std::shared_ptr<TestWindow> spWindow= std::make_shared<TestWindow>();
-    //spWindow->Create(NULL,_T("DUIWND"),UI_WNDSTYLE_FRAME,WS_EX_WINDOWEDGE);
-    spWindow->Create(NULL,_T("DUIWND"),WS_CAPTION,WS_EX_WINDOWEDGE);
-    spWindow->CenterWindow();
-    spWindow->SetIcon(IDI_ICON1);
-    spWindow->ShowModal();
+#if 0
+	{
+		PaintManagerUI::SetInstance(hInstance);
+		std::shared_ptr<TestWindow> spWindow= std::make_shared<TestWindow>();
+		spWindow->Create(NULL,_T("DUIWND"),WS_CAPTION,WS_EX_WINDOWEDGE);
+		spWindow->CenterWindow();
+		spWindow->SetIcon(IDI_ICON1);
+		spWindow->ShowModal();
     //PaintManagerUI::MessageLoop();
+	}
+#endif
 	 
-		/*std::shared_ptr<D2DWnd> spD2D = std::make_shared<D2DWnd>();
+		std::shared_ptr<D2DWnd> spD2D = std::make_shared<D2DWnd>();
 		spD2D->Init();
 		spD2D->Create(NULL,_T("D2DWnd"),UI_WNDSTYLE_FRAME,WS_EX_WINDOWEDGE);
 		spD2D->CenterWindow();
-		spD2D->ShowModal();*/
+		spD2D->ShowModal();
 		CoUninitialize();
     } 
     catch(YYUIException &e)

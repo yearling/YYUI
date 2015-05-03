@@ -36,7 +36,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v110</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='FarDebug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -122,6 +122,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>d2d1.lib;dwrite.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='FarDebug|Win32'">
@@ -226,11 +227,12 @@
     <ClInclude Include="..\..\include\ChildLayout.h" />
     <ClInclude Include="..\..\include\Container.h" />
     <ClInclude Include="..\..\include\ControlUI.h" />
-    <ClInclude Include="..\..\include\D2DRender.h" />
+    <ClInclude Include="..\..\include\D2DWnd.h" />
     <ClInclude Include="..\..\include\HorizontalLayout.h" />
     <ClInclude Include="..\..\include\Label.h" />
     <ClInclude Include="..\..\include\PaintManagerUI.h" />
     <ClInclude Include="..\..\include\DlgBuilder.h" />
+    <ClInclude Include="..\..\include\RenderD2D.h" />
     <ClInclude Include="..\..\include\RenderDGI.h" />
     <ClInclude Include="..\..\include\TabLayout.h" />
     <ClInclude Include="..\..\include\thirdparty\tinyxml2\tinyxml2.h" />
@@ -260,11 +262,12 @@
     <ClCompile Include="..\..\src\ChildLayout.cpp" />
     <ClCompile Include="..\..\src\Container.cpp" />
     <ClCompile Include="..\..\src\ControlUI.cpp" />
-    <ClCompile Include="..\..\src\D2DRender.cpp" />
+    <ClCompile Include="..\..\src\D2DWnd.cpp" />
     <ClCompile Include="..\..\src\HorizontalLayout.cpp" />
     <ClCompile Include="..\..\src\Label.cpp" />
     <ClCompile Include="..\..\src\PaintManagerUI.cpp" />
     <ClCompile Include="..\..\src\DlgBuilder.cpp" />
+    <ClCompile Include="..\..\src\RenderD2D.cpp" />
     <ClCompile Include="..\..\src\RenderDGI.cpp" />
     <ClCompile Include="..\..\src\stb_image.c" />
     <ClCompile Include="..\..\src\TabLayout.cpp" />

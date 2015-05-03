@@ -56,7 +56,7 @@ namespace YUI
         m_strName = strName;
     }
 
-    std::shared_ptr<ControlUI> ControlUI::QueryInterface(const YString & strName)
+    std::shared_ptr<ControlUI> ControlUI::QueryInterface(const std::string & strName)
     {
         if( strName == CTR_CONTROL )
             return this->shared_from_this();
@@ -786,136 +786,166 @@ namespace YUI
             spParent->DoEvent(eve);
     }
 
-    void ControlUI::SetAttribute(const YString &strName, const YString& strValue)
+    void ControlUI::SetAttribute(const std::string &strName, const std::string& strValue)
     {
         auto pstrName = strName.c_str();
         auto pstrValue = strValue.c_str();
-        if( _tcscmp(pstrName, _T("pos")) == 0 ) {
+        if( strcmp(pstrName, ("pos")) == 0 ) {
             RECT rcPos = { 0 };
-            LPTSTR pstr = NULL;
-            rcPos.left = _tcstol(pstrValue, &pstr, 10);  assert(pstr);    
-            rcPos.top = _tcstol(pstr + 1, &pstr, 10);    assert(pstr);    
-            rcPos.right = _tcstol(pstr + 1, &pstr, 10);  assert(pstr);    
-            rcPos.bottom = _tcstol(pstr + 1, &pstr, 10); assert(pstr);    
+            LPSTR pstr = NULL;
+            rcPos.left = strtol(pstrValue, &pstr, 10);  assert(pstr);    
+            rcPos.top = strtol(pstr + 1, &pstr, 10);    assert(pstr);    
+            rcPos.right = strtol(pstr + 1, &pstr, 10);  assert(pstr);    
+            rcPos.bottom = strtol(pstr + 1, &pstr, 10); assert(pstr);    
             SIZE szXY = {rcPos.left >= 0 ? rcPos.left : rcPos.right, rcPos.top >= 0 ? rcPos.top : rcPos.bottom};
             SetFixedXY(szXY);
             SetFixedWidth(rcPos.right - rcPos.left);
             SetFixedHeight(rcPos.bottom - rcPos.top);
         }
-        else if( _tcscmp(pstrName, _T("relativepos")) == 0 ) {
+        else if( strcmp(pstrName, ("relativepos")) == 0 ) {
             SIZE szMove,szZoom;
-            LPTSTR pstr = NULL;
-            szMove.cx = _tcstol(pstrValue, &pstr, 10);  assert(pstr);    
-            szMove.cy = _tcstol(pstr + 1, &pstr, 10);    assert(pstr);    
-            szZoom.cx = _tcstol(pstr + 1, &pstr, 10);  assert(pstr);    
-            szZoom.cy = _tcstol(pstr + 1, &pstr, 10); assert(pstr); 
+            LPSTR pstr = NULL;
+            szMove.cx = strtol(pstrValue, &pstr, 10);  assert(pstr);    
+            szMove.cy = strtol(pstr + 1, &pstr, 10);    assert(pstr);    
+            szZoom.cx = strtol(pstr + 1, &pstr, 10);  assert(pstr);    
+            szZoom.cy = strtol(pstr + 1, &pstr, 10); assert(pstr); 
             SetRelativePos(szMove,szZoom);
         }
-        else if( _tcscmp(pstrName, _T("padding")) == 0 ) {
+        else if( strcmp(pstrName, ("padding")) == 0 ) {
             RECT rcPadding = { 0 };
-            LPTSTR pstr = NULL;
-            rcPadding.left = _tcstol(pstrValue, &pstr, 10);  assert(pstr);    
-            rcPadding.top = _tcstol(pstr + 1, &pstr, 10);    assert(pstr);    
-            rcPadding.right = _tcstol(pstr + 1, &pstr, 10);  assert(pstr);    
-            rcPadding.bottom = _tcstol(pstr + 1, &pstr, 10); assert(pstr);    
+            LPSTR pstr = NULL;
+            rcPadding.left = strtol(pstrValue, &pstr, 10);  assert(pstr);    
+            rcPadding.top = strtol(pstr + 1, &pstr, 10);    assert(pstr);    
+            rcPadding.right = strtol(pstr + 1, &pstr, 10);  assert(pstr);    
+            rcPadding.bottom = strtol(pstr + 1, &pstr, 10); assert(pstr);    
             SetPadding(rcPadding);
         }
-        else if( _tcscmp(pstrName, _T("bkcolor")) == 0 || _tcscmp(pstrName, _T("bkcolor1")) == 0 ) {
-            while( *pstrValue > _T('\0') && *pstrValue <= _T(' ') ) pstrValue = ::CharNext(pstrValue);
-            if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-            LPTSTR pstr = NULL;
-            DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
+        else if( strcmp(pstrName, ("bkcolor")) == 0 || strcmp(pstrName, ("bkcolor1")) == 0 ) {
+            while( *pstrValue > ('\0') && *pstrValue <= (' ') ) pstrValue = ::CharNextA(pstrValue);
+            if( *pstrValue == ('#')) pstrValue = ::CharNextA(pstrValue);
+            LPSTR pstr = NULL;
+            DWORD clrColor = strtoul(pstrValue, &pstr, 16);
             SetBkColor(clrColor);
         }
-        else if( _tcscmp(pstrName, _T("bkcolor2")) == 0 ) {
-            while( *pstrValue > _T('\0') && *pstrValue <= _T(' ') ) pstrValue = ::CharNext(pstrValue);
-            if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-            LPTSTR pstr = NULL;
-            DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
+        else if( strcmp(pstrName, ("bkcolor2")) == 0 ) {
+            while( *pstrValue > ('\0') && *pstrValue <= (' ') ) pstrValue = ::CharNextA(pstrValue);
+            if( *pstrValue == ('#')) pstrValue = ::CharNextA(pstrValue);
+            LPSTR pstr = NULL;
+            DWORD clrColor = strtoul(pstrValue, &pstr, 16);
             SetBkColor2(clrColor);
         }
-        else if( _tcscmp(pstrName, _T("bkcolor3")) == 0 ) {
-            while( *pstrValue > _T('\0') && *pstrValue <= _T(' ') ) pstrValue = ::CharNext(pstrValue);
-            if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-            LPTSTR pstr = NULL;
-            DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
+        else if( strcmp(pstrName, ("bkcolor3")) == 0 ) {
+            while( *pstrValue > ('\0') && *pstrValue <= (' ') ) pstrValue = ::CharNextA(pstrValue);
+            if( *pstrValue == ('#')) pstrValue = ::CharNextA(pstrValue);
+            LPSTR pstr = NULL;
+            DWORD clrColor = strtoul(pstrValue, &pstr, 16);
             SetBkColor3(clrColor);
         }
-        else if( _tcscmp(pstrName, _T("bordercolor")) == 0 ) {
-            if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-            LPTSTR pstr = NULL;
-            DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
+        else if( strcmp(pstrName, ("bordercolor")) == 0 ) {
+            if( *pstrValue == ('#')) pstrValue = ::CharNextA(pstrValue);
+            LPSTR pstr = NULL;
+            DWORD clrColor = strtoul(pstrValue, &pstr, 16);
             SetBorderColor(clrColor);
         }
-        else if( _tcscmp(pstrName, _T("focusbordercolor")) == 0 ) {
-            if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-            LPTSTR pstr = NULL;
-            DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
+        else if( strcmp(pstrName, ("focusbordercolor")) == 0 ) {
+            if( *pstrValue == ('#')) pstrValue = ::CharNextA(pstrValue);
+            LPSTR pstr = NULL;
+            DWORD clrColor = strtoul(pstrValue, &pstr, 16);
             SetFocusBorderColor(clrColor);
         }
-        else if( _tcscmp(pstrName, _T("colorhsl")) == 0 ) SetColorHSL(_tcscmp(pstrValue, _T("true")) == 0);
-        else if( _tcscmp(pstrName, _T("bordersize")) == 0 ) {
-            YString nValue = pstrValue;
-            if(nValue.find(_T(',')) < 0)
+        else if( strcmp(pstrName, ("colorhsl")) == 0 ) SetColorHSL(strcmp(pstrValue, ("true")) == 0);
+        else if( strcmp(pstrName, ("bordersize")) == 0 ) {
+            std::string nValue = pstrValue;
+            if(nValue.find((',')) < 0)
             {
-                SetBorderSize(_ttoi(pstrValue));
+                SetBorderSize(atoi(pstrValue));
                 RECT rcPadding = {0};
                 SetBorderSize(rcPadding);
             }
             else
             {
                 RECT rcPadding = { 0 };
-                LPTSTR pstr = NULL;
-                rcPadding.left = _tcstol(pstrValue, &pstr, 10);  assert(pstr);
-                rcPadding.top = _tcstol(pstr + 1, &pstr, 10);    assert(pstr);
-                rcPadding.right = _tcstol(pstr + 1, &pstr, 10);  assert(pstr);
-                rcPadding.bottom = _tcstol(pstr + 1, &pstr, 10); assert(pstr);
+                LPSTR pstr = NULL;
+                rcPadding.left = strtol(pstrValue, &pstr, 10);  assert(pstr);
+                rcPadding.top = strtol(pstr + 1, &pstr, 10);    assert(pstr);
+                rcPadding.right = strtol(pstr + 1, &pstr, 10);  assert(pstr);
+                rcPadding.bottom = strtol(pstr + 1, &pstr, 10); assert(pstr);
                 SetBorderSize(rcPadding);
             }
         }
-        else if( _tcscmp(pstrName, _T("leftbordersize")) == 0 ) SetLeftBorderSize(_ttoi(pstrValue));
-        else if( _tcscmp(pstrName, _T("topbordersize")) == 0 ) SetTopBorderSize(_ttoi(pstrValue));
-        else if( _tcscmp(pstrName, _T("rightbordersize")) == 0 ) SetRightBorderSize(_ttoi(pstrValue));
-        else if( _tcscmp(pstrName, _T("bottombordersize")) == 0 ) SetBottomBorderSize(_ttoi(pstrValue));
-        else if( _tcscmp(pstrName, _T("borderstyle")) == 0 ) SetBorderStyle(_ttoi(pstrValue));
-        else if( _tcscmp(pstrName, _T("borderround")) == 0 ) {
+        else if( strcmp(pstrName, ("leftbordersize")) == 0 ) SetLeftBorderSize(atoi(pstrValue));
+        else if( strcmp(pstrName, ("topbordersize")) == 0 ) SetTopBorderSize(atoi(pstrValue));
+        else if( strcmp(pstrName, ("rightbordersize")) == 0 ) SetRightBorderSize(atoi(pstrValue));
+        else if( strcmp(pstrName, ("bottombordersize")) == 0 ) SetBottomBorderSize(atoi(pstrValue));
+        else if( strcmp(pstrName, ("borderstyle")) == 0 ) SetBorderStyle(atoi(pstrValue));
+        else if( strcmp(pstrName, ("borderround")) == 0 ) {
             SIZE cxyRound = { 0 };
-            LPTSTR pstr = NULL;
-            cxyRound.cx = _tcstol(pstrValue, &pstr, 10);  assert(pstr);    
-            cxyRound.cy = _tcstol(pstr + 1, &pstr, 10);    assert(pstr);     
+            LPSTR pstr = NULL;
+            cxyRound.cx = strtol(pstrValue, &pstr, 10);  assert(pstr);    
+            cxyRound.cy = strtol(pstr + 1, &pstr, 10);    assert(pstr);     
             SetBorderRound(cxyRound);
         }
-        else if( _tcscmp(pstrName, _T("bkimage")) == 0 ) SetBkImage(pstrValue);
-        else if( _tcscmp(pstrName, _T("width")) == 0 ) SetFixedWidth(_ttoi(pstrValue));
-        else if( _tcscmp(pstrName, _T("height")) == 0 ) SetFixedHeight(_ttoi(pstrValue));
-        else if( _tcscmp(pstrName, _T("minwidth")) == 0 ) SetMinWidth(_ttoi(pstrValue));
-        else if( _tcscmp(pstrName, _T("minheight")) == 0 ) SetMinHeight(_ttoi(pstrValue));
-        else if( _tcscmp(pstrName, _T("maxwidth")) == 0 ) SetMaxWidth(_ttoi(pstrValue));
-        else if( _tcscmp(pstrName, _T("maxheight")) == 0 ) SetMaxHeight(_ttoi(pstrValue));
-        else if( _tcscmp(pstrName, _T("name")) == 0 ) SetName(pstrValue);
-        else if( _tcscmp(pstrName, _T("text")) == 0 ) SetText(pstrValue);
-        else if( _tcscmp(pstrName, _T("tooltip")) == 0 ) SetToolTip(pstrValue);
-        else if( _tcscmp(pstrName, _T("userdata")) == 0 ) SetUserData(pstrValue);
-        else if( _tcscmp(pstrName, _T("enabled")) == 0 ) SetEnabled(_tcscmp(pstrValue, _T("true")) == 0);
-        else if( _tcscmp(pstrName, _T("mouse")) == 0 ) SetMouseEnabled(_tcscmp(pstrValue, _T("true")) == 0);
-        else if( _tcscmp(pstrName, _T("keyboard")) == 0 ) SetKeyboardEnabled(_tcscmp(pstrValue, _T("true")) == 0);
-        else if( _tcscmp(pstrName, _T("visible")) == 0 ) SetVisible(_tcscmp(pstrValue, _T("true")) == 0);
-        else if( _tcscmp(pstrName, _T("float")) == 0 ) SetFloat(_tcscmp(pstrValue, _T("true")) == 0);
-        else if( _tcscmp(pstrName, _T("shortcut")) == 0 ) SetShortcut(pstrValue[0]);
-        else if( _tcscmp(pstrName, _T("menu")) == 0 ) SetContextMenuUsed(_tcscmp(pstrValue, _T("true")) == 0);
-        else if( _tcscmp(pstrName, _T("virtualwnd")) == 0 ) SetVirtualWnd(pstrValue);
+        else if( strcmp(pstrName, ("bkimage")) == 0 ) 
+#if defined _UNICODE | defined UNICODE
+            SetBkImage(Ansi2Wchar(pstrValue));
+#else
+            SetBkImage(pstrValue);
+#endif
+        else if( strcmp(pstrName, ("width")) == 0 ) SetFixedWidth(atoi(pstrValue));
+        else if( strcmp(pstrName, ("height")) == 0 ) SetFixedHeight(atoi(pstrValue));
+        else if( strcmp(pstrName, ("minwidth")) == 0 ) SetMinWidth(atoi(pstrValue));
+        else if( strcmp(pstrName, ("minheight")) == 0 ) SetMinHeight(atoi(pstrValue));
+        else if( strcmp(pstrName, ("maxwidth")) == 0 ) SetMaxWidth(atoi(pstrValue));
+        else if( strcmp(pstrName, ("maxheight")) == 0 ) SetMaxHeight(atoi(pstrValue));
+        else if( strcmp(pstrName, ("name")) == 0 ) 
+#if defined _UNICODE | defined UNICODE
+        SetName(Ansi2Wchar(pstrValue));
+#else
+        SetName(pstrValue);
+#endif
+        else if( strcmp(pstrName, ("text")) == 0 )
+#if defined _UNICODE | defined UNICODE
+        SetText(Ansi2Wchar(pstrValue));
+#else
+        SetText(pstrValue);
+#endif
+        else if( strcmp(pstrName, ("tooltip")) == 0 )
+#if defined _UNICODE | defined UNICODE
+        SetToolTip(Ansi2Wchar(pstrValue));
+#else
+        SetToolTip(pstrValue);
+#endif
+        else if( strcmp(pstrName, ("userdata")) == 0 )
+#if defined _UNICODE | defined UNICODE
+        SetUserData(Ansi2Wchar(pstrValue));
+#else
+        SetUserData(pstrValue);
+#endif 
+        else if( strcmp(pstrName, ("enabled")) == 0 ) SetEnabled(strcmp(pstrValue, ("true")) == 0);
+        else if( strcmp(pstrName, ("mouse")) == 0 ) SetMouseEnabled(strcmp(pstrValue, ("true")) == 0);
+        else if( strcmp(pstrName, ("keyboard")) == 0 ) SetKeyboardEnabled(strcmp(pstrValue, ("true")) == 0);
+        else if( strcmp(pstrName, ("visible")) == 0 ) SetVisible(strcmp(pstrValue, ("true")) == 0);
+        else if( strcmp(pstrName, ("float")) == 0 ) SetFloat(strcmp(pstrValue, ("true")) == 0);
+        else if( strcmp(pstrName, ("shortcut")) == 0 ) SetShortcut(pstrValue[0]);
+        else if( strcmp(pstrName, ("menu")) == 0 ) SetContextMenuUsed(strcmp(pstrValue, ("true")) == 0);
+        else if( strcmp(pstrName, ("virtualwnd")) == 0 ) 
+#if defined _UNICODE | defined UNICODE
+        SetVirtualWnd(Ansi2Wchar(pstrValue).c_str());
+#else
+        SetVirtualWnd(pstrValue);
+#endif 
     }
 
-    std::shared_ptr<ControlUI> ControlUI::ApplyAttributeList(const YString& strList)
+    std::shared_ptr<ControlUI> ControlUI::ApplyAttributeList(const std::string & strList)
     {
-        YString sItem;
-        YString sValue;
+        std::string sItem;
+        std::string sValue;
         auto pstrList = strList.c_str();
         while( *pstrList != _T('\0') ) {
             sItem.clear();
             sValue.clear();
             while( *pstrList != _T('\0') && *pstrList != _T('=') ) {
-                LPTSTR pstrTemp = ::CharNext(pstrList);
+                LPSTR pstrTemp = ::CharNextA(pstrList);
                 while( pstrList < pstrTemp) {
                     sItem += *pstrList++;
                 }
@@ -927,7 +957,7 @@ namespace YUI
             if( *pstrList++ != _T('\"') )
                 return shared_from_this();
             while( *pstrList != _T('\0') && *pstrList != _T('\"') ) {
-                LPTSTR pstrTemp = ::CharNext(pstrList);
+                LPSTR pstrTemp = ::CharNextA(pstrList);
                 while( pstrList < pstrTemp) {
                     sValue += *pstrList++;
                 }

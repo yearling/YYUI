@@ -20,20 +20,20 @@ namespace YUI
         return _T("VerticalLayoutUI");
     }
 
-    std::shared_ptr<ControlUI> VerticalLayout::QueryInterface(const YString & strName)
+    std::shared_ptr<ControlUI> VerticalLayout::QueryInterface(const std::string & strName)
     {
         if( strName == CTR_VERTICALLAYOUT)
             return shared_from_this();
         return Container::QueryInterface(strName);
     }
 
-    void VerticalLayout::SetAttribute(const YString &pstrName, const YString& pstrValue)
+    void VerticalLayout::SetAttribute(const std::string &strName, const std::string& strValue)
     {
-        if( pstrName == _T("sepheight") ) 
-            SetSepHeight(_ttoi(pstrValue.c_str()));
-        else if( pstrName == _T("sepimm") )
-            SetSepImmMode(pstrValue == _T("true"));
-        else Container::SetAttribute(pstrName, pstrValue);
+        if( strName =="sepheight" ) 
+            SetSepHeight(atoi(strValue.c_str()));
+        else if( strName == "sepimm" )
+            SetSepImmMode(strValue == "true");
+        else Container::SetAttribute(strName, strValue);
     }
 
     UINT VerticalLayout::GetControlFlags() const

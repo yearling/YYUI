@@ -27,7 +27,7 @@ namespace YUI
         return _T("ButtonUI");
     }
 
-    std::shared_ptr<ControlUI> Button::QueryInterface(const YString & strName)
+    std::shared_ptr<ControlUI> Button::QueryInterface(const std::string & strName)
     {
         if( strName ==  CTR_BUTTON  ) 
             return shared_from_this();
@@ -145,43 +145,53 @@ namespace YUI
 		return ControlUI::EstimateSize(szAvailable);
     }
 
-    void Button::SetAttribute(const YString &strName, const YString& strValue)
+    void Button::SetAttribute(const std::string &strName, const std::string& strValue)
     {
         auto pstrName = strName.c_str();
         auto pstrValue = strValue.c_str();
-        if( _tcscmp(pstrName, _T("normalimage")) == 0 ) SetNormalImage(pstrValue);
-        else if( _tcscmp(pstrName, _T("hotimage")) == 0 ) SetHotImage(pstrValue);
-        else if( _tcscmp(pstrName, _T("pushedimage")) == 0 ) SetPushedImage(pstrValue);
-        else if( _tcscmp(pstrName, _T("focusedimage")) == 0 ) SetFocusedImage(pstrValue);
-        else if( _tcscmp(pstrName, _T("disabledimage")) == 0 ) SetDisabledImage(pstrValue);
-        else if( _tcscmp(pstrName, _T("foreimage")) == 0 ) SetForeImage(pstrValue);
-        else if( _tcscmp(pstrName, _T("hotforeimage")) == 0 ) SetHotForeImage(pstrValue);
-        else if( _tcscmp(pstrName, _T("hotbkcolor")) == 0 )
+#if defined _UNICODE | defined UNICODE
+        if( strcmp(pstrName, ("normalimage")) == 0 ) SetNormalImage(Ansi2Wchar(pstrValue));
+        else if( strcmp(pstrName, ("hotimage")) == 0 ) SetHotImage(Ansi2Wchar(pstrValue));
+        else if( strcmp(pstrName, ("pushedimage")) == 0 ) SetPushedImage(Ansi2Wchar(pstrValue));
+        else if( strcmp(pstrName, ("focusedimage")) == 0 ) SetFocusedImage(Ansi2Wchar(pstrValue));
+        else if( strcmp(pstrName, ("disabledimage")) == 0 ) SetDisabledImage(Ansi2Wchar(pstrValue));
+        else if( strcmp(pstrName, ("foreimage")) == 0 ) SetForeImage(Ansi2Wchar(pstrValue));
+        else if( strcmp(pstrName, ("hotforeimage")) == 0 ) SetHotForeImage(Ansi2Wchar(pstrValue));
+#else 
+        if( strcmp(pstrName, ("normalimage")) == 0 ) SetNormalImage(pstrValue);
+        else if( strcmp(pstrName, ("hotimage")) == 0 ) SetHotImage(pstrValue);
+        else if( strcmp(pstrName, ("pushedimage")) == 0 ) SetPushedImage(pstrValue);
+        else if( strcmp(pstrName, ("focusedimage")) == 0 ) SetFocusedImage(pstrValue);
+        else if( strcmp(pstrName, ("disabledimage")) == 0 ) SetDisabledImage(pstrValue);
+        else if( strcmp(pstrName, ("foreimage")) == 0 ) SetForeImage(pstrValue);
+        else if( strcmp(pstrName, ("hotforeimage")) == 0 ) SetHotForeImage(pstrValue);
+#endif
+        else if( strcmp(pstrName, ("hotbkcolor")) == 0 )
         {
-            if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-            LPTSTR pstr = NULL;
-            DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
+            if( *pstrValue == ('#')) pstrValue = ::CharNextA(pstrValue);
+            LPSTR pstr = NULL;
+            DWORD clrColor = strtoul(pstrValue, &pstr, 16);
             SetHotBkColor(clrColor);
         }
-        else if( _tcscmp(pstrName, _T("hottextcolor")) == 0 )
+        else if( strcmp(pstrName, ("hottextcolor")) == 0 )
         {
-            if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-            LPTSTR pstr = NULL;
-            DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
+            if( *pstrValue == ('#')) pstrValue = ::CharNextA(pstrValue);
+            LPSTR pstr = NULL;
+            DWORD clrColor = strtoul(pstrValue, &pstr, 16);
             SetHotTextColor(clrColor);
         }
-        else if( _tcscmp(pstrName, _T("pushedtextcolor")) == 0 )
+        else if( strcmp(pstrName, ("pushedtextcolor")) == 0 )
         {
-            if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-            LPTSTR pstr = NULL;
-            DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
+            if( *pstrValue == ('#')) pstrValue = ::CharNextA(pstrValue);
+            LPSTR pstr = NULL;
+            DWORD clrColor = strtoul(pstrValue, &pstr, 16);
             SetPushedTextColor(clrColor);
         }
-        else if( _tcscmp(pstrName, _T("focusedtextcolor")) == 0 )
+        else if( strcmp(pstrName, ("focusedtextcolor")) == 0 )
         {
-            if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-            LPTSTR pstr = NULL;
-            DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
+            if( *pstrValue == ('#')) pstrValue = ::CharNextA(pstrValue);
+            LPSTR pstr = NULL;
+            DWORD clrColor = strtoul(pstrValue, &pstr, 16);
             SetFocusedTextColor(clrColor);
         }
         else Label::SetAttribute(pstrName, pstrValue);

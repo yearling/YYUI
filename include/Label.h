@@ -17,7 +17,7 @@ namespace YUI
         Label();
         virtual ~Label();
         LPCTSTR                         GetClass() const;
-        virtual std::shared_ptr<ControlUI> QueryInterface(const YString & strName);
+        virtual std::shared_ptr<ControlUI> QueryInterface(const std::string & strName);
 
         void                            SetTextStyle(UINT uStyle);
         UINT                            GetTextStyle() const;
@@ -34,7 +34,7 @@ namespace YUI
 
         SIZE                            EstimateSize(SIZE szAvailable);
         void                            DoEvent(ControlEvent& event);
-        virtual void                   SetAttribute(const YString &pstrName, const YString& pstrValue);
+        virtual void SetAttribute(const std::string &strName, const std::string& strValue);
 
         void                            PaintText(HDC hDC);
 

@@ -138,7 +138,10 @@
     <ClInclude Include="..\..\include\TileLayout.h">
       <Filter>YYUI\Layout</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\D2DRender.h">
+    <ClInclude Include="..\..\include\RenderD2D.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\D2DWnd.h">
       <Filter>YYUI\include\base</Filter>
     </ClInclude>
   </ItemGroup>
@@ -203,7 +206,10 @@
     <ClCompile Include="..\..\src\VerticalLayout.cpp">
       <Filter>YYUI\src\Layout</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\D2DRender.cpp">
+    <ClCompile Include="..\..\src\RenderD2D.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\D2DWnd.cpp">
       <Filter>YYUI\src</Filter>
     </ClCompile>
   </ItemGroup>

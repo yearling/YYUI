@@ -22,7 +22,7 @@ namespace YUI
         virtual ~Container();
     public:
         virtual LPCTSTR                 GetClass() const;
-        virtual std::shared_ptr<ControlUI> QueryInterface(const YString & strName);
+        virtual std::shared_ptr<ControlUI> QueryInterface(const std::string & strName);
 
 
 
@@ -52,7 +52,7 @@ namespace YUI
         virtual int                     FindSelectable(int iIndex, bool bForward = true) const;
         virtual void                    SetPos(RECT &rc);
         virtual void                    DoPaint(HDC hDC, const RECT& rcPaint);
-        virtual void                    SetAttribute(const YString &pstrName, const YString& pstrValue);
+        virtual void SetAttribute(const std::string &strName, const std::string& strValue);
         virtual void SetManager(std::shared_ptr<PaintManagerUI> &pManager,
                                         std::weak_ptr<ControlUI> pParent,
                                         bool bInit=true);

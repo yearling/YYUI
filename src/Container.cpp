@@ -29,7 +29,7 @@ namespace YUI
         return _T("Container");
     }
 
-    std::shared_ptr<ControlUI> Container::QueryInterface(const YString & strName)
+    std::shared_ptr<ControlUI> Container::QueryInterface(const std::string & strName)
     {
         if( strName == CTR_CONTAINER ) 
 			return this->shared_from_this();
@@ -348,36 +348,36 @@ namespace YUI
         }*/
     }
 
-    void Container::SetAttribute(const YString &strName, const YString& strValue)
+    void Container::SetAttribute(const std::string &strName, const std::string& strValue)
     {
-        LPCTSTR pstrName = strName.c_str();
-        LPCTSTR pstrValue = strValue.c_str();
-        if( _tcscmp(pstrName, _T("inset")) == 0 ) {
+        LPCSTR pstrName = strName.c_str();
+        LPCSTR pstrValue = strValue.c_str();
+        if( strcmp(pstrName, "inset") == 0 ) {
             RECT rcInset = { 0 };
-            LPTSTR pstr = NULL;
-            rcInset.left = _tcstol(pstrValue, &pstr, 10);  assert(pstr);    
-            rcInset.top = _tcstol(pstr + 1, &pstr, 10);    assert(pstr);    
-            rcInset.right = _tcstol(pstr + 1, &pstr, 10);  assert(pstr);    
-            rcInset.bottom = _tcstol(pstr + 1, &pstr, 10); assert(pstr);    
+            LPSTR pstr = NULL;
+            rcInset.left = strtol(pstrValue, &pstr, 10);  assert(pstr);    
+            rcInset.top = strtol(pstr + 1, &pstr, 10);    assert(pstr);    
+            rcInset.right = strtol(pstr + 1, &pstr, 10);  assert(pstr);    
+            rcInset.bottom = strtol(pstr + 1, &pstr, 10); assert(pstr);    
             SetInset(rcInset);
         }
-        else if( _tcscmp(pstrName, _T("mousechild")) == 0 ) SetMouseChildEnabled(_tcscmp(pstrValue, _T("true")) == 0);
-        else if( _tcscmp(pstrName, _T("vscrollbar")) == 0 ) {
-            EnableScrollBar(_tcscmp(pstrValue, _T("true")) == 0, GetHorizontalScrollBar() != NULL);
+        else if( strcmp(pstrName,"mousechild") == 0 ) SetMouseChildEnabled(strcmp(pstrValue, "true") == 0);
+        else if( strcmp(pstrName, "vscrollbar") == 0 ) {
+            EnableScrollBar(strcmp(pstrValue, "true") == 0, GetHorizontalScrollBar() != NULL);
         }
-      /*  else if( _tcscmp(pstrName, _T("vscrollbarstyle")) == 0 ) {
+      /*  else if( strcmp(pstrName, _T("vscrollbarstyle")) == 0 ) {
             EnableScrollBar(true, GetHorizontalScrollBar() != NULL);
             if( GetVerticalScrollBar() ) GetVerticalScrollBar()->ApplyAttributeList(pstrValue);
         }
-        else if( _tcscmp(pstrName, _T("hscrollbar")) == 0 ) {
-            EnableScrollBar(GetVerticalScrollBar() != NULL, _tcscmp(pstrValue, _T("true")) == 0);
+        else if( strcmp(pstrName, _T("hscrollbar")) == 0 ) {
+            EnableScrollBar(GetVerticalScrollBar() != NULL, strcmp(pstrValue, _T("true")) == 0);
         }
-        else if( _tcscmp(pstrName, _T("hscrollbarstyle")) == 0 ) {
+        else if( strcmp(pstrName, _T("hscrollbarstyle")) == 0 ) {
             EnableScrollBar(GetVerticalScrollBar() != NULL, true);
             if( GetHorizontalScrollBar() ) GetHorizontalScrollBar()->ApplyAttributeList(pstrValue);
         }*/
-        else if( _tcscmp(pstrName, _T("childpadding")) == 0 ) SetChildPadding(_ttoi(pstrValue));
-        else ControlUI::SetAttribute(pstrName, pstrValue);
+        else if( strcmp(pstrName,"childpadding") == 0 ) SetChildPadding(atoi(pstrValue));
+        else ControlUI::SetAttribute(strName, strValue);
     }
 
     void Container::SetManager(std::shared_ptr<PaintManagerUI> &pManager, std::weak_ptr<ControlUI> pParent, bool bInit/*=true*/)

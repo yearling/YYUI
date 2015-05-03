@@ -9,8 +9,7 @@ namespace YUI
     class IDialogBuilderCallback
     {
     public:
-        virtual std::shared_ptr<ControlUI> 
-                                        CreateControl(YString pstrClass) =0 ;
+        virtual std::shared_ptr<ControlUI> CreateControl(std::string pstrClass) =0 ;
     };
 
     class DialogBuilder

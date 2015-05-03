@@ -22,7 +22,7 @@ namespace YUI
         virtual YString                 GetName() const;
         virtual void                    SetName(const YString & strName);
         virtual LPCTSTR                 GetClass() const;
-        virtual std::shared_ptr<ControlUI> QueryInterface(const YString & strName);
+        virtual std::shared_ptr<ControlUI> QueryInterface(const std::string & strName);
         virtual bool                    Activate();
         virtual std::shared_ptr<PaintManagerUI>
                                         GetManager() const;
@@ -159,8 +159,8 @@ namespace YUI
         virtual void                    Event(ControlEvent& eve);
         virtual void                    DoEvent(ControlEvent& eve);
 
-        virtual void                    SetAttribute(const YString &pstrName, const YString& pstrValue);
-        std::shared_ptr<ControlUI>      ApplyAttributeList(const YString& strList);
+        virtual void                    SetAttribute(const std::string &strName, const std::string& strValue);
+        std::shared_ptr<ControlUI> ApplyAttributeList(const std::string & strList);
 
         virtual SIZE                    EstimateSize(SIZE szAvailable);
 

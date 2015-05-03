@@ -20,7 +20,7 @@ namespace YUI
         return _T("HorizontalLayoutUI");
     }
 
-    std::shared_ptr<ControlUI> HorizontalLayout::QueryInterface(const YString & strName)
+    std::shared_ptr<ControlUI> HorizontalLayout::QueryInterface(const std::string & strName)
     {
         if( strName == CTR_HORIZONTALLAYOUT) 
             return shared_from_this();
@@ -58,14 +58,14 @@ namespace YUI
         return m_bImmMode;
     }
 
-    void HorizontalLayout::SetAttribute(const YString &pstrName, const YString& pstrValue)
+    void HorizontalLayout::SetAttribute(const std::string &strName, const std::string& strValue)
     {
-        if( pstrName == _T("sepwidth")) 
-            SetSepWidth(_ttoi(pstrValue.c_str()));
-        else if( pstrName == _T("sepimm")) 
-            SetSepImmMode(pstrValue == _T("true"));
+        if( strName == ("sepwidth")) 
+            SetSepWidth(atoi(strValue.c_str()));
+        else if( strName == ("sepimm")) 
+            SetSepImmMode(strValue == ("true"));
         else 
-            Container::SetAttribute(pstrName, pstrValue);
+            Container::SetAttribute(strName, strValue);
     }
 
     void HorizontalLayout::DoEvent(ControlEvent& eve)

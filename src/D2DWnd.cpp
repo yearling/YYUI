@@ -1,5 +1,5 @@
 #include "YUI.h"
-#include "D2DRender.h"
+#include "D2DWnd.h"
 
 namespace YUI
 {

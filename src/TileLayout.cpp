@@ -13,19 +13,19 @@ namespace YUI
         m_szItem.cx = m_szItem.cy =0;
     }
 
-    void TileLayout::SetAttribute(const YString &pstrName, const YString& pstrValue)
+    void TileLayout::SetAttribute(const std::string &strName, const std::string& strValue)
     {
-        if( pstrName == _T("itemsize") ) {
+        if( strName == "itemsize" ) {
             SIZE szItem = { 0 };
-            LPTSTR pstr = NULL;
-            szItem.cx = _tcstol(pstrValue.c_str(), &pstr, 10);  assert(pstr);    
-            szItem.cy = _tcstol(pstr + 1, &pstr, 10);   assert(pstr);     
+            LPSTR pstr = NULL;
+            szItem.cx = strtol(strValue.c_str(), &pstr, 10);  assert(pstr);    
+            szItem.cy = strtol(pstr + 1, &pstr, 10);   assert(pstr);     
             SetItemSize(szItem);
         }
-        else if( pstrName ==  _T("columns") ) 
-            SetColumns(_ttoi(pstrValue.c_str()));
+        else if( strName == "columns") 
+            SetColumns(atoi(strValue.c_str()));
         else 
-            Container::SetAttribute(pstrName, pstrValue);
+            Container::SetAttribute(strName, strValue);
     }
 
     LPCTSTR TileLayout::GetClass() const
@@ -33,7 +33,7 @@ namespace YUI
         return _T("TileLayoutUI");
     }
 
-    std::shared_ptr<ControlUI> TileLayout::QueryInterface(const YString & strName)
+    std::shared_ptr<ControlUI> TileLayout::QueryInterface(const std::string & strName)
     {
         if( strName == CTR_TILELAYOUT ) 
             return this->shared_from_this();

@@ -94,15 +94,7 @@ namespace YUI
         return _T("");
     }
 
-    std::shared_ptr<ControlUI> WindowImpl::CreateControl(const YString & strClassName)
-    {
-        return nullptr;
-    }
-
-    std::shared_ptr<ControlUI> WindowImpl::CreateControl(YString pstrClass)
-    {
-        return NULL;
-    }
+   
 
     LRESULT WindowImpl::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM /*lParam*/, bool& /*bHandled*/)
     {
@@ -480,6 +472,6 @@ namespace YUI
         return styleValue;
     }
 
-   
+       
 
 }

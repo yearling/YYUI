@@ -12,12 +12,12 @@ namespace YUI
 
     }
 
-    void TabLayout::SetAttribute(const YString &pstrName, const YString& pstrValue)
+    void TabLayout::SetAttribute(const std::string &strName, const std::string& strValue)
     {
         //bugs to do 
        /* if( pstrName== _T("selectedid")) 
             SelectItem(_ttoi(pstrValue.c_str()));*/
-        return Container::SetAttribute(pstrName, pstrValue);
+        return Container::SetAttribute(strName, strValue);
     }
 
     LPCTSTR TabLayout::GetClass() const
@@ -25,7 +25,7 @@ namespace YUI
         return _T("TabLayoutUI");
     }
 
-    std::shared_ptr<ControlUI> TabLayout::QueryInterface(const YString & strName)
+    std::shared_ptr<ControlUI> TabLayout::QueryInterface(const std::string & strName)
     {
         if( strName == CTR_TABLAYOUT ) 
             return this->shared_from_this();
