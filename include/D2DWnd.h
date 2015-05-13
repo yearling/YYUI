@@ -9,6 +9,7 @@
 #include <wincodec.h>
 #include <atlcomcli.h>
 #include "ControlUI.h"
+#include "RenderD2D.h"
 namespace YUI
 {
 	struct D2DException: public YYUIException {};

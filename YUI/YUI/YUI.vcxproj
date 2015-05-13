@@ -94,6 +94,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IntDir>..\..\tmp\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='FarDebug|Win32'">
     <LinkIncremental>true</LinkIncremental>
@@ -223,11 +224,14 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\include\BrushDef.h" />
     <ClInclude Include="..\..\include\Button.h" />
+    <ClInclude Include="..\..\include\Canvas2D.h" />
     <ClInclude Include="..\..\include\ChildLayout.h" />
     <ClInclude Include="..\..\include\Container.h" />
     <ClInclude Include="..\..\include\ControlUI.h" />
     <ClInclude Include="..\..\include\D2DWnd.h" />
+    <ClInclude Include="..\..\include\FontDef.h" />
     <ClInclude Include="..\..\include\HorizontalLayout.h" />
     <ClInclude Include="..\..\include\Label.h" />
     <ClInclude Include="..\..\include\PaintManagerUI.h" />
@@ -257,8 +261,11 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\include\BrushDef.cpp" />
+    <ClCompile Include="..\..\include\FontDef.cpp" />
     <ClCompile Include="..\..\include\thirdparty\tinyxml2\tinyxml2.cpp" />
     <ClCompile Include="..\..\src\Button.cpp" />
+    <ClCompile Include="..\..\src\Canvas2D.cpp" />
     <ClCompile Include="..\..\src\ChildLayout.cpp" />
     <ClCompile Include="..\..\src\Container.cpp" />
     <ClCompile Include="..\..\src\ControlUI.cpp" />

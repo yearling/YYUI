@@ -10,6 +10,7 @@
 #include "resource.h"
 #include <iostream>
 #include "D2DWnd.h"
+#include "Canvas2D.h"
 using namespace YUI;
 class MyWindow : public WindowWnd
 {
@@ -66,7 +67,7 @@ int APIENTRY _tWinMain( __in HINSTANCE hInstance, __in_opt HINSTANCE hPrevInstan
     //PaintManagerUI::MessageLoop();
 	}
 #endif
-	 
+	    Canvas2D::Init(); 
 		std::shared_ptr<D2DWnd> spD2D = std::make_shared<D2DWnd>();
 		spD2D->Init();
 		spD2D->Create(NULL,_T("D2DWnd"),UI_WNDSTYLE_FRAME,WS_EX_WINDOWEDGE);

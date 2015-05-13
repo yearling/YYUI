@@ -25,6 +25,32 @@ namespace YUI
     {
         return Ansi2Wchar(s.c_str());
     }
+#if defined UNICODE || defined _UNICODE
+#define ToWString( a )  (a)
+#define ToCWSTR(a)  (a.c_str())   
+#define CWSTRLength(a) (a.length())
+#else
+#define ToWString( a )  (S2W(a))
+#define ToCWSTR(a)  (S2W(a).c_str())
+#define CWSTRLength(a) (S2W(a).length())
+#endif
+
+
+    //template<class T>
+    //std::wstring ToWString(const T & );
+    //
+    //template<class T>
+    //inline std::wstring ToWString(const std::string & str) 
+    //{
+    //    return Ansi2Wchar(str.c_str());
+    //}
+
+    //template<class T>
+    //std::wstring ToWString( const std::wstring & str)
+    //{
+    //    return str;
+    //}
+
     YString FormatGetLastError();
     YString FormatGetLastError(DWORD dwErr);
 

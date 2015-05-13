@@ -144,6 +144,15 @@
     <ClInclude Include="..\..\include\D2DWnd.h">
       <Filter>YYUI\include\base</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\FontDef.h">
+      <Filter>YYUI\include\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\BrushDef.h">
+      <Filter>YYUI\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Canvas2D.h">
+      <Filter>YYUI\include\base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -210,6 +219,15 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\D2DWnd.cpp">
+      <Filter>YYUI\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\FontDef.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\BrushDef.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Canvas2D.cpp">
       <Filter>YYUI\src</Filter>
     </ClCompile>
   </ItemGroup>

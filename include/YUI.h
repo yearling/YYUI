@@ -10,6 +10,18 @@
 #include <string>
 #include <memory>
 #include "YYExceptionAll.h"
+#include <d2d1.h>
+#include <d2d1helper.h>
+#include <d2derr.h>
+#include <d2d1_1.h>
+#include <d2d1_1helper.h>
+#include <d2d1helper.h>
+#include <d2d1effects.h>
+#include <d2d1effecthelpers.h>
+#include <dwrite.h>
+#include <wincodec.h>
+#include <atlcomcli.h>
+#include <d3d11.h>
 #include <functional>
 #include <vector>
 #include <map>
@@ -105,7 +117,7 @@ namespace YUI
     class IMessageFilterUI;
     class ITranslateAccelerator;
     class PaintManagerUI;
-
+    class RenderD2D;
 	typedef std::shared_ptr<ControlUI>  SPControlUI;
 	typedef std::weak_ptr<ControlUI>	WPControlUI;
 
@@ -268,5 +280,82 @@ namespace YUI
         int                             m_nZoomXPercent;
         int                             m_nZoomYPercent;
     };
+#define   YYRGB(r,g,b)          ((COLORREF)(((BYTE)(r)|((WORD)((BYTE)(g))<<8))|(((DWORD)(BYTE)(b))<<16) | (((DWORD)(BYTE)(255))<<24)))
+    struct YYCOLOR
+    {
+        float r;
+        float g;
+        float b;
+        float a;
+        operator COLORREF()
+        {
+           COLORREF col= RGB((byte)r*255,(byte)g*255,(byte)b*255);
+        }
+        operator unsigned int()
+        {
+          return   (((BYTE)(r*255)|((WORD)((BYTE)(g*255))<<8))|(((DWORD)(BYTE)(b*255))<<16) | (((DWORD)(BYTE)(a*255))<<16));
+        }
+        YYCOLOR(int col)
+        {
+            r = float((byte)(0xFF & col))/255.0f;
+            g = float((byte)((0xFF& (col>>8)))) /255.0f;
+            b = float((byte)(0xFF& (col>>16))) /255.0f;
+            a = float((byte)(0xFF& (col>>24))) /255.0f;
+        }
+        YYCOLOR(D2D1::ColorF col ) 
+        {
+            r= col.r;
+            g= col.g;
+            b= col.b;
+            a= col.a;
+        }
+        YYCOLOR():r(0.0f),g(0.0f),b(0.0f),a(0.0f) {};
+        operator D2D1::ColorF() const
+        {
+            return D2D1::ColorF(r,g,b,a);
+        }
+    };
+    struct YYRECT
+    {
+        float left;
+        float right;
+        float top;
+        float bottom;
+        YYRECT(int iLeft,int iTop,int iRight ,int iBottom)
+                                        :left(float(iLeft))
+                                        ,top(float(iTop))
+                                        ,right(float(iRight))
+                                        ,bottom(float(iBottom)){};
+        YYRECT(float fLeft,float fTop,float fRight ,float fBottom)
+                                        :left(fLeft)
+                                        ,top(fTop)
+                                        ,right(fRight)
+                                        ,bottom(fBottom){};
+        YYRECT():left(0.0f),right(0.0f),top(0.0f),bottom(0.0f){};
+        YYRECT(const RECT &rc)
+                            :left((float)rc.left)
+                            ,top((float)rc.top)
+                            ,right((float)rc.right)
+                            ,bottom((float)rc.bottom){};
+        YYRECT(const D2D1_RECT_F & rc)
+                            :left(rc.left)
+                            ,top(rc.top)
+                            ,right(rc.right)
+                            ,bottom(rc.bottom){};
+        operator RECT() const{RECT tmp;tmp.left=(int)left;tmp.top= (int)top;tmp.right = (int) right; tmp.bottom = (int)bottom; return tmp;}
+        operator D2D1_RECT_F() const { D2D1_RECT_F tmp;tmp.left = left; tmp.top = top; tmp.right = right; tmp.bottom = bottom; return tmp;}
 
+    };
+
+    struct YYSIZE
+    {
+        float width;
+        float height;
+        YYSIZE(float fWidth,float fHeight):width(fWidth),height(fHeight){};
+        YYSIZE(int iWidth,int iHeight):width((float)iWidth),height((float)iHeight){};
+        YYSIZE(unsigned int uWidth,unsigned int uHeight):width((float)uWidth),height((float)uHeight){};
+        YYSIZE(const D2D_SIZE_F &d2dSize):width(d2dSize.width),height(d2dSize.height){};
+        operator SIZE() const { SIZE tmp;tmp.cx = (int) width;tmp.cy = (int) height; return tmp;}
+        operator D2D_SIZE_F() const { D2D_SIZE_F tmp;tmp.width = width; tmp.height = height;return tmp;}
+    };
 }
