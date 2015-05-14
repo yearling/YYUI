@@ -25,8 +25,17 @@ namespace YUI
         {
             THROW_EXCEPTION(Render2DException()<<UIErrorStr(_T("Create DWriteCreateFactory FAILED!"))<<UIErrorHr(hr));
         }
-        m_mapHwndToTarget.clear();
-        m_mapFontToTextFormat.clear();
+
+       if(FAILED( hr = CoCreateInstance(
+            CLSID_WICImagingFactory,
+            NULL,
+            CLSCTX_INPROC_SERVER,
+            IID_IWICImagingFactory,
+            reinterpret_cast<void **>(&m_pWICFactory)
+            )))
+       {
+            THROW_EXCEPTION(Render2DException()<<UIErrorStr(_T("Create WICImageFactory FAILED!"))<<UIErrorHr(hr));
+       }
 	}
 
 	RenderD2D::~RenderD2D(void)
@@ -171,6 +180,21 @@ namespace YUI
     CComPtr<ID2D1Bitmap> RenderD2D::GetBitmap(HWND hwnd,const YString &uri,UINT destinationWidth/*= 0*/,UINT destinationHeight /*= 0*/)
     {
         return GetHwndRenderTarget(hwnd)->GetBitmap(uri,destinationWidth,destinationHeight);
+    }
+
+    void RenderD2D::DrawBitmap(HWND hWnd,const YString &strBmp,const YYRECT &rc)
+    {
+        return GetHwndRenderTarget(hWnd)->DrawBitmap(strBmp,rc);
+    }
+
+    void RenderD2D::DrawLine(HWND hWnd,YYPOINT start,YYPOINT end,const YYCOLOR &brush,float strokewidth/*=1.0f*/)
+    {
+        return GetHwndRenderTarget(hWnd)->DrawLine(start,end,brush,strokewidth);
+    }
+
+    void RenderD2D::DrawRect(HWND hWnd,const YYRECT rc,const YYCOLOR &brush,float strokewidth/*=1.0f*/)
+    {
+        return GetHwndRenderTarget(hWnd)->DrawRect(rc,brush,strokewidth);
     }
 
     CComPtr<IDWriteFactory> RenderD2D::m_pDWriteFactory;
@@ -441,5 +465,23 @@ namespace YUI
         m_mapColorBrush.clear();
         m_mapBitmap.clear();
     }
+
+    void RenderTargetHWND::DrawBitmap(const YString &strBmp,const YYRECT &rc)
+    {
+        auto m_pTexture= GetBitmap(strBmp);
+        m_rt->DrawBitmap(m_pTexture,rc);
+    }
+
+    void RenderTargetHWND::DrawLine(YYPOINT start,YYPOINT end,const YYCOLOR &brush,float strokewidth)
+    {
+        m_rt->DrawLine(start,end,GetSolidColorBrush(brush),strokewidth);
+    }
+
+    void RenderTargetHWND::DrawRect(const YYRECT rc,const YYCOLOR &brush,float strokewidth/*=1.0f*/)
+    {
+        m_rt->DrawRectangle(rc,GetSolidColorBrush(brush),strokewidth);
+    }
+
+    
 
 }

@@ -155,7 +155,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Dwrite.lib;D2D1.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Dwrite.lib;D2D1.lib;windowscodecs.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>

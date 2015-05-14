@@ -50,6 +50,21 @@ namespace YUI
         return m_RenderEngine->m_mapHwndToTarget[hWnd]->GetRenderTarget();
     }
 
+    void Canvas2D::DrawBitmap(const YString &strBmp,const YYRECT &rc)
+    {
+        return m_RenderEngine->DrawBitmap(m_hWnd,strBmp,rc);
+    }
+
+    void Canvas2D::DrawLine(YYPOINT start,YYPOINT end,const YYCOLOR &brush,float strokewidth/*=1.0f*/)
+    {
+        return m_RenderEngine->DrawLine(m_hWnd,start,end,brush,strokewidth);
+    }
+
+    void Canvas2D::DrawRect(const YYRECT rc,const YYCOLOR &brush,float strokewidth/*=1.0f*/)
+    {
+        return m_RenderEngine->DrawRect(m_hWnd,rc,brush,strokewidth);
+    }
+
    
 
     std::shared_ptr<RenderD2D> Canvas2D::m_RenderEngine;

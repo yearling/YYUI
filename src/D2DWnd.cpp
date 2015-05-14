@@ -72,7 +72,13 @@ namespace YUI
         FontD2D defaultFont(_T("Verdana"),50);
         YYCOLOR color(YYRGB(0,0,0));
         YYRECT rect(0.0f,0.0f,cavas.GetSize().width,cavas.GetSize().height);
+        cavas.DrawBitmap(_T("sampleImage.jpg"),rect);
         cavas.DrawSolidText(strOut,defaultFont,rect,color);
+        YYPOINT start(50,50);
+        YYPOINT end(100,100);
+        cavas.DrawLine(start,end,YYRGB(255,0,0),1.0f);
+        YYRECT rcCenter(200,200,600,400);
+        cavas.DrawRect(rcCenter,YYRGB(0,255,0),1.0f);
         cavas.EndDraw();
 	}
 

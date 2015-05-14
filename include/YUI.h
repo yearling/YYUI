@@ -358,4 +358,15 @@ namespace YUI
         operator SIZE() const { SIZE tmp;tmp.cx = (int) width;tmp.cy = (int) height; return tmp;}
         operator D2D_SIZE_F() const { D2D_SIZE_F tmp;tmp.width = width; tmp.height = height;return tmp;}
     };
+    struct YYPOINT
+    {
+        float x;
+        float y;
+        YYPOINT(float fx,float fy):x(fx),y(fy){};
+        YYPOINT(int ix,int iy):x(float(ix)),y((float)iy){};
+        YYPOINT(unsigned int ix,unsigned int iy):x(float(ix)),y((float)iy){};
+        YYPOINT(const D2D_POINT_2F &d2dpoint):x(d2dpoint.x),y(d2dpoint.y){};
+        operator POINT() const { POINT tmp; tmp.x = (LONG) x;tmp.y = (LONG)y; return tmp;}
+        operator D2D_POINT_2F () const { D2D_POINT_2F tmp;tmp.x = x; tmp.y =y;return tmp;}
+    };
 }
