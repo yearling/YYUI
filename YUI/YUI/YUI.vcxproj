@@ -231,6 +231,7 @@
     <ClInclude Include="..\..\include\Container.h" />
     <ClInclude Include="..\..\include\ControlUI.h" />
     <ClInclude Include="..\..\include\D2DWnd.h" />
+    <ClInclude Include="..\..\include\FileSystem.h" />
     <ClInclude Include="..\..\include\FontDef.h" />
     <ClInclude Include="..\..\include\HorizontalLayout.h" />
     <ClInclude Include="..\..\include\Label.h" />
@@ -239,6 +240,7 @@
     <ClInclude Include="..\..\include\RenderD2D.h" />
     <ClInclude Include="..\..\include\RenderDGI.h" />
     <ClInclude Include="..\..\include\TabLayout.h" />
+    <ClInclude Include="..\..\include\TextureDef.h" />
     <ClInclude Include="..\..\include\thirdparty\tinyxml2\tinyxml2.h" />
     <ClInclude Include="..\..\include\TileLayout.h" />
     <ClInclude Include="..\..\include\VerticalLayout.h" />
@@ -270,6 +272,7 @@
     <ClCompile Include="..\..\src\Container.cpp" />
     <ClCompile Include="..\..\src\ControlUI.cpp" />
     <ClCompile Include="..\..\src\D2DWnd.cpp" />
+    <ClCompile Include="..\..\src\FileSystem.cpp" />
     <ClCompile Include="..\..\src\HorizontalLayout.cpp" />
     <ClCompile Include="..\..\src\Label.cpp" />
     <ClCompile Include="..\..\src\PaintManagerUI.cpp" />
@@ -278,6 +281,7 @@
     <ClCompile Include="..\..\src\RenderDGI.cpp" />
     <ClCompile Include="..\..\src\stb_image.c" />
     <ClCompile Include="..\..\src\TabLayout.cpp" />
+    <ClCompile Include="..\..\src\TextureDef.cpp" />
     <ClCompile Include="..\..\src\TileLayout.cpp" />
     <ClCompile Include="..\..\src\VerticalLayout.cpp" />
     <ClCompile Include="..\..\src\WindowImpl.cpp" />

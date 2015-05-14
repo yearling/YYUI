@@ -10,7 +10,7 @@ namespace YUI
     public:
         Canvas2D(HWND hWnd);
     public:
-        void                            BeginDraw( );
+        bool                            BeginDraw( );
         void                            EndDraw();
         void                            DrawSolidText(const YString& strText,const FontD2D& font,const YYRECT &rc,const YYCOLOR color);
         void                            OnResize(float width,float height);

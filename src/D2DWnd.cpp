@@ -65,7 +65,8 @@ namespace YUI
 	void D2DWnd::OnRender()
 	{
         Canvas2D cavas(m_hWnd);
-        cavas.BeginDraw();
+        if(!cavas.BeginDraw())
+            return;
         cavas.Clear(YYRGB(155,155,244));
         YString strOut= _T("HELLO D2D");
         FontD2D defaultFont(_T("Verdana"),50);

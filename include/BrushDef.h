@@ -21,13 +21,12 @@ namespace YUI
         friend class RenderTargetHWND;
     public:
       
-        ColorBrushD2D(YYCOLOR col):m_color(col){};
+        explicit ColorBrushD2D(YYCOLOR col):m_color(col){};
         virtual ~ColorBrushD2D();
         YYCOLOR                         GetColor() const { return m_color;}
     private: 
         ColorBrushD2D();
         YYCOLOR                         m_color;
-        CComPtr<ID2D1SolidColorBrush>   m_bursh;
     };
     bool operator<(const ColorBrushD2D &lhs,const ColorBrushD2D &rhs);
     class ColorBrushD2DToHash

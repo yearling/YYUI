@@ -146,52 +146,38 @@ namespace YUI
         rt->DrawText(ToCWSTR(strText),CWSTRLength(strText),textFormat,rc,brush);
     }
 
-    void RenderD2D::BeginDraw(HWND hWnd)
+    bool RenderD2D::BeginDraw(HWND hWnd)
     {
-        auto &rt = GetHwndRenderTarget(hWnd)->GetRenderTarget();
-        rt->BeginDraw();
-        rt->SetTransform(D2D1::Matrix3x2F::Identity());
+        return GetHwndRenderTarget(hWnd)->BeginDraw();
     }
 
     void RenderD2D::EndDraw(HWND hWnd)
     {
-        auto &rt = GetHwndRenderTarget(hWnd)->GetRenderTarget();
-        rt->EndDraw();
+        GetHwndRenderTarget(hWnd)->EndDraw();
     }
 
     void RenderD2D::Clear(HWND hWnd,const YYCOLOR &color)
     {
-        auto &rt = GetHwndRenderTarget(hWnd)->GetRenderTarget();
-        rt->Clear(color);
+        //auto &rt = GetHwndRenderTarget(hWnd)->GetRenderTarget();
+        //rt->Clear(color);
+        (*GetHwndRenderTarget(hWnd))->Clear(color);
     }
 
     YUI::YYSIZE RenderD2D::GetDrawSize(HWND hWnd)
     {
-         auto &rt = GetHwndRenderTarget(hWnd)->GetRenderTarget();
-         return rt->GetSize();
+        return (*GetHwndRenderTarget(hWnd))->GetSize();
     }
 
-   /* CComPtr<ID2D1SolidColorBrush> RenderD2D::GetColorBrush(HWND hWnd,const YYCOLOR &color)
+    CComPtr<ID2D1Bitmap> RenderD2D::GetBitmap(HWND hwnd,const YString &uri,UINT destinationWidth/*= 0*/,UINT destinationHeight /*= 0*/)
     {
-        auto iter = m_mapSolidColorBrush.find(color);
-        if(iter == m_mapSolidColorBrush.end())
-        {
-            HRESULT hr = S_OK;
-            CComPtr<ID2D1SolidColorBrush> brush;
-            auto &rt = GetHwndRenderTarget(hWnd)->GetRenderTarget();
-            if(FAILED(hr= rt->CreateSolidColorBrush(
-                    color,
-                &brush
-                )))
-            {
-                THROW_EXCEPTION(Render2DException()<<UIErrorStr(_T("Create Brush Failed"))<<UIErrorHr(hr));
-            }
-            m_mapSolidColorBrush[color]= brush;
-            return brush;
-        }
-        else
-            return iter->second;
-    }*/
+        return GetHwndRenderTarget(hwnd)->GetBitmap(uri,destinationWidth,destinationHeight);
+    }
+
+    CComPtr<IDWriteFactory> RenderD2D::m_pDWriteFactory;
+
+    CComPtr<IWICImagingFactory> RenderD2D::m_pWICFactory;
+
+    CComPtr<ID2D1Factory> RenderD2D::m_pD2DFactory;
 
 #if 0 
     CComPtr<ID2D1RenderTarget> RenderD2D::CreateDirect2DDC()
@@ -314,6 +300,146 @@ namespace YUI
     CComPtr<ID2D1SolidColorBrush> RenderTargetHWND::GetSolidColorBrush(const YYCOLOR& color)
     {
         return GetSolidColorBrush(ColorBrushD2D(color));
+    }
+
+    CComPtr<ID2D1Bitmap> RenderTargetHWND::GetBitmap(const TextureD2D & texture)
+    {
+        auto iter = m_mapBitmap.find(texture);
+        if(iter!= m_mapBitmap.end())
+            return iter->second;
+        return GetBitmap(texture.GetPath());
+
+    }
+
+    CComPtr<ID2D1Bitmap> RenderTargetHWND::GetBitmap(const YString &uri,UINT desWidth/*= 0*/,UINT desHeight /*= 0*/)
+    {
+        TextureD2D tex(uri);
+        auto iter = m_mapBitmap.find(tex);
+        if(iter!= m_mapBitmap.end())
+            return iter->second;
+        
+        HRESULT hr = S_OK;
+        CComPtr<ID2D1Bitmap>    pBitmap;
+        CComPtr<IWICBitmapDecoder> pDecoder;
+        CComPtr<IWICBitmapFrameDecode> pSource;
+        CComPtr<IWICStream> pStream ;
+        CComPtr<IWICFormatConverter> pConverter ;
+        CComPtr<IWICBitmapScaler> pScaler;
+        if(FAILED(hr = RenderD2D::GetWICFactory()->CreateDecoderFromFilename(
+            ToCWSTR(uri),
+            NULL,
+            GENERIC_READ,
+            WICDecodeMetadataCacheOnLoad,
+            &pDecoder
+            )))
+        {
+            THROW_EXCEPTION(Render2DException()<<UIErrorStr("Create Picture Decoder["+uri+"]  failed!")<<UIErrorHr(hr));
+        }
+
+        if(FAILED(hr = pDecoder->GetFrame(0, &pSource)))
+        {
+            THROW_EXCEPTION(Render2DException()<<UIErrorStr("Create Picture Frame0["+uri+"]  failed!")<<UIErrorHr(hr));
+        }
+        // Convert the image format to 32bppPBGRA
+        // (DXGI_FORMAT_B8G8R8A8_UNORM + D2D1_ALPHA_MODE_PREMULTIPLIED).
+        if(FAILED(hr = RenderD2D::GetWICFactory()->CreateFormatConverter(&pConverter)))
+        {
+            THROW_EXCEPTION(Render2DException()<<UIErrorStr("Convert Picture ["+uri+"]  failed!")<<UIErrorHr(hr)); 
+        }
+
+        // If a new width or height was specified, create an
+        // IWICBitmapScaler and use it to resize the image.
+        if (desWidth != 0 || desHeight != 0)
+        {
+            UINT originalWidth, originalHeight;
+            if(FAILED(hr = pSource->GetSize(&originalWidth, &originalHeight)))
+            {
+                THROW_EXCEPTION(Render2DException()<<UIErrorStr("Get Picture ["+uri+"] size failed!")<<UIErrorHr(hr)); 
+            }
+            if (desWidth == 0)
+            {
+                FLOAT scalar = static_cast<FLOAT>(desHeight) / static_cast<FLOAT>(originalHeight);
+                desWidth = static_cast<UINT>(scalar * static_cast<FLOAT>(originalWidth));
+            }
+            else if (desHeight == 0)
+            {
+                FLOAT scalar = static_cast<FLOAT>(desWidth) / static_cast<FLOAT>(originalWidth);
+                desHeight = static_cast<UINT>(scalar * static_cast<FLOAT>(originalHeight));
+            }
+
+            if(FAILED(hr = RenderD2D::GetWICFactory()->CreateBitmapScaler(&pScaler)))
+            {
+                THROW_EXCEPTION(Render2DException()<<UIErrorStr("Create bitmapScalar ["+uri+"] failed!")<<UIErrorHr(hr)); 
+            }
+            if(FAILED  (hr = pScaler->Initialize(
+                pSource,
+                desWidth,
+                desHeight,
+                WICBitmapInterpolationModeCubic
+                )))
+            {
+                THROW_EXCEPTION(Render2DException()<<UIErrorStr("Init bitmap scalar ["+uri+"] failed!")<<UIErrorHr(hr)); 
+            }
+            if(FAILED(  hr = pConverter->Initialize(
+                pScaler,
+                GUID_WICPixelFormat32bppPBGRA,
+                WICBitmapDitherTypeNone,
+                NULL,
+                0.f,
+                WICBitmapPaletteTypeMedianCut
+                )))
+            {
+                THROW_EXCEPTION(Render2DException()<<UIErrorStr("Init bitmap convert ["+uri+"] failed!")<<UIErrorHr(hr)); 
+            }
+        }
+        else // Don't scale the image.
+        {
+            if(FAILED(hr = pConverter->Initialize(
+                pSource,
+                GUID_WICPixelFormat32bppPBGRA,
+                WICBitmapDitherTypeNone,
+                NULL,
+                0.f,
+                WICBitmapPaletteTypeMedianCut
+                )))
+            {
+                THROW_EXCEPTION(Render2DException()<<UIErrorStr("Init bitmap convert ["+uri+"] failed!")<<UIErrorHr(hr)); 
+            }
+        }
+        // Create a Direct2D bitmap from the WIC bitmap.
+        if(FAILED(hr =m_rt->CreateBitmapFromWicBitmap(
+            pConverter,
+            NULL,
+            &pBitmap
+            )))
+        {
+            THROW_EXCEPTION(Render2DException()<<UIErrorStr("D2D CreateBitmap form wicbitmap  ["+uri+"] failed!")<<UIErrorHr(hr)); 
+        }
+        m_mapBitmap[tex] = pBitmap;
+        return pBitmap;
+    }
+
+    bool RenderTargetHWND::BeginDraw()
+    {
+        if(m_rt->CheckWindowState() & D2D1_WINDOW_STATE_OCCLUDED)
+            return false;
+
+        m_rt->BeginDraw();
+
+        m_rt->SetTransform(D2D1::Matrix3x2F::Identity());
+        return true;
+    }
+
+    void RenderTargetHWND::EndDraw()
+    {
+        if(D2DERR_RECREATE_TARGET == m_rt->EndDraw())
+            DiscardResource();
+    }
+
+    void RenderTargetHWND::DiscardResource()
+    {
+        m_mapColorBrush.clear();
+        m_mapBitmap.clear();
     }
 
 }

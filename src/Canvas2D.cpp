@@ -15,9 +15,9 @@ namespace YUI
         m_RenderEngine->DrawSolidText(m_hWnd,strText,font,rc,color);
     }
 
-    void Canvas2D::BeginDraw()
+    bool Canvas2D::BeginDraw()
     {
-        m_RenderEngine->BeginDraw(m_hWnd);
+       return m_RenderEngine->BeginDraw(m_hWnd);
     }
 
     void Canvas2D::EndDraw()

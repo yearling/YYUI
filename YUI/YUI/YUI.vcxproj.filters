@@ -43,6 +43,12 @@
     <Filter Include="YYUI\src\Layout">
       <UniqueIdentifier>{d4189fbc-16ab-461e-ab00-c9968e12618f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="YYUI\include\Sys">
+      <UniqueIdentifier>{1ea7e22a-6c56-4b4d-8beb-baed0a198b81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="YYUI\src\Sys">
+      <UniqueIdentifier>{60d49b4d-1fb6-4e3f-bfc8-134e803ff93a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -153,6 +159,12 @@
     <ClInclude Include="..\..\include\Canvas2D.h">
       <Filter>YYUI\include\base</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\FileSystem.h">
+      <Filter>YYUI\include\Sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\TextureDef.h">
+      <Filter>YYUI\include\base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -228,6 +240,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\Canvas2D.cpp">
+      <Filter>YYUI\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\FileSystem.cpp">
+      <Filter>YYUI\src\Sys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TextureDef.cpp">
       <Filter>YYUI\src</Filter>
     </ClCompile>
   </ItemGroup>

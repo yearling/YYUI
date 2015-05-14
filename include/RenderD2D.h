@@ -14,6 +14,7 @@
 #include <d3d11.h>
 #include "FontDef.h"
 #include "BrushDef.h"
+#include "TextureDef.h"
 #include <set>
 namespace YUI
 {
@@ -27,12 +28,19 @@ namespace YUI
         CComPtr<ID2D1SolidColorBrush>   GetSolidColorBrush(const ColorBrushD2D& brush);
         CComPtr<ID2D1SolidColorBrush>   GetSolidColorBrush(const YYCOLOR& color);
         CComPtr<ID2D1HwndRenderTarget>  GetRenderTarget() const{ return m_rt;}
-        //ID2D1HwndRenderTarget*          operator->() { return m_rt.p;}
+        CComPtr<ID2D1Bitmap>            GetBitmap(const TextureD2D & texture);
+        CComPtr<ID2D1Bitmap>            GetBitmap(const YString &uri,UINT desWidth= 0,UINT desHeight = 0);
+        ID2D1HwndRenderTarget*          operator->() { return m_rt.p;}
+        void                            DiscardResource();
+        bool                            BeginDraw();
+        void                            EndDraw();
     private:
         RenderTargetHWND(CComPtr<ID2D1HwndRenderTarget>& rt);
         CComPtr<ID2D1HwndRenderTarget>  m_rt;
         std::map<ColorBrushD2D, CComPtr<ID2D1SolidColorBrush> >
                                         m_mapColorBrush;
+        std::map<TextureD2D,CComPtr<ID2D1Bitmap> >
+                                        m_mapBitmap;
     };
 	class RenderD2D
 	{
@@ -46,7 +54,7 @@ namespace YUI
 
 	public:
 		void							Resize(HWND hWnd,unsigned int width, unsigned int height);
-        void                            BeginDraw(HWND hWnd);
+        bool                            BeginDraw(HWND hWnd);
         void                            EndDraw(HWND hWnd);
         void                            Clear(HWND hWnd,const YYCOLOR &color);
         YYSIZE                          GetDrawSize(HWND hWnd);
@@ -55,19 +63,19 @@ namespace YUI
 	public: /*Get & Set*/
 		std::shared_ptr<RenderTargetHWND>	GetHwndRenderTarget(HWND hwnd);
 		std::shared_ptr<RenderTargetHWND>	GetHwndRenderTarget(HWND hwnd,unsigned int width, unsigned int height);
-	    CComPtr<ID2D1Factory>			GetD2DFactory() const { return m_pD2DFactory; }
-		void							SetD2DFactory(CComPtr<ID2D1Factory> val) { m_pD2DFactory = val; }
-		CComPtr<IWICImagingFactory>		GetWICFactory() const { return m_pWICFactory; }
-		void							SetWICFactory(CComPtr<IWICImagingFactory> val) { m_pWICFactory = val; }
-		CComPtr<IDWriteFactory>			GetDWriteFactory() const { return m_pDWriteFactory; }
-		void							SetDWriteFactory(CComPtr<IDWriteFactory> val) { m_pDWriteFactory = val; }
-        CComPtr<IDWriteTextFormat>      GetTextureFormat(const YString &strFontname,float fFontsize);
-        inline CComPtr<IDWriteTextFormat>      GetTextureFormat(const FontD2D &font);
-        //CComPtr<ID2D1SolidColorBrush>   GetColorBrush(HWND hWnd,const YYCOLOR &color); 
+	    static CComPtr<ID2D1Factory>			GetD2DFactory()  { return m_pD2DFactory; }
+		static CComPtr<IWICImagingFactory>		GetWICFactory()  { return m_pWICFactory; }
+		static CComPtr<IDWriteFactory>			GetDWriteFactory()  { return m_pDWriteFactory; }
+        CComPtr<IDWriteTextFormat>              GetTextureFormat(const YString &strFontname,float fFontsize);
+        inline CComPtr<IDWriteTextFormat>       GetTextureFormat(const FontD2D &font);
+
+    //生成纹理资源
+    public: 
+        CComPtr<ID2D1Bitmap>            GetBitmap(HWND hwnd,const YString &uri,UINT desWidth= 0,UINT desHeight = 0);
 	private:
-		 CComPtr<ID2D1Factory>			m_pD2DFactory;
-		 CComPtr<IWICImagingFactory>		m_pWICFactory;
-		 CComPtr<IDWriteFactory>			m_pDWriteFactory;
+	static	 CComPtr<ID2D1Factory>			m_pD2DFactory;
+	static	 CComPtr<IWICImagingFactory>    m_pWICFactory;
+	static	 CComPtr<IDWriteFactory>	    m_pDWriteFactory;
 		
 		std::map<HWND,std::shared_ptr<RenderTargetHWND>>
 										m_mapHwndToTarget;
