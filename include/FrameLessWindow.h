@@ -1,51 +1,33 @@
 #pragma once
-
 #include "YUI.h"
 #include "WindowWnd.h"
-#include "UIDef.h"
-#include "DlgBuilder.h"
-#include "PaintManagerUI.h"
-
+#include "WindowProperty.h"
 namespace YUI
 {
-    enum UILIB_RESOURCETYPE
+    class FrameLessWindow:public WindowWnd,
+                          public IMsgHandler,
+                          public std::enable_shared_from_this<FrameLessWindow>
     {
-        UILIB_FILE=1,				    // 来自磁盘文件
-        UILIB_ZIP,						// 来自磁盘zip压缩包
-        UILIB_RESOURCE,			        // 来自资源
-        UILIB_ZIPRESOURCE,	            // 来自资源的zip压缩包
-    };
 
-    class WindowImpl 
-        : public WindowWnd
-        , public INotifyPump
-        , public INotifyUI
-        , public IMessageFilterUI
-        , public IDialogBuilderCallback
-        , public std::enable_shared_from_this<WindowImpl>
-    {
+#pragma region Constructor&Destructor
     public:
-                                        WindowImpl();
-        virtual                         ~WindowImpl();
-        virtual void                    InitWindow();
-        virtual void                    OnFinalMessage(HWND hWnd);
-        virtual void                    Notify(NotifyMsg & msg);
-        virtual void                    OnClick(NotifyMsg & msg);
-    protected:
-        virtual YString                 GetSkinFolder() = 0 ;
-        virtual YString                 GetSkinFile() =0 ;
-        virtual LPCTSTR                 GetWindowClassName(void) const= 0;
-        virtual LRESULT                 ResponseDefaultKeyEvent(WPARAM wParam);
+        FrameLessWindow();
+        virtual    ~FrameLessWindow();
+    private:
+        FrameLessWindow(const FrameLessWindow &);
+       // FrameLessWindow operator=(const FrameLessWindow &);
+#pragma endregion 
 
-        std::shared_ptr<PaintManagerUI> m_spPaintManager;
-
+#pragma region inherite the interfaces
     public:
+        virtual LRESULT                 OnSysMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
+        virtual void					HandleMsg(const MsgWrap & msg)throw();	
         virtual UINT                    GetClassStyle() const;
-        virtual UILIB_RESOURCETYPE      GetResourceType() const;
-        virtual YString                 GetZIPFileName() const;
-        virtual YString                 GetResourceID() const;
-       
-        virtual LRESULT                 OnSysMessage(UINT uMsg, WPARAM wParam, LPARAM /*lParam*/, bool& /*bHandled*/);
+#pragma endregion 继承来的接口
+
+#pragma region interfaces
+    public:
+        virtual void                    InitWindow();
         virtual LRESULT                 OnClose(UINT uMsg, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled);
         virtual LRESULT                 OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled);
         virtual LRESULT                 OnNcActivate(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& bHandled);
@@ -65,10 +47,13 @@ namespace YUI
         virtual LRESULT                 OnLButtonDown(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled);
         virtual LRESULT                 OnLButtonUp(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled);
         virtual LRESULT                 OnMouseMove(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled);
-        virtual LRESULT                 OnMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
-        virtual LRESULT                 HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-        virtual LONG                    GetStyle();              
+    protected:
+        virtual LPCTSTR                 GetWindowClassName(void) const= 0;//这是个虚基类
+        virtual LONG                    GetStyle();
+#pragma endregion 子类要继承的接口
 
+    protected:
+        WindowProperty                  m_Property;
     };
-
 }
+

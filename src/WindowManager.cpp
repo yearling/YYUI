@@ -51,7 +51,7 @@ namespace YUI
             }
         }
         if( pWnd != NULL )
-            return pWnd->HandleMessage(uMsg,wParam,lParam);
+            return pWnd->OnSysMessage(uMsg,wParam,lParam);
         else
             return ::DefWindowProc(hWnd,uMsg,wParam,lParam);
     }

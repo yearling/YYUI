@@ -96,7 +96,7 @@ namespace YUI
 
    
 
-    LRESULT WindowImpl::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM /*lParam*/, bool& /*bHandled*/)
+    LRESULT WindowImpl::OnSysMessage(UINT uMsg, WPARAM wParam, LPARAM /*lParam*/, bool& /*bHandled*/)
     {
         if (uMsg == WM_KEYDOWN)
         {
@@ -278,7 +278,7 @@ namespace YUI
         }
 
         BOOL bZoomed = ::IsZoomed(*this);
-        LRESULT lRes = WindowWnd::HandleMessage(uMsg, wParam, lParam);
+        LRESULT lRes = WindowWnd::OnSysMessage(uMsg, wParam, lParam);
         if( ::IsZoomed(*this) != bZoomed )
         {
             //add by yyCom to fix the 当最大化时，没有最大化的icon
@@ -420,7 +420,7 @@ namespace YUI
         return 0;
     }
 
-    LRESULT WindowImpl::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
+    LRESULT WindowImpl::OnMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
         LRESULT lRes = 0;
         BOOL bHandled = TRUE;
@@ -455,7 +455,7 @@ namespace YUI
         
         if (m_spPaintManager->MessageHandler(uMsg, wParam, lParam, lRes))
             return lRes;
-        return WindowWnd::HandleMessage(uMsg, wParam, lParam);
+        return WindowWnd::OnSysMessage(uMsg, wParam, lParam);
     }
     
     LRESULT WindowImpl::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)

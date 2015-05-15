@@ -177,6 +177,15 @@
     <ClInclude Include="..\..\include\MessageSystem.h">
       <Filter>YYUI\include\WindowManger</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\FrameLessWindow.h">
+      <Filter>YYUI\include\WindowManger</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MessageHandler.h">
+      <Filter>YYUI\include\WindowManger</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\WindowProperty.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -265,6 +274,15 @@
     </ClCompile>
     <ClCompile Include="..\..\src\WindowManager.cpp">
       <Filter>YYUI\include\WindowManger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\MessageHandler.cpp">
+      <Filter>YYUI\include\WindowManger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\FrameLessWindow.cpp">
+      <Filter>YYUI\include\WindowManger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\WindowProperty.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

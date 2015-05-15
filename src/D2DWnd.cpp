@@ -29,7 +29,7 @@ namespace YUI
        // PostQuitMessage(0);
 	}
 
-	LRESULT D2DWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
+	LRESULT D2DWnd::OnSysMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 		switch (uMsg)
 		{
@@ -54,7 +54,7 @@ namespace YUI
 		default:
 			break;
 		}
-		return WindowWnd::HandleMessage(uMsg,wParam,lParam);
+		return WindowWnd::OnSysMessage(uMsg,wParam,lParam);
 	}
 
 	void D2DWnd::Init()
@@ -183,7 +183,7 @@ namespace YUI
 
     }
 
-    LRESULT D3DWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
+    LRESULT D3DWnd::OnMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
         switch (uMsg)
         {
@@ -200,7 +200,7 @@ namespace YUI
         default:
             break;
         }
-        return WindowWnd::HandleMessage(uMsg,wParam,lParam);
+        return WindowWnd::OnSysMessage(uMsg,wParam,lParam);
     }
 
     void D3DWnd::Init()

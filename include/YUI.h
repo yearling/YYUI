@@ -6,6 +6,7 @@
 
 #include <tchar.h>
 #include <Windows.h>
+#include <Windowsx.h>
 #include <exception>
 #include <string>
 #include <memory>
@@ -326,6 +327,7 @@ namespace YUI
         float right;
         float top;
         float bottom;
+        YYRECT():left(0.0f),right(0.0f),top(0.0f),bottom(0.0f){};
         YYRECT(int iLeft,int iTop,int iRight ,int iBottom)
                                         :left(float(iLeft))
                                         ,top(float(iTop))
@@ -336,7 +338,6 @@ namespace YUI
                                         ,top(fTop)
                                         ,right(fRight)
                                         ,bottom(fBottom){};
-        YYRECT():left(0.0f),right(0.0f),top(0.0f),bottom(0.0f){};
         YYRECT(const RECT &rc)
                             :left((float)rc.left)
                             ,top((float)rc.top)
@@ -350,12 +351,64 @@ namespace YUI
         operator RECT() const{RECT tmp;tmp.left=(int)left;tmp.top= (int)top;tmp.right = (int) right; tmp.bottom = (int)bottom; return tmp;}
         operator D2D1_RECT_F() const { D2D1_RECT_F tmp;tmp.left = left; tmp.top = top; tmp.right = right; tmp.bottom = bottom; return tmp;}
 
+        void Clear() { left= right=top=bottom =0.0f;}
+        float GetWidth() { return right - left;}
+        float GetHeight() { return bottom - top;}
+        void Join(const YYRECT & rc)
+        {
+            if( rc.left < left )
+                left = rc.left;
+            if( rc.top < top )
+                top = rc.top;
+            if( rc.right > right )
+                right = rc.right;
+            if( rc.bottom > bottom )
+                bottom = rc.bottom;
+        }
+        void Normalize() 
+        {
+            if( left > right )
+            {
+                std::swap(left,right);
+            }
+            if( top > bottom )
+            {
+                std::swap(top,bottom);
+            }
+        }
+        void OffSet(float cx,float cy)
+        {
+            left+=cx;
+            right +=cx;
+            top+=cy;
+            bottom+=cy;
+        }
+        void Inflate(float cx,float cy)
+        {
+            left -=cx;
+            right +=cx;
+            top -=cy;
+            bottom +=cy;
+        }
+        void Deflate(float cx,float cy)
+        {
+            Inflate(-cx,-cy);
+        }
+        void Union(const YYRECT &rc)
+        {
+            left = (std::min)(left,rc.left);
+            right = (std::max)(right,rc.right);
+            top = (std::min)(top,rc.top);
+            bottom = (std::max)(bottom,rc.bottom);
+        }
+        bool Empty() const { return (right ==0.0f && left ==0.0f && top == 0.0f && bottom == 0.0f);} 
     };
 
     struct YYSIZE
     {
         float width;
         float height;
+        YYSIZE():width(0.0f),height(0.0f){};
         YYSIZE(float fWidth,float fHeight):width(fWidth),height(fHeight){};
         YYSIZE(int iWidth,int iHeight):width((float)iWidth),height((float)iHeight){};
         YYSIZE(unsigned int uWidth,unsigned int uHeight):width((float)uWidth),height((float)uHeight){};
@@ -367,6 +420,7 @@ namespace YUI
     {
         float x;
         float y;
+        YYPOINT():x(0.0f),y(0.0f){};
         YYPOINT(float fx,float fy):x(fx),y(fy){};
         YYPOINT(int ix,int iy):x(float(ix)),y((float)iy){};
         YYPOINT(unsigned int ix,unsigned int iy):x(float(ix)),y((float)iy){};

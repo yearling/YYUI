@@ -5,6 +5,7 @@
 #pragma once
 #include "YUI.h"
 #include "UIDef.h"
+#include "MessageHandler.h"
 #include <map>
 namespace YUI
 {
@@ -22,21 +23,6 @@ namespace YUI
 #define UI_CLASSSTYLE_CHILD      (CS_VREDRAW | CS_HREDRAW | CS_DBLCLKS | CS_SAVEBITS)
 #define UI_CLASSSTYLE_DIALOG     (CS_VREDRAW | CS_HREDRAW | CS_DBLCLKS | CS_SAVEBITS)
     
-    //消息链设计模式
-    class MsgHandleChainBase
-    {
-    public:
-                                        MsgHandleChainBase();
-		   virtual                      ~MsgHandleChainBase();
-           virtual void                 HandleMsg(const NotifyMsg & msg)throw();
-		   virtual void					HandleMsg(const MsgWrap & msg)throw();
-           //设计继承的对象，就是下一步要交给处理的对像
-           void                         SetSuccessor(std::shared_ptr<MsgHandleChainBase> & sp);
-         
-    private:
-        std::weak_ptr<MsgHandleChainBase>  m_wpSuccessor;//下一个要交给的处理的对像
-    };
-
     class INotifyPump: public MsgHandleChainBase  
     {
     public:
@@ -50,32 +36,18 @@ namespace YUI
         YMessageHash                    m_MessageMap;      
     private:
         std::map<YString, void *>       m_mapVWnd;
-    };
+    }; 
 
-	class IMsgHandler : public MsgHandleChainBase
-	{
-	public:
-		typedef std::multimap<const YString,FucHandleMsg> MsgMap;
-	public:
-		IMsgHandler();
-		virtual ~IMsgHandler();
-		virtual void					HandleMsg(const MsgWrap & msg)throw();	
-		void							AddEntry(const YString &strType,FucHandleMsg & );
-		void							DeleteEntry(const YString &strType,FucHandleMsg );	
-	private:   
-		MsgMap							m_MessageMap;  //每个控件处理自己的消息 
-	};
+
 	class WindowWnd
 	{
 	public:
-        friend  class  WindowManger;
+        friend  class                   WindowManger;
 		                                WindowWnd();
 		virtual                         ~WindowWnd();
 
     public:
-        HWND                            GetHWND() const  { return m_hWnd; }
-        operator                        HWND() const { return m_hWnd; }
-
+       
         //注册当前窗口的类名，如果注册失败（没有重复注册）,会抛异常; 
         void                            RegisterWindowClass();
         
@@ -87,6 +59,7 @@ namespace YUI
                                                 DWORD dwExStyle,
                                                 const RECT rc,
                                                 HMENU hMenu= NULL);
+
         HWND                            Create(HWND hWndParent,
                                                 LPCTSTR pstrName,
                                                 DWORD dwStyple,
@@ -96,6 +69,7 @@ namespace YUI
                                                 int cx = CW_USEDEFAULT,
                                                 int cy = CW_USEDEFAULT,
                                                 HMENU hMenu = NULL);
+
         HWND                            CreateUIWindow( HWND hWndParent,
                                                 LPCTSTR pstrWindowName,
                                                 DWORD dwStyle =0,
@@ -108,17 +82,27 @@ namespace YUI
         UINT                            ShowModal();
         void                            Close(UINT nRet = IDOK);
         void                            CenterWindow();
-        void                            SetIcon(UINT nRes);
         LRESULT                         SendMessage(UINT uMsg, WPARAM wParam = 0, LPARAM lParam = 0L);
-        LRESULT                         PostMessage(UINT uMsg, WPARAM wParam = 0, LPARAM lParam = 0L);
+        LRESULT                         PostMessage(UINT uMsg, WPARAM wParam = 0, LPARAM lParam = 0L); 
+#pragma region GET/SET
+    public: 
+        void                            SetIcon(UINT nRes);
+#pragma endregion GET/SET
+    public: 
+        HWND                            GetHWND() const  { return m_hWnd; }
+        operator                        HWND() const { return m_hWnd; }
+#pragma region interface
     protected:
         virtual UINT                    GetClassStyle() const;
         virtual LPCTSTR                 GetWindowClassName() const = 0;
+
+        virtual void                    OnFinalMessage(HWND hWnd);
+        virtual LRESULT                 OnSysMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
+        virtual LPCTSTR                 GetSuperClassName() const;
+#pragma endregion 
+    protected:
         static  LRESULT CALLBACK        WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
         static  LRESULT CALLBACK        ControlProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-        virtual void                    OnFinalMessage(HWND hWnd);
-        virtual LRESULT                 HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
-        virtual LPCTSTR                 GetSuperClassName() const;
 	protected:
 		HWND							m_hWnd;
 		WNDPROC							m_OldWndProc;

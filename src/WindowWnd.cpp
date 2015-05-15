@@ -147,7 +147,7 @@ namespace YUI
             }
         }
         if( pWnd != NULL )
-            return pWnd->HandleMessage(uMsg,wParam,lParam);
+            return pWnd->OnSysMessage(uMsg,wParam,lParam);
         else
             return ::DefWindowProc(hWnd,uMsg,wParam,lParam);
     }
@@ -183,7 +183,7 @@ namespace YUI
         //一般用来清理和PostQuitMessage
     }
 
-    LRESULT WindowWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
+    LRESULT WindowWnd::OnSysMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
         return ::CallWindowProc( m_OldWndProc, m_hWnd, uMsg, wParam, lParam);
     }
@@ -221,7 +221,7 @@ namespace YUI
             }
         }
         if( pWnd != nullptr )
-            return pWnd->HandleMessage(uMsg, wParam, lParam);
+            return pWnd->OnSysMessage(uMsg, wParam, lParam);
         else
             return ::DefWindowProc( hWnd, uMsg, wParam, lParam);
     }
@@ -352,16 +352,15 @@ namespace YUI
 
     }
 
-
     void INotifyPump::NotifyPump(NotifyMsg & msg)
     {
         //to do ??没看明白加了个virtual wnd做什么用
         HandleMsg(msg);
     }
 
-   
 
-    
+
+
 
     void INotifyPump::HandleMsg(const NotifyMsg & msg)
     {
@@ -387,69 +386,5 @@ namespace YUI
     {
         m_MessageMap[YStrStr(strType,strControlName)] = fun;
     }
-
-
-    void MsgHandleChainBase::HandleMsg(const NotifyMsg & msg)
-    {
-        auto sp= m_wpSuccessor.lock();
-        if(sp)
-            sp->HandleMsg(msg);
-    }
-
-	void MsgHandleChainBase::HandleMsg(const MsgWrap & msg)
-	{
-		auto sp= m_wpSuccessor.lock();
-		if(sp)
-			sp->HandleMsg(msg);
-	}
-
-    void MsgHandleChainBase::SetSuccessor(std::shared_ptr<MsgHandleChainBase> & sp)
-    {
-        m_wpSuccessor = sp;
-    }
-
-    MsgHandleChainBase::MsgHandleChainBase()
-    {
-
-    }
-
-	MsgHandleChainBase::~MsgHandleChainBase()
-	{
-
-	}
-
-
-	IMsgHandler::IMsgHandler()
-	{
-
-	}
-
-	IMsgHandler::~IMsgHandler()
-	{
-
-	}
-
-	void IMsgHandler::HandleMsg(const MsgWrap & msg) throw()
-	{
-		auto iterLow = m_MessageMap.lower_bound(msg.strType);
-		auto iterUp = m_MessageMap.upper_bound(msg.strType);
-		if(iterLow == iterUp)
-			MsgHandleChainBase::HandleMsg(msg);
-		while( iterLow != iterUp )
-		{
-			iterLow->second(msg);
-			iterLow++;
-		}
-	}
-
-	void IMsgHandler::AddEntry(const YString &strType,FucHandleMsg &fuc)
-	{
-		m_MessageMap.insert(MsgMap::value_type(strType,fuc));
-	}
-
-	void IMsgHandler::DeleteEntry(const YString &strType,FucHandleMsg)
-	{
-		assert(0 && "unimplement");
-	}
-
+   
 }

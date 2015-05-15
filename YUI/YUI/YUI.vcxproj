@@ -233,8 +233,10 @@
     <ClInclude Include="..\..\include\D2DWnd.h" />
     <ClInclude Include="..\..\include\FileSystem.h" />
     <ClInclude Include="..\..\include\FontDef.h" />
+    <ClInclude Include="..\..\include\FrameLessWindow.h" />
     <ClInclude Include="..\..\include\HorizontalLayout.h" />
     <ClInclude Include="..\..\include\Label.h" />
+    <ClInclude Include="..\..\include\MessageHandler.h" />
     <ClInclude Include="..\..\include\MessageSystem.h" />
     <ClInclude Include="..\..\include\PaintManagerUI.h" />
     <ClInclude Include="..\..\include\DlgBuilder.h" />
@@ -247,6 +249,7 @@
     <ClInclude Include="..\..\include\VerticalLayout.h" />
     <ClInclude Include="..\..\include\WindowImpl.h" />
     <ClInclude Include="..\..\include\WindowManager.h" />
+    <ClInclude Include="..\..\include\WindowProperty.h" />
     <ClInclude Include="..\..\include\WindowWnd.h" />
     <ClInclude Include="..\..\include\YYDisableIf.h" />
     <ClInclude Include="..\..\include\YYErrorInfo.h" />
@@ -275,8 +278,10 @@
     <ClCompile Include="..\..\src\ControlUI.cpp" />
     <ClCompile Include="..\..\src\D2DWnd.cpp" />
     <ClCompile Include="..\..\src\FileSystem.cpp" />
+    <ClCompile Include="..\..\src\FrameLessWindow.cpp" />
     <ClCompile Include="..\..\src\HorizontalLayout.cpp" />
     <ClCompile Include="..\..\src\Label.cpp" />
+    <ClCompile Include="..\..\src\MessageHandler.cpp" />
     <ClCompile Include="..\..\src\MessageSystem.cpp" />
     <ClCompile Include="..\..\src\PaintManagerUI.cpp" />
     <ClCompile Include="..\..\src\DlgBuilder.cpp" />
@@ -289,6 +294,7 @@
     <ClCompile Include="..\..\src\VerticalLayout.cpp" />
     <ClCompile Include="..\..\src\WindowImpl.cpp" />
     <ClCompile Include="..\..\src\WindowManager.cpp" />
+    <ClCompile Include="..\..\src\WindowProperty.cpp" />
     <ClCompile Include="..\..\src\WindowWnd.cpp" />
     <ClCompile Include="..\..\src\UIUtility.cpp" />
     <ClCompile Include="..\..\src\MutiScreen.cpp" />
