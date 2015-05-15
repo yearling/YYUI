@@ -197,6 +197,11 @@ namespace YUI
         return GetHwndRenderTarget(hWnd)->DrawRect(rc,brush,strokewidth);
     }
 
+    void RenderD2D::FillRect(HWND hWnd,const YYRECT rc,const YYCOLOR &brush)
+    {
+         return GetHwndRenderTarget(hWnd)->FillRect(rc,brush);
+    }
+
     CComPtr<IDWriteFactory> RenderD2D::m_pDWriteFactory;
 
     CComPtr<IWICImagingFactory> RenderD2D::m_pWICFactory;
@@ -480,6 +485,11 @@ namespace YUI
     void RenderTargetHWND::DrawRect(const YYRECT rc,const YYCOLOR &brush,float strokewidth/*=1.0f*/)
     {
         m_rt->DrawRectangle(rc,GetSolidColorBrush(brush),strokewidth);
+    }
+
+    void RenderTargetHWND::FillRect(const YYRECT rc,const YYCOLOR &brush)
+    {
+        m_rt->FillRectangle(rc,GetSolidColorBrush(brush));
     }
 
     

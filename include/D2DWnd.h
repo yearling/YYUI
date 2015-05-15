@@ -42,6 +42,7 @@ namespace YUI
 	public:
 		virtual void					Init();
 		virtual void					OnResize(unsigned int width,unsigned int height);
+         virtual LRESULT                OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 		virtual void					OnRender();
 		void							CreateDeviceDependResource();
 		void                            DiscardDeviceResources();

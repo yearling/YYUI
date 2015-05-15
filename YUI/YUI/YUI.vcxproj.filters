@@ -144,9 +144,6 @@
     <ClInclude Include="..\..\include\TileLayout.h">
       <Filter>YYUI\Layout</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\RenderD2D.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\D2DWnd.h">
       <Filter>YYUI\include\base</Filter>
     </ClInclude>
@@ -185,6 +182,9 @@
     </ClInclude>
     <ClInclude Include="..\..\include\WindowProperty.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\RenderD2D.h">
+      <Filter>YYUI\include\base\Draw</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

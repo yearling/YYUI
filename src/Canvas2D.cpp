@@ -65,6 +65,11 @@ namespace YUI
         return m_RenderEngine->DrawRect(m_hWnd,rc,brush,strokewidth);
     }
 
+    void Canvas2D::FillRect(const YYRECT rc,const YYCOLOR &brush)
+    {
+        return m_RenderEngine->FillRect(m_hWnd,rc,brush);
+    }
+
    
 
     std::shared_ptr<RenderD2D> Canvas2D::m_RenderEngine;

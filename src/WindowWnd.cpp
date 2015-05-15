@@ -24,7 +24,6 @@ namespace YUI
         WNDCLASS wc;
         ZeroMemory(&wc,sizeof(wc));
         wc.style = GetClassStyle();
-        //wc.lpfnWndProc = WindowWnd::WndProc; //用自己的WndProc
         wc.lpfnWndProc =WindowManger::WndProc; //用自己的WndProc
         wc.cbClsExtra = 0;
         wc.cbWndExtra = 0;
@@ -114,44 +113,6 @@ namespace YUI
         return 0;
     }
 
-    LRESULT CALLBACK WindowWnd::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-    {
-        //WindowWnd *pWnd = NULL;
-        //SPWindowWnd spWnd;
-        //if(uMsg == WM_NCCREATE )
-        //{
-        //    //窗口刚开始创建时CreateWindowEx，最后一个参数LPVOID lpParam，保存了当前的this指针，这里取出来；
-        //    LPCREATESTRUCT lpcs = reinterpret_cast<LPCREATESTRUCT>( lParam );
-        //    pWnd = static_cast<WindowWnd*>( lpcs->lpCreateParams );
-        //    pWnd->m_hWnd = hWnd;
-        //    //这时把YWindowWnd的指针绑到当前生成的HWND上
-        //    //相当于每个HWND都通过这个指针映射到一个YWinodwWnd的类
-        //    ::SetWindowLongPtr( hWnd, GWLP_USERDATA, reinterpret_cast<LPARAM>(pWnd) );
-        //}
-        //else
-        //{
-        //    pWnd = reinterpret_cast< WindowWnd* >( ::GetWindowLongPtr( hWnd,GWLP_USERDATA ) );
-        //    //！！这里用的是WM_NCDESTROY，就是窗口即将消失的时候。这个消息在WM_CLOSE消息被正确处理后触发
-        //    if(uMsg == WM_NCDESTROY && pWnd != NULL )
-        //    {
-        //        //一般调用的是DefWindowProc
-        //        LRESULT lRes = ::CallWindowProc( pWnd->m_OldWndProc, hWnd, uMsg, wParam, lParam );
-        //        //清空hWnd绑到的YWindowWnd
-        //        ::SetWindowLongPtr( hWnd, GWLP_USERDATA , NULL );
-        //        //???
-        //        if( pWnd->m_bSubClassed )
-        //            pWnd->UnsubClass();
-        //        pWnd->m_hWnd = NULL;
-        //        pWnd->OnFinalMessage(hWnd);
-        //        return lRes;
-        //    }
-        //}
-        //if( pWnd != NULL )
-        //    return pWnd->OnSysMessage(uMsg,wParam,lParam);
-        //else
-        //    return ::DefWindowProc(hWnd,uMsg,wParam,lParam);
-        return 0;
-    }
 
     void WindowWnd::UnsubClass()
     {
@@ -170,12 +131,12 @@ namespace YUI
         assert(::IsWindow(hWnd));
         assert(m_hWnd == NULL);
         //把当前YWindowWnd的WndProc设为hWnd的WndProc,之前的保存;
-        m_OldWndProc = (WNDPROC)SetWindowLongPtr((hWnd), GWLP_WNDPROC, (LPARAM)(WNDPROC)(WindowWnd::WndProc));
+    /*    m_OldWndProc = (WNDPROC)SetWindowLongPtr((hWnd), GWLP_WNDPROC, (LPARAM)(WNDPROC)(WindowWnd::WndProc));
         if( m_OldWndProc == NULL )
             return NULL;
         m_bSubClassed = true;
         m_hWnd = hWnd;
-        ::SetWindowLongPtr( hWnd, GWLP_USERDATA , reinterpret_cast<LPARAM>(this));
+        ::SetWindowLongPtr( hWnd, GWLP_USERDATA , reinterpret_cast<LPARAM>(this));*/
         return m_hWnd;
     }
 

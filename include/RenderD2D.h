@@ -37,6 +37,7 @@ namespace YUI
         void                            DrawBitmap(const YString &strBmp,const YYRECT &rc);
         void                            DrawLine(YYPOINT start,YYPOINT end,const YYCOLOR &brush,float strokewidth=1.0f);
         void                            DrawRect(const YYRECT rc,const YYCOLOR &brush,float strokewidth=1.0f);
+        void                            FillRect(const YYRECT rc,const YYCOLOR &brush);
     private:
         RenderTargetHWND(CComPtr<ID2D1HwndRenderTarget>& rt);
         CComPtr<ID2D1HwndRenderTarget>  m_rt;
@@ -65,7 +66,8 @@ namespace YUI
         void                            DrawSolidText(HWND hWnd,const YString& strText,const FontD2D& font,const YYRECT &rc,const YYCOLOR color);
         void                            DrawBitmap(HWND hWnd,const YString &strBmp,const YYRECT &rc);
         void                            DrawLine(HWND hWnd,YYPOINT start,YYPOINT end,const YYCOLOR &brush,float strokewidth=1.0f);
-         void                           DrawRect(HWND hWnd,const YYRECT rc,const YYCOLOR &brush,float strokewidth=1.0f);
+        void                            DrawRect(HWND hWnd,const YYRECT rc,const YYCOLOR &brush,float strokewidth=1.0f);
+        void                            FillRect(HWND hWnd,const YYRECT rc,const YYCOLOR &brush);
 	public: /*Get & Set*/
 		std::shared_ptr<RenderTargetHWND>	GetHwndRenderTarget(HWND hwnd);
 		std::shared_ptr<RenderTargetHWND>	GetHwndRenderTarget(HWND hwnd,unsigned int width, unsigned int height);

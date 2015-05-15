@@ -129,6 +129,56 @@ namespace YUI
         return rcClient;
     }
 
+    void WindowProperty::SetDefaultDisabledColor(YYCOLOR color)
+    {
+        m_DisableFontColor = color;
+    }
+
+    YUI::YYCOLOR WindowProperty::GetDefaultDisabledColor() const
+    {
+        return m_DisableFontColor;
+    }
+
+    void WindowProperty::SetDefaultFontColor(YYCOLOR color)
+    {
+        m_DefaultFontColor= color;
+    }
+
+    YUI::YYCOLOR WindowProperty::GetDefaultFontColor() const
+    {
+        return m_DefaultFontColor;
+    }
+
+    void WindowProperty::SetDefaultLinkFontColor(YYCOLOR color)
+    {
+        m_LinkFontColor = color;
+    }
+
+    YUI::YYCOLOR WindowProperty::GetDefaultLinkFontColor() const
+    {
+        return m_LinkFontColor;
+    }
+
+    void WindowProperty::SetDefaultLinkHoverFontColor(YYCOLOR color)
+    {
+        m_LinkHoverFontColor = color;
+    }
+
+    YUI::YYCOLOR WindowProperty::GetDefaultLinkHoverFontColor() const
+    {
+        return m_LinkHoverFontColor;
+    }
+
+    void WindowProperty::SetDefaultSelectedBkColor(YYCOLOR color)
+    {
+        m_SelectBKColor = color;
+    }
+
+    YUI::YYCOLOR WindowProperty::GetDefaultSelectedBkColor() const
+    {
+        return m_SelectBKColor;
+    }
+
 
     
 

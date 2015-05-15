@@ -122,6 +122,7 @@ namespace YUI
     class PaintManagerUI;
     class RenderD2D;
     class WindowWnd;
+    class WindowProperty;
     //定义常用的SP
 	typedef std::shared_ptr<ControlUI>  SPControlUI;
 	typedef std::weak_ptr<ControlUI>	WPControlUI;
@@ -287,6 +288,7 @@ namespace YUI
         int                             m_nZoomYPercent;
     };
 #define   YYRGB(r,g,b)          ((COLORREF)(((BYTE)(r)|((WORD)((BYTE)(g))<<8))|(((DWORD)(BYTE)(b))<<16) | (((DWORD)(BYTE)(255))<<24)))
+#define   YYRGBA(r,g,b,a)          ((COLORREF)(((BYTE)(r)|((WORD)((BYTE)(g))<<8))|(((DWORD)(BYTE)(b))<<16) | (((DWORD)(BYTE)(a))<<24)))
     struct YYCOLOR
     {
         float r;

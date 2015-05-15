@@ -17,6 +17,7 @@ namespace YUI
         void                            DrawBitmap(const YString &strBmp,const YYRECT &rc);
         void                            DrawLine(YYPOINT start,YYPOINT end,const YYCOLOR &brush,float strokewidth=1.0f);
         void                            DrawRect(const YYRECT rc,const YYCOLOR &brush,float strokewidth=1.0f);
+        void                            FillRect(const YYRECT rc,const YYCOLOR &brush);
         void                            OnResize(float width,float height);
         void                            Clear(const YYCOLOR & color);
         YYSIZE                          GetSize();

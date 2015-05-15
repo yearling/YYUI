@@ -102,7 +102,6 @@ namespace YUI
         virtual LPCTSTR                 GetSuperClassName() const;
 #pragma endregion 
     protected:
-        static  LRESULT CALLBACK        WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
         static  LRESULT CALLBACK        ControlProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 	protected:
 		HWND							m_hWnd;

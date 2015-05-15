@@ -10,12 +10,8 @@ namespace YUI
         MSG msg = { 0 };
         while( ::GetMessage(&msg, NULL, 0, 0) ) 
         {
-            if( !::TranslateMessage(&msg) )
-            {
                 ::TranslateMessage(&msg);
                 ::DispatchMessage(&msg);
-            } 
-
             if( msg.message == WM_QUIT && WindowManger::GetInstance()->GetWindowsNumber()== 0 )
                 break;
             /*if( msg.message == WM_CLOSE && WindowManger::GetInstance()->GetWindowsNumber()== 0 )

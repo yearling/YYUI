@@ -7,12 +7,7 @@ namespace YUI
 
 	D2DWnd::D2DWnd()
 	{
-        m_Property.SetCaptionRect(YYRECT(0,0,0,50));
-        m_Property.SetInitSize(800,600);
-        m_Property.SetMaxInfo(1000,800);
-        m_Property.SetMinInfo(400,400);
-        m_Property.SetSizeBox(YYRECT(4,4,4,4));
-	}
+    }
 
 	D2DWnd::~D2DWnd()
 	{
@@ -74,6 +69,7 @@ namespace YUI
 	{
 		Canvas2D canvas(m_hWnd);
         canvas.OnResize((float)width,(float)height);
+        InvalidateRect(m_hWnd,NULL,FALSE);
 	}
 
 	void D2DWnd::OnRender()
@@ -93,6 +89,8 @@ namespace YUI
         cavas.DrawLine(start,end,YYRGB(255,0,0),1.0f);
         YYRECT rcCenter(200,200,600,400);
         cavas.DrawRect(rcCenter,YYRGB(0,255,0),1.0f);
+        YYRECT rcFill(650,100,750,300);
+        cavas.FillRect(rcFill,YYRGBA(155,155,244,128));
         cavas.EndDraw();
 	}
 
@@ -116,6 +114,13 @@ namespace YUI
     {
         //__super::SetPos(rc);
         ::SetWindowPos(m_hWnd, NULL, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, SWP_NOZORDER | SWP_NOACTIVATE);
+    }
+
+    LRESULT D2DWnd::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+    {
+        OnResize((float)GET_X_LPARAM(lParam),(float)GET_Y_LPARAM(lParam));
+        bHandled = FALSE;
+        return 0;
     }
 
     

@@ -1,6 +1,8 @@
 #include "YUI.h"
 #include "FrameLessWindow.h"
 #include <windows.h>
+#include "DlgBuilder.h"
+#include "ControlUI.h"
 
 namespace YUI
 {
@@ -41,6 +43,7 @@ namespace YUI
         case WM_LBUTTONDOWN:	lRes = OnLButtonDown(uMsg, wParam, lParam, bHandled); break;
         case WM_MOUSEMOVE:		lRes = OnMouseMove(uMsg, wParam, lParam, bHandled); break;
         case WM_MOUSEHOVER:	    lRes = OnMouseHover(uMsg, wParam, lParam, bHandled); break;
+
         default:				bHandled = FALSE; break;
         }
 
@@ -230,8 +233,11 @@ namespace YUI
         RECT rcClient;
         ::GetClientRect(*this, &rcClient);
         ::SetWindowPos(*this, NULL, rcClient.left, rcClient.top, rcClient.right - rcClient.left, rcClient.bottom - rcClient.top, SWP_FRAMECHANGED);
-
+        DialogBuilder builder;
         m_Property.Init(m_hWnd);
+        std::shared_ptr<ControlUI> pRoot;
+        std::shared_ptr<ControlUI> spNull;
+        pRoot=builder.Create(_T("duilib.xml"),m_Property,nullptr,spNull);
         InitWindow();
         return 0;
     }
@@ -274,7 +280,7 @@ namespace YUI
 
     UINT FrameLessWindow::GetClassStyle() const
     {
-         return CS_DBLCLKS;
+         return CS_DBLCLKS|CS_HREDRAW|CS_VREDRAW;
     }
 
     LONG FrameLessWindow::GetStyle()
@@ -283,6 +289,21 @@ namespace YUI
         styleValue &= ~WS_CAPTION;
 
         return styleValue;
+    }
+
+    LRESULT FrameLessWindow::OnSysKeyDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+    {
+        switch (wParam)
+        {
+        case VK_F4:
+               Close(0);
+               bHandled =TRUE;
+               break;
+        default:
+            break;
+        }
+        bHandled = FALSE;
+        return 0;
     }
 
 }
