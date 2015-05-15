@@ -55,7 +55,6 @@ namespace YUI
 			break;
 		}
 		return FrameLessWindow::OnSysMessage(uMsg,wParam,lParam);
-		//return WindowWnd::OnSysMessage(uMsg,wParam,lParam);
 	}
 
 	void D2DWnd::Init()

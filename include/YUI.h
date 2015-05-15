@@ -152,6 +152,19 @@ namespace YUI
     typedef std::function<void(const NotifyMsg&)> FunNofity;
     typedef std::function<void(const MsgWrap&)> FucHandleMsg;
 
+#define  UIMSG_SETFOCUS     _T("SETFOCUS")
+#define  UIMSG_KILLFOCUS    _T("KILLFOCUS")
+#define  UIMSG_SETCURSOR    _T("SETCURSOR")
+#define  UIMSG_TIMER        _T("TIMER")
+#define  UIMSG_KEYDOWN      _T("KEYDOWN")
+#define  UIMSG_LBUTTONDOWN  _T("LBUTTONDOWN")
+#define  UIMSG_LBUTTONBLICK _T("LBUTTONBLICK")
+#define  UIMSG_DBLCLICK     _T("DLBUTTONBLICK")
+#define  UIMSG_LBUTTONUP    _T("LBUTTONUP")
+#define  UIMSG_MOUSEMOVE    _T("MOUSEMOVE")
+#define  UIMSG_MOUSEENTER   _T("MOUSEENTER")
+#define  UIMSG_MOUSELEAVE   _T("MOUSELEAVE")
+#define  UIMSG_WINDOWSIZE   _T("WINDOWSIZE")
     typedef enum EVENTTYPE_UI
     {
         UIEVENT__FIRST = 1,

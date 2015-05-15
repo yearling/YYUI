@@ -42,7 +42,7 @@ namespace YUI
     bool Button::Activate()
     {
         if( !ControlUI::Activate() ) return false;
-        if( m_pManager != NULL ) m_pManager->SendNotify(shared_from_this(), MSG_Click);
+        //if( m_pManager != NULL ) m_pManager->SendNotify(shared_from_this(), MSG_Click);
         return true;
     }
 
@@ -56,86 +56,7 @@ namespace YUI
 
     void Button::DoEvent(ControlEvent& eve)
     {
-        if( !IsMouseEnabled() && eve.m_Type > UIEVENT__MOUSEBEGIN && eve.m_Type < UIEVENT__MOUSEEND )
-        {
-             auto spParent = m_pParent.lock();
-            if( spParent )
-                spParent->DoEvent(eve);
-            else
-                Label::DoEvent(eve);
-            return;
-        }
-
-        if( eve.m_Type == UIEVENT_SETFOCUS ) 
-        {
-            Invalidate();
-        }
-        if( eve.m_Type == UIEVENT_KILLFOCUS ) 
-        {
-            Invalidate();
-        }
-        if( eve.m_Type == UIEVENT_KEYDOWN )
-        {
-            if (IsKeyboardEnabled()) {
-                if( eve.m_chKey == VK_SPACE || eve.m_chKey == VK_RETURN ) {
-                    Activate();
-                    return;
-                }
-            }
-        }
-        if( eve.m_Type == UIEVENT_BUTTONDOWN || eve.m_Type == UIEVENT_DBLCLICK )
-        {
-            if( ::PtInRect(&m_rcItem, eve.m_ptMouse) && IsEnabled() ) {
-                m_uButtonState |= UISTATE_PUSHED | UISTATE_CAPTURED;
-                Invalidate();
-            }
-            return;
-        }
-        if( eve.m_Type == UIEVENT_MOUSEMOVE )
-        {
-            if( (m_uButtonState & UISTATE_CAPTURED) != 0 ) {
-                if( ::PtInRect(&m_rcItem, eve.m_ptMouse) ) m_uButtonState |= UISTATE_PUSHED;
-                else m_uButtonState &= ~UISTATE_PUSHED;
-                Invalidate();
-            }
-            return;
-        }
-        if( eve.m_Type == UIEVENT_BUTTONUP )
-        {
-            if( (m_uButtonState & UISTATE_CAPTURED) != 0 ) {
-                if( ::PtInRect(&m_rcItem, eve.m_ptMouse) ) Activate();
-                m_uButtonState &= ~(UISTATE_PUSHED | UISTATE_CAPTURED);
-                Invalidate();
-            }
-            return;
-        }
-        if( eve.m_Type == UIEVENT_CONTEXTMENU )
-        {
-            if( IsContextMenuUsed() ) {
-                m_pManager->SendNotify(shared_from_this(), MSG_MENU, eve.m_wParam, eve.m_lParam);
-            }
-            return;
-        }
-        if( eve.m_Type == UIEVENT_MOUSEENTER )
-        {
-            if( IsEnabled() ) {
-                m_uButtonState |= UISTATE_HOT;
-                Invalidate();
-            }
-            // return;
-        }
-        if( eve.m_Type == UIEVENT_MOUSELEAVE )
-        {
-            if( IsEnabled() ) {
-                m_uButtonState &= ~UISTATE_HOT;
-                Invalidate();
-            }
-            // return;
-        }
-        if( eve.m_Type == UIEVENT_SETCURSOR ) {
-            ::SetCursor(::LoadCursor(NULL, MAKEINTRESOURCE(IDC_HAND)));
-            return;
-        }
+       
         Label::DoEvent(eve);
     }
 
@@ -419,6 +340,99 @@ Label_ForeImage:
     DWORD Button::GetFocusedTextColor() const
     {
         return m_dwFocusedTextColor;
+    }
+
+    void Button::AddHander()
+    {
+        SetSuccessor(std::static_pointer_cast<Label>(shared_from_this()));
+
+        AddEntry(UIMSG_SETFOCUS,[&](const MsgWrap &msg)
+        {
+            Invalidate();
+            MsgHandleChainBase::HandleMsg(msg);
+        });
+        AddEntry(UIMSG_KILLFOCUS,[&](const MsgWrap &msg)
+        {
+            Invalidate();
+            MsgHandleChainBase::HandleMsg(msg);
+        });
+        
+        AddEntry(UIMSG_KEYDOWN,[&](const MsgWrap &msg)
+        {
+            if (IsKeyboardEnabled()) {
+                if( msg.wParam == VK_SPACE || msg.wParam == VK_RETURN ) {
+                    Activate();
+                }
+            }
+        });
+
+        AddEntry(UIMSG_LBUTTONDOWN,[&](const MsgWrap &msg)
+        {
+            POINT pt= { GET_X_LPARAM(msg.lParam),GET_Y_LPARAM(msg.lParam)};
+            if( ::PtInRect(&m_rcItem, pt) && IsEnabled() ) 
+            {
+                m_uButtonState |= UISTATE_PUSHED | UISTATE_CAPTURED;
+                Invalidate();
+            }
+        });
+
+        AddEntry(UIMSG_DBLCLICK,[&](const MsgWrap &msg)
+        {
+            POINT pt= { GET_X_LPARAM(msg.lParam),GET_Y_LPARAM(msg.lParam)};
+            if( ::PtInRect(&m_rcItem, pt) && IsEnabled() ) 
+            {
+                m_uButtonState |= UISTATE_PUSHED | UISTATE_CAPTURED;
+                Invalidate();
+            }
+        });
+
+        AddEntry(UIMSG_MOUSEMOVE,[&](const MsgWrap &msg)
+        {
+            POINT pt= { GET_X_LPARAM(msg.lParam),GET_Y_LPARAM(msg.lParam)};
+            if( (m_uButtonState & UISTATE_CAPTURED) != 0 ) 
+            {
+                if( ::PtInRect(&m_rcItem, pt) ) m_uButtonState |= UISTATE_PUSHED;
+                else m_uButtonState &= ~UISTATE_PUSHED;
+                Invalidate();
+            }
+        });
+
+        AddEntry(UIMSG_LBUTTONUP,[&](const MsgWrap &msg)
+        {
+            POINT pt= { GET_X_LPARAM(msg.lParam),GET_Y_LPARAM(msg.lParam)};
+            if( (m_uButtonState & UISTATE_CAPTURED) != 0 )
+            {
+                if( ::PtInRect(&m_rcItem, pt ) )
+                    Activate();
+                m_uButtonState &= ~(UISTATE_PUSHED | UISTATE_CAPTURED);
+                Invalidate();
+            }
+        }); 
+       
+        AddEntry(UIMSG_MOUSEENTER,[&](const MsgWrap &msg)
+        {
+            if( IsEnabled() ) 
+            {
+                m_uButtonState |= UISTATE_HOT;
+                Invalidate();
+            }
+            MsgHandleChainBase::HandleMsg(msg);
+        }); 
+        
+        AddEntry(UIMSG_MOUSELEAVE,[&](const MsgWrap &msg)
+        {
+            if( IsEnabled() ) 
+            {
+                m_uButtonState &= ~UISTATE_HOT;
+                Invalidate();
+            }
+            MsgHandleChainBase::HandleMsg(msg);
+        }); 
+
+        AddEntry(UIMSG_SETCURSOR,[&](const MsgWrap &msg)
+        {
+           ::SetCursor(::LoadCursor(NULL, MAKEINTRESOURCE(IDC_HAND)));
+        });
     }
 
 }

@@ -31,8 +31,7 @@ namespace YUI
 
         virtual bool                    Remove(std::shared_ptr<ControlUI> &pControl) ;
         virtual void                    RemoveAll();
-
-        virtual void                    DoEvent(ControlEvent& eve);
+        void                            AddHandler();
         virtual void                    SetVisible(bool bVisible = true);
         virtual void                    SetInternVisible(bool bVisible = true); // 仅供内部调用，有些UI拥有窗口句柄，需要重写此函数
         virtual void                    SetMouseEnabled(bool bEnable = true);
@@ -53,7 +52,7 @@ namespace YUI
         virtual void                    SetPos(RECT &rc);
         virtual void                    DoPaint(HDC hDC, const RECT& rcPaint);
         virtual void SetAttribute(const std::string &strName, const std::string& strValue);
-        virtual void SetManager(std::shared_ptr<PaintManagerUI> &pManager,
+        virtual void SetManager(std::shared_ptr<ControlManager> &pManager,
                                         std::weak_ptr<ControlUI> pParent,
                                         bool bInit=true);
 

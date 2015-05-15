@@ -13,6 +13,7 @@ namespace YUI
     {
         ptLastMouse.x= ptLastMouse.y=0;
         ::ZeroMemory(&m_rcNewPos,sizeof(m_rcNewPos));
+        AddHandler();
     }
 
     LPCTSTR HorizontalLayout::GetClass() const
@@ -47,7 +48,7 @@ namespace YUI
     {
         if( m_bImmMode == bImmediately ) return;
         if( (m_uButtonState & UISTATE_CAPTURED) != 0 && !m_bImmMode && m_pManager != NULL ) {
-            m_pManager->RemovePostPaint(shared_from_this());
+            //m_pManager->RemovePostPaint(shared_from_this());
         }
 
         m_bImmMode = bImmediately;
@@ -66,91 +67,6 @@ namespace YUI
             SetSepImmMode(strValue == ("true"));
         else 
             Container::SetAttribute(strName, strValue);
-    }
-
-    void HorizontalLayout::DoEvent(ControlEvent& eve)
-    {
-        if( m_iSepWidth != 0 ) {
-            if( eve.m_Type == UIEVENT_BUTTONDOWN && IsEnabled() )
-            {
-                RECT rcSeparator = GetThumbRect(false);
-                if( ::PtInRect(&rcSeparator, eve.m_ptMouse) ) {
-                    m_uButtonState |= UISTATE_CAPTURED;
-                    ptLastMouse = eve.m_ptMouse;
-                    m_rcNewPos = m_rcItem;
-                    if( !m_bImmMode && m_pManager ) m_pManager->AddPostPaint(shared_from_this());
-                    return;
-                }
-            }
-            if( eve.m_Type == UIEVENT_BUTTONUP )
-            {
-                if( (m_uButtonState & UISTATE_CAPTURED) != 0 ) {
-                    m_uButtonState &= ~UISTATE_CAPTURED;
-                    m_rcItem = m_rcNewPos;
-                    if( !m_bImmMode && m_pManager ) m_pManager->RemovePostPaint(shared_from_this());
-                    NeedParentUpdate();
-                    return;
-                }
-            }
-            if( eve.m_Type == UIEVENT_MOUSEMOVE )
-            {
-                if( (m_uButtonState & UISTATE_CAPTURED) != 0 ) {
-                    LONG cx = eve.m_ptMouse.x - ptLastMouse.x;
-                    ptLastMouse = eve.m_ptMouse;
-                    RECT rc = m_rcNewPos;
-                    if( m_iSepWidth >= 0 ) {
-                        if( cx > 0 && eve.m_ptMouse.x < m_rcNewPos.right - m_iSepWidth ) return;
-                        if( cx < 0 && eve.m_ptMouse.x > m_rcNewPos.right ) return;
-                        rc.right += cx;
-                        if( rc.right - rc.left <= GetMinWidth() ) {
-                            if( m_rcNewPos.right - m_rcNewPos.left <= GetMinWidth() ) return;
-                            rc.right = rc.left + GetMinWidth();
-                        }
-                        if( rc.right - rc.left >= GetMaxWidth() ) {
-                            if( m_rcNewPos.right - m_rcNewPos.left >= GetMaxWidth() ) return;
-                            rc.right = rc.left + GetMaxWidth();
-                        }
-                    }
-                    else {
-                        if( cx > 0 && eve.m_ptMouse.x < m_rcNewPos.left ) return;
-                        if( cx < 0 && eve.m_ptMouse.x > m_rcNewPos.left - m_iSepWidth ) return;
-                        rc.left += cx;
-                        if( rc.right - rc.left <= GetMinWidth() ) {
-                            if( m_rcNewPos.right - m_rcNewPos.left <= GetMinWidth() ) return;
-                            rc.left = rc.right - GetMinWidth();
-                        }
-                        if( rc.right - rc.left >= GetMaxWidth() ) {
-                            if( m_rcNewPos.right - m_rcNewPos.left >= GetMaxWidth() ) return;
-                            rc.left = rc.right - GetMaxWidth();
-                        }
-                    }
-
-                    YRect rcInvalidate = GetThumbRect(true);
-                    m_rcNewPos = rc;
-                    m_cXYFixed.cx = m_rcNewPos.right - m_rcNewPos.left;
-
-                    if( m_bImmMode ) {
-                        m_rcItem = m_rcNewPos;
-                        NeedParentUpdate();
-                    }
-                    else {
-                        rcInvalidate.Join(GetThumbRect(true));
-                        rcInvalidate.Join(GetThumbRect(false));
-                        if( m_pManager ) m_pManager->Invalidate(rcInvalidate);
-                    }
-                    return;
-                }
-            }
-            if( eve.m_Type == UIEVENT_SETCURSOR )
-            {
-                RECT rcSeparator = GetThumbRect(false);
-                if( IsEnabled() && ::PtInRect(&rcSeparator, eve.m_ptMouse) ) {
-                    ::SetCursor(::LoadCursor(NULL, MAKEINTRESOURCE(IDC_SIZEWE)));
-                    return;
-                }
-            }
-        }
-        Container::DoEvent(eve);
     }
 
     void HorizontalLayout::SetPos(RECT &rc)
@@ -270,6 +186,11 @@ namespace YUI
             if( m_iSepWidth >= 0 ) return YRect(m_rcItem.right - m_iSepWidth, m_rcItem.top, m_rcItem.right, m_rcItem.bottom);
             else return YRect(m_rcItem.left, m_rcItem.top, m_rcItem.left - m_iSepWidth, m_rcItem.bottom);
         }
+    }
+
+    void HorizontalLayout::AddHandler()
+    {
+       SetSuccessor(std::static_pointer_cast<Container>(shared_from_this()));
     }
 
 }

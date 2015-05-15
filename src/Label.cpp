@@ -22,8 +22,6 @@ namespace YUI
         ,m_dwDisabledTextColor(0)
         ,m_bShowHtml(false)
         ,m_EnableEffect(false)
-        ,m_gdiplusToken(0)
-        ,m_TextRenderingHintAntiAlias(TextRenderingHintSystemDefault)
         ,m_TransShadow(60)
         ,m_TransText(168)
         ,m_TransShadow1(60)
@@ -44,14 +42,13 @@ namespace YUI
         m_ShadowOffset.Y		= 0.0f;
         m_ShadowOffset.Width	= 0.0f;
         m_ShadowOffset.Height	= 0.0f;
-        GdiplusStartup( &m_gdiplusToken,&m_gdiplusStartupInput, NULL);
 
         ::ZeroMemory(&m_rcTextPadding, sizeof(m_rcTextPadding));
+        AddHander();
     }
 
     Label::~Label()
     {
-        GdiplusShutdown( m_gdiplusToken );
     }
 
     LPCTSTR Label::GetClass() const
@@ -138,29 +135,6 @@ namespace YUI
     {
         if( m_cXYFixed.cy == 0 ) return YSize(m_cXYFixed.cx, m_pManager->GetFontInfo((HFONT)_ttoi(GetFont().c_str()))->m_tm.tmHeight + 4);
         return ControlUI::EstimateSize(szAvailable);
-    }
-
-    void Label::DoEvent(ControlEvent& event)
-    {
-        if( event.m_Type == UIEVENT_SETFOCUS ) 
-        {
-            m_bFocused = true;
-            return;
-        }
-        if( event.m_Type == UIEVENT_KILLFOCUS ) 
-        {
-            m_bFocused = false;
-            return;
-        }
-        if( event.m_Type == UIEVENT_MOUSEENTER )
-        {
-            // return;
-        }
-        if( event.m_Type == UIEVENT_MOUSELEAVE )
-        {
-            // return;
-        }
-        ControlUI::DoEvent(event);
     }
 
     void Label::SetAttribute(const std::string &strName, const std::string& strValue)
@@ -272,105 +246,14 @@ namespace YUI
 
     void Label::PaintText(HDC hDC)
     {
-        if( m_dwTextColor == 0 ) m_dwTextColor = m_pManager->GetDefaultFontColor();
-        if( m_dwDisabledTextColor == 0 ) m_dwDisabledTextColor = m_pManager->GetDefaultDisabledColor();
+        if( m_dwTextColor == 0 ) m_dwTextColor ;
+        if( m_dwDisabledTextColor == 0 ) m_dwDisabledTextColor;
 
         RECT rc = m_rcItem;
         rc.left += m_rcTextPadding.left;
         rc.right -= m_rcTextPadding.right;
         rc.top += m_rcTextPadding.top;
         rc.bottom -= m_rcTextPadding.bottom;
-
-        if(!GetEnabledEffect())
-        {
-            if( m_strText.empty() ) return;
-            int nLinks = 0;
-            if( IsEnabled() ) {
-                if( m_bShowHtml )
-                    RenderGDI::DrawHtmlText(hDC, m_pManager, rc, m_strText, m_dwTextColor, \
-                    NULL, NULL, nLinks, DT_SINGLELINE | m_uTextStyle);
-               /* else
-                    RenderGDI::DrawText(hDC, m_pManager, rc, m_strText, m_dwTextColor, \
-                    m_iFont, DT_SINGLELINE | m_uTextStyle);*/
-            }
-            else {
-                if( m_bShowHtml )
-                    RenderGDI::DrawHtmlText(hDC, m_pManager, rc, m_strText, m_dwDisabledTextColor, \
-                    NULL, NULL, nLinks, DT_SINGLELINE | m_uTextStyle);
-              /*  else
-                    RenderGDI::DrawText(hDC, m_pManager, rc, m_strText, m_dwDisabledTextColor, \
-                    m_iFont, DT_SINGLELINE | m_uTextStyle);*/
-            }
-        }
-        else
-        {
-            Font	nFont(hDC,m_pManager->GetFont(GetFont()));
-
-            Graphics nGraphics(hDC);
-            nGraphics.SetTextRenderingHint(m_TextRenderingHintAntiAlias);
-
-            StringFormat format;
-            format.SetAlignment((StringAlignment)m_hAlign);
-            format.SetLineAlignment((StringAlignment)m_vAlign);
-
-            RectF nRc((float)rc.left,(float)rc.top,(float)rc.right-rc.left,(float)rc.bottom-rc.top);
-            RectF nShadowRc = nRc;
-            nShadowRc.X += m_ShadowOffset.X;
-            nShadowRc.Y += m_ShadowOffset.Y;
-
-            int nGradientLength	= GetGradientLength();
-
-            if(nGradientLength == 0)
-                nGradientLength = (rc.bottom-rc.top);
-
-            LinearGradientBrush nLineGrBrushA(Point(GetGradientAngle(), 0),Point(0,nGradientLength),_MakeRGB(GetTransShadow(),GetTextShadowColorA()),_MakeRGB(GetTransShadow1(),GetTextShadowColorB() == -1?GetTextShadowColorA():GetTextShadowColorB()));
-            LinearGradientBrush nLineGrBrushB(Point(GetGradientAngle(), 0),Point(0,nGradientLength),_MakeRGB(GetTransText(),GetTextColor()),_MakeRGB(GetTransText1(),GetTextColor1() == -1?GetTextColor():GetTextColor1()));
-
-            if(GetEnabledStroke() && GetStrokeColor() > 0)
-            {
-                LinearGradientBrush nLineGrBrushStroke(Point(GetGradientAngle(),0),Point(0,rc.bottom-rc.top+2),_MakeRGB(GetTransStroke(),GetStrokeColor()),_MakeRGB(GetTransStroke(),GetStrokeColor()));
-
-#ifdef _UNICODE
-                nRc.Offset(-1,0);
-                nGraphics.DrawString(m_TextValue.c_str(),m_TextValue.length(),&nFont,nRc,&format,&nLineGrBrushStroke);
-                nRc.Offset(2,0);
-                nGraphics.DrawString(m_TextValue.c_str(),m_TextValue.length(),&nFont,nRc,&format,&nLineGrBrushStroke);
-                nRc.Offset(-1,-1);
-                nGraphics.DrawString(m_TextValue.c_str(),m_TextValue.length(),&nFont,nRc,&format,&nLineGrBrushStroke);
-                nRc.Offset(0,2);
-                nGraphics.DrawString(m_TextValue.c_str(),m_TextValue.length(),&nFont,nRc,&format,&nLineGrBrushStroke);
-                nRc.Offset(0,-1);
-#else
-                USES_CONVERSION;
-                std::wstring mTextValue = A2W(m_TextValue.c_str());
-
-                nRc.Offset(-1,0);
-                nGraphics.DrawString(mTextValue.c_str(),mTextValue.length(),&nFont,nRc,&format,&nLineGrBrushStroke);
-                nRc.Offset(2,0);
-                nGraphics.DrawString(mTextValue.c_str(),mTextValue.length(),&nFont,nRc,&format,&nLineGrBrushStroke);
-                nRc.Offset(-1,-1);
-                nGraphics.DrawString(mTextValue.c_str(),mTextValue.length(),&nFont,nRc,&format,&nLineGrBrushStroke);
-                nRc.Offset(0,2);
-                nGraphics.DrawString(mTextValue.c_str(),mTextValue.length(),&nFont,nRc,&format,&nLineGrBrushStroke);
-                nRc.Offset(0,-1);
-#endif
-
-            }
-#ifdef _UNICODE
-            if(GetEnabledShadow() && (GetTextShadowColorA() > 0 || GetTextShadowColorB() > 0))
-                nGraphics.DrawString(m_TextValue.c_str(),m_TextValue.length(),&nFont,nShadowRc,&format,&nLineGrBrushA);
-
-            nGraphics.DrawString(m_TextValue.c_str(),m_TextValue.length(),&nFont,nRc,&format,&nLineGrBrushB);
-#else
-            USES_CONVERSION;
-            std::wstring mTextValue = A2W(m_TextValue.c_str());
-
-            if(GetEnabledShadow() && (GetTextShadowColorA() > 0 || GetTextShadowColorB() > 0))
-                nGraphics.DrawString(mTextValue.c_str(),mTextValue.length(),&nFont,nShadowRc,&format,&nLineGrBrushA);
-
-            nGraphics.DrawString(mTextValue.c_str(),mTextValue.length(),&nFont,nRc,&format,&nLineGrBrushB);
-#endif
-        }
     }
 
     void Label::SetEnabledEffect(bool _EnabledEffect)
@@ -462,12 +345,13 @@ namespace YUI
     {
         if(extRenderingHintAntiAlias < 0 || extRenderingHintAntiAlias > 5)
             extRenderingHintAntiAlias = 0;
-        m_TextRenderingHintAntiAlias = (TextRenderingHint)extRenderingHintAntiAlias;
+        //m_TextRenderingHintAntiAlias = (TextRenderingHint)extRenderingHintAntiAlias;
     }
 
     int Label::GetTextRenderingHintAntiAlias()
     {
-        return m_TextRenderingHintAntiAlias;
+        //return m_TextRenderingHintAntiAlias;
+        return 1;
     }
 
     void Label::SetShadowOffset(int _offset,int _angle)
@@ -564,6 +448,24 @@ namespace YUI
     bool Label::GetEnabledShadow()
     {
         return m_EnabledShadow;
+    }
+
+   
+
+    void Label::AddHander()
+    {
+        SetSuccessor(std::static_pointer_cast<ControlUI>(shared_from_this()));
+        AddEntry(UIMSG_SETFOCUS,[&](const MsgWrap &msg)
+        {
+            m_bFocused = true;
+            Invalidate();
+        });
+
+        AddEntry(UIMSG_KILLFOCUS,[&](const MsgWrap &msg)
+        {
+            m_bFocused = false;
+            Invalidate();
+        });
     }
 
 }

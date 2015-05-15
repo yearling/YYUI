@@ -11,6 +11,7 @@ namespace YUI
     public:
         Button();
         virtual ~Button();
+        void                            AddHander();
         LPCTSTR                         GetClass() const;
         virtual std::shared_ptr<ControlUI> QueryInterface(const std::string & strName);
         virtual UINT                    GetControlFlags() const;

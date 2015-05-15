@@ -132,16 +132,7 @@
     <ClInclude Include="..\..\include\HorizontalLayout.h">
       <Filter>YYUI\Layout</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\ChildLayout.h">
-      <Filter>YYUI\Layout</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\VerticalLayout.h">
-      <Filter>YYUI\Layout</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\TabLayout.h">
-      <Filter>YYUI\Layout</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\TileLayout.h">
       <Filter>YYUI\Layout</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\D2DWnd.h">
@@ -185,6 +176,9 @@
     </ClInclude>
     <ClInclude Include="..\..\include\RenderD2D.h">
       <Filter>YYUI\include\base\Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\ControlManager.h">
+      <Filter>YYUI\include\WindowManger</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -233,16 +227,7 @@
     <ClCompile Include="..\..\src\Container.cpp">
       <Filter>YYUI\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\ChildLayout.cpp">
-      <Filter>YYUI\src\Layout</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\HorizontalLayout.cpp">
-      <Filter>YYUI\src\Layout</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\TabLayout.cpp">
-      <Filter>YYUI\src\Layout</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\TileLayout.cpp">
       <Filter>YYUI\src\Layout</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\VerticalLayout.cpp">
@@ -283,6 +268,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\WindowProperty.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ControlManager.cpp">
+      <Filter>YYUI\include\WindowManger</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

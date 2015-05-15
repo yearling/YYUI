@@ -18,7 +18,7 @@ namespace YUI
         virtual ~Label();
         LPCTSTR                         GetClass() const;
         virtual std::shared_ptr<ControlUI> QueryInterface(const std::string & strName);
-
+        void                            AddHander();
         void                            SetTextStyle(UINT uStyle);
         UINT                            GetTextStyle() const;
         void                            SetTextColor(DWORD dwTextColor);
@@ -33,7 +33,6 @@ namespace YUI
         void                            SetShowHtml(bool bShowHtml = true);
 
         SIZE                            EstimateSize(SIZE szAvailable);
-        void                            DoEvent(ControlEvent& event);
         virtual void SetAttribute(const std::string &strName, const std::string& strValue);
 
         void                            PaintText(HDC hDC);
@@ -100,8 +99,5 @@ namespace YUI
         DWORD					        m_dwStrokeColor;
         RectF					        m_ShadowOffset;
         YString				            m_TextValue;
-        ULONG_PTR				        m_gdiplusToken;
-        GdiplusStartupInput		        m_gdiplusStartupInput;
-        TextRenderingHint		        m_TextRenderingHintAntiAlias;
     };
 }

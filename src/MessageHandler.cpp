@@ -58,7 +58,7 @@ namespace YUI
         }
     }
 
-    void IMsgHandler::AddEntry(const YString &strType,FucHandleMsg &fuc)
+    void IMsgHandler::AddEntry(const YString &strType,FucHandleMsg fuc)
     {
         m_MessageMap.insert(MsgMap::value_type(strType,fuc));
     }

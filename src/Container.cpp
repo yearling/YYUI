@@ -17,6 +17,7 @@ namespace YUI
 
     {
         ::ZeroMemory(&m_rcInset,sizeof(m_rcInset));
+        AddHandler();
     }
 
     Container::~Container()
@@ -78,102 +79,6 @@ namespace YUI
         NeedUpdate();
     }
 
-    void Container::DoEvent(ControlEvent& eve)
-    {
-        if( !IsMouseEnabled() && eve.m_Type > UIEVENT__MOUSEBEGIN && eve.m_Type < UIEVENT__MOUSEEND ) {
-            auto sp = m_pParent.lock();
-            if(sp)
-                sp->DoEvent(eve);
-            else
-                ControlUI::DoEvent(eve);
-            return;
-        }
-
-        if( eve.m_Type == UIEVENT_SETFOCUS ) 
-        {
-            m_bFocused = true;
-            return;
-        }
-        if( eve.m_Type == UIEVENT_KILLFOCUS ) 
-        {
-            m_bFocused = false;
-            return;
-        }
-        if( m_pVerticalScrollBar != NULL /*&& m_pVerticalScrollBar->IsVisible() && m_pVerticalScrollBar->IsEnabled()*/ )
-        {
-            if( eve.m_Type == UIEVENT_KEYDOWN ) 
-            {
-                switch( eve.m_chKey ) {
-                case VK_DOWN:
-                    LineDown();
-                    return;
-                case VK_UP:
-                    LineUp();
-                    return;
-                case VK_NEXT:
-                    PageDown();
-                    return;
-                case VK_PRIOR:
-                    PageUp();
-                    return;
-                case VK_HOME:
-                    HomeUp();
-                    return;
-                case VK_END:
-                    EndDown();
-                    return;
-                }
-            }
-            else if( eve.m_Type == UIEVENT_SCROLLWHEEL )
-            {
-                switch( LOWORD(eve.m_wParam) ) {
-                case SB_LINEUP:
-                    LineUp();
-                    return;
-                case SB_LINEDOWN:
-                    LineDown();
-                    return;
-                }
-            }
-        }
-        else if( m_pHorizontalScrollBar != NULL /*&& m_pHorizontalScrollBar->IsVisible() && m_pHorizontalScrollBar->IsEnabled()*/ ) {
-            if( eve.m_Type == UIEVENT_KEYDOWN ) 
-            {
-                switch( eve.m_chKey ) {
-                case VK_DOWN:
-                    LineRight();
-                    return;
-                case VK_UP:
-                    LineLeft();
-                    return;
-                case VK_NEXT:
-                    PageRight();
-                    return;
-                case VK_PRIOR:
-                    PageLeft();
-                    return;
-                case VK_HOME:
-                    HomeLeft();
-                    return;
-                case VK_END:
-                    EndRight();
-                    return;
-                }
-            }
-            else if( eve.m_Type == UIEVENT_SCROLLWHEEL )
-            {
-                switch( LOWORD(eve.m_wParam) ) {
-                case SB_LINEUP:
-                    LineLeft();
-                    return;
-                case SB_LINEDOWN:
-                    LineRight();
-                    return;
-                }
-            }
-        }
-        ControlUI::DoEvent(eve);
-    }
 
     void Container::SetVisible(bool bVisible /*= true*/)
     {
@@ -287,65 +192,6 @@ namespace YUI
         RECT rcTemp = { 0 };
         if( !::IntersectRect(&rcTemp, &rcPaint, &m_rcItem) ) return;
 
-        RenderClip clip;
-        RenderClip::GenerateClip(hDC, rcTemp, clip);
-        ControlUI::DoPaint(hDC, rcPaint);
-
-        if( !m_SetItems.empty() ) 
-        {
-            RECT rc = m_rcItem;
-            rc.left += m_rcInset.left;
-            rc.top += m_rcInset.top;
-            rc.right -= m_rcInset.right;
-            rc.bottom -= m_rcInset.bottom;
-            /*  if( m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible() ) rc.right -= m_pVerticalScrollBar->GetFixedWidth();
-            if( m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible() ) rc.bottom -= m_pHorizontalScrollBar->GetFixedHeight();*/
-
-            if( !::IntersectRect(&rcTemp, &rcPaint, &rc) ) 
-            {
-                for(auto& pControl : m_SetItems)
-                {
-                    if( !pControl->IsVisible() ) continue;
-                    if( !::IntersectRect(&rcTemp, &rcPaint, &pControl->GetPos()) ) continue;
-                    if( pControl ->IsFloat() )
-                    {
-                        if( !::IntersectRect(&rcTemp, &m_rcItem, &pControl->GetPos()) ) continue;
-                        pControl->DoPaint(hDC, rcPaint);
-                    }
-                }
-            }
-            else {
-                RenderClip childClip;
-                RenderClip::GenerateClip(hDC, rcTemp, childClip);
-                for(auto& pControl : m_SetItems)
-                {
-                    if( !pControl->IsVisible() ) continue;
-                    if( !::IntersectRect(&rcTemp, &rcPaint, &pControl->GetPos()) ) continue;
-                    if( pControl ->IsFloat() ) {
-                        if( !::IntersectRect(&rcTemp, &m_rcItem, &pControl->GetPos()) ) continue;
-                        RenderClip::UseOldClipBegin(hDC, childClip);
-                        pControl->DoPaint(hDC, rcPaint);
-                        RenderClip::UseOldClipEnd(hDC, childClip);
-                    }
-                    else {
-                        if( !::IntersectRect(&rcTemp, &rc, &pControl->GetPos()) ) continue;
-                        pControl->DoPaint(hDC, rcPaint);
-                    }
-                }
-            }
-        }
-
-       /* if( m_pVerticalScrollBar != NULL && m_pVerticalScrollBar->IsVisible() ) {
-            if( ::IntersectRect(&rcTemp, &rcPaint, &m_pVerticalScrollBar->GetPos()) ) {
-                m_pVerticalScrollBar->DoPaint(hDC, rcPaint);
-            }
-        }
-
-        if( m_pHorizontalScrollBar != NULL && m_pHorizontalScrollBar->IsVisible() ) {
-            if( ::IntersectRect(&rcTemp, &rcPaint, &m_pHorizontalScrollBar->GetPos()) ) {
-                m_pHorizontalScrollBar->DoPaint(hDC, rcPaint);
-            }
-        }*/
     }
 
     void Container::SetAttribute(const std::string &strName, const std::string& strValue)
@@ -365,22 +211,11 @@ namespace YUI
         else if( strcmp(pstrName, "vscrollbar") == 0 ) {
             EnableScrollBar(strcmp(pstrValue, "true") == 0, GetHorizontalScrollBar() != NULL);
         }
-      /*  else if( strcmp(pstrName, _T("vscrollbarstyle")) == 0 ) {
-            EnableScrollBar(true, GetHorizontalScrollBar() != NULL);
-            if( GetVerticalScrollBar() ) GetVerticalScrollBar()->ApplyAttributeList(pstrValue);
-        }
-        else if( strcmp(pstrName, _T("hscrollbar")) == 0 ) {
-            EnableScrollBar(GetVerticalScrollBar() != NULL, strcmp(pstrValue, _T("true")) == 0);
-        }
-        else if( strcmp(pstrName, _T("hscrollbarstyle")) == 0 ) {
-            EnableScrollBar(GetVerticalScrollBar() != NULL, true);
-            if( GetHorizontalScrollBar() ) GetHorizontalScrollBar()->ApplyAttributeList(pstrValue);
-        }*/
         else if( strcmp(pstrName,"childpadding") == 0 ) SetChildPadding(atoi(pstrValue));
         else ControlUI::SetAttribute(strName, strValue);
     }
 
-    void Container::SetManager(std::shared_ptr<PaintManagerUI> &pManager, std::weak_ptr<ControlUI> pParent, bool bInit/*=true*/)
+    void Container::SetManager(std::shared_ptr<ControlManager> &pManager, std::weak_ptr<ControlUI> pParent, bool bInit/*=true*/)
     {
         for( auto &pControl : m_SetItems ) {
             pControl->SetManager(pManager, shared_from_this(), bInit);
@@ -503,7 +338,7 @@ namespace YUI
     void Container::LineUp()
     {
         int cyLine = 8;
-        if( m_pManager ) cyLine = m_pManager->GetDefaultFontInfo()->m_tm.tmHeight + 8;
+        //if( m_pManager ) cyLine = m_pManager->GetDefaultFontInfo()->m_tm.tmHeight + 8;
 
         SIZE sz = GetScrollPos();
         sz.cy -= cyLine;
@@ -513,7 +348,7 @@ namespace YUI
     void Container::LineDown()
     {
         int cyLine = 8;
-        if( m_pManager ) cyLine = m_pManager->GetDefaultFontInfo()->m_tm.tmHeight + 8;
+        //if( m_pManager ) cyLine = m_pManager->GetDefaultFontInfo()->m_tm.tmHeight + 8;
 
         SIZE sz = GetScrollPos();
         sz.cy += cyLine;
@@ -732,6 +567,22 @@ namespace YUI
 
         if( pResult == NULL && (flag & UIFIND_ME_FIRST) == 0 ) pResult = ControlUI::FindControlFromPoint(pt,flag);
         return pResult;
+    }
+
+    void Container::AddHandler()
+    {
+        SetSuccessor(std::static_pointer_cast<ControlUI>(shared_from_this()));
+        AddEntry(UIMSG_SETFOCUS,[&](const MsgWrap &msg)
+        {
+            m_bFocused = true;
+            Invalidate();
+        });
+
+        AddEntry(UIMSG_KILLFOCUS,[&](const MsgWrap &msg)
+        {
+            m_bFocused = false;
+            Invalidate();
+        });
     }
 
 }

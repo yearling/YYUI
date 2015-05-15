@@ -3,6 +3,7 @@
 #include "ControlUI.h"
 #include "PaintManagerUI.h"
 #include "RenderDGI.h"
+#include "ControlManager.h"
 namespace YUI
 {
     ControlUI::ControlUI():
@@ -23,7 +24,6 @@ namespace YUI
         ,m_dwBackColor3(0)
         ,m_dwBorderColor(0)
         ,m_dwFocusBorderColor(0)
-        ,m_bColorHSL(false)
         ,m_nBorderSize(0)
         ,m_nBorderStyle(PS_SOLID)
         ,m_nTooltipWidth(300)
@@ -32,12 +32,12 @@ namespace YUI
         m_cXYFixed.cx = m_cXYFixed.cy = 0;
         m_cxyMin.cx = m_cxyMin.cy = 0;
         m_cxyMax.cx = m_cxyMax.cy = 9999;
-        m_cxyBorderRound.cx = m_cxyBorderRound.cy = 0;
         ZeroMemory(&m_rcPaint,sizeof(RECT));
         ZeroMemory(&m_rcItem, sizeof(RECT));
         ZeroMemory(&m_rcPadding, sizeof(RECT));
         ZeroMemory(&m_rcBorderSize ,sizeof(RECT));
         ZeroMemory(&m_RelativePos,sizeof(RelativePosUI));
+        AddHandler();
     }
 
     LPCTSTR ControlUI::GetClass() const
@@ -72,17 +72,17 @@ namespace YUI
     {
         if(!IsVisible())
             return false;
-        if(!IsVisible())
+        if(!IsEnabled())
             return false;
         return true;
     }
 
-    std::shared_ptr<PaintManagerUI> ControlUI::GetManager() const
+    std::shared_ptr<ControlManager> ControlUI::GetManager() const
     {
         return m_pManager;
     }
 
-    void ControlUI::SetManager(std::shared_ptr<PaintManagerUI> &pManager, std::weak_ptr<ControlUI> pParent, bool bInit/*=true*/)
+    void ControlUI::SetManager(std::shared_ptr<ControlManager> &pManager, std::weak_ptr<ControlUI> pParent, bool bInit/*=true*/)
     {
         m_pManager=pManager;
         m_pParent=pParent;
@@ -170,38 +170,20 @@ namespace YUI
         Invalidate();
     }
 
-    bool ControlUI::IsColorHSL() const
-    {
-        return m_bColorHSL;
-    }
+   
 
-    void ControlUI::SetColorHSL(bool bColorHSL)
-    {
-        if( m_bColorHSL == bColorHSL )
-            return;
-        m_bColorHSL = bColorHSL;
-        Invalidate();
-    }
+  
 
     YUI::YString ControlUI::GetBkImage()
     {
         return m_strBKImage;
     }
 
-    SIZE ControlUI::GetBorderRound() const
-    {
-        return m_cxyBorderRound;
-    }
-
-    void ControlUI::SetBorderRound(SIZE cxyRound)
-    {
-        m_cxyBorderRound = cxyRound;
-        Invalidate();
-    }
+  
 
     bool ControlUI::DrawImage(HDC hDc, const YString strImg, const YString strModify /*=_T("")*/)
     {
-        return RenderGDI::DrawImageString(hDc,m_pManager,m_rcItem,m_rcPaint,strImg,strModify);
+        return true; 
     }
 
     int ControlUI::GetBorderSize() const
@@ -589,7 +571,7 @@ namespace YUI
             m_bFocused = false;
         if( !bVisible && m_pManager && m_pManager->GetFocus()==shared_from_this())
         {
-            m_pManager->SetFocus(NULL);
+            m_pManager->SetFocus(SPControlUI());
         }
         if( IsVisible() != v)
             NeedParentUpdate();
@@ -599,7 +581,7 @@ namespace YUI
     {
         m_bInternVisible = bVisible;
         if( !bVisible && m_pManager && m_pManager->GetFocus() == shared_from_this())
-            m_pManager->SetFocus(nullptr);
+            m_pManager->SetFocus(SPControlUI());
     }
 
     bool ControlUI::IsEnabled() const
@@ -721,69 +703,11 @@ namespace YUI
         if( m_pManager != NULL ) 
             m_pManager->NeedUpdate();
     }
-
-    DWORD ControlUI::GetAdjustColor(DWORD dwColor)
-    {
-       /* if( !m_bColorHSL ) return dwColor;
-        short H, S, L;*/
-        
-    /*    CPaintManagerUI::GetHSL(&H, &S, &L);
-        return CRenderEngine::AdjustColor(dwColor, H, S, L);*/
-        return dwColor;
-    }
-
     void ControlUI::Init()
     {
         DoInit();
         if( OnInit )
             OnInit(shared_from_this());
-    }
-
-    void ControlUI::DoInit()
-    {
-
-    }
-
-    void ControlUI::Event(ControlEvent& eve)
-    {
-        //if(OnEvent && OnEvent(eve) )
-        DoEvent(eve);
-    }
-
-    void ControlUI::DoEvent(ControlEvent& eve)
-    {
-        if( eve.m_Type == UIEVENT_SETCURSOR )
-        {
-            ::SetCursor(::LoadCursor(NULL, MAKEINTRESOURCE(IDC_ARROW)));
-            return;
-        }
-        if( eve.m_Type == UIEVENT_SETFOCUS ) 
-        {
-            m_bFocused = true;
-            Invalidate();
-            return;
-        }
-        if( eve.m_Type == UIEVENT_KILLFOCUS ) 
-        {
-            m_bFocused = false;
-            Invalidate();
-            return;
-        }
-        if( eve.m_Type == UIEVENT_TIMER )
-        {
-            m_pManager->SendNotify(shared_from_this(), MSG_TIMER, eve.m_wParam, eve.m_lParam);
-            return;
-        }
-        if( eve.m_Type == UIEVENT_CONTEXTMENU )
-        {
-            if( IsContextMenuUsed() ) {
-                m_pManager->SendNotify(shared_from_this(), MSG_MENU, eve.m_wParam, eve.m_lParam);
-                return;
-            }
-        }
-        auto spParent = m_pParent.lock();
-        if( spParent ) 
-            spParent->DoEvent(eve);
     }
 
     void ControlUI::SetAttribute(const std::string &strName, const std::string& strValue)
@@ -853,7 +777,7 @@ namespace YUI
             DWORD clrColor = strtoul(pstrValue, &pstr, 16);
             SetFocusBorderColor(clrColor);
         }
-        else if( strcmp(pstrName, ("colorhsl")) == 0 ) SetColorHSL(strcmp(pstrValue, ("true")) == 0);
+        else if( strcmp(pstrName, ("colorhsl")) == 0 ) {}
         else if( strcmp(pstrName, ("bordersize")) == 0 ) {
             std::string nValue = pstrValue;
             if(nValue.find((',')) < 0)
@@ -883,7 +807,6 @@ namespace YUI
             LPSTR pstr = NULL;
             cxyRound.cx = strtol(pstrValue, &pstr, 10);  assert(pstr);    
             cxyRound.cy = strtol(pstr + 1, &pstr, 10);    assert(pstr);     
-            SetBorderRound(cxyRound);
         }
         else if( strcmp(pstrName, ("bkimage")) == 0 ) 
 #if defined _UNICODE | defined UNICODE
@@ -982,42 +905,16 @@ namespace YUI
         if( !::IntersectRect(&m_rcPaint, &rcPaint, &m_rcItem) ) return;
 
         // »æÖÆÑ­Ðò£º±³¾°ÑÕÉ«->±³¾°Í¼->×´Ì¬Í¼->ÎÄ±¾->±ß¿ò
-        if( m_cxyBorderRound.cx > 0 || m_cxyBorderRound.cy > 0 ) {
-            RenderClip roundClip;
-            RenderClip::GenerateRoundClip(hDC, m_rcPaint,  m_rcItem, m_cxyBorderRound.cx, m_cxyBorderRound.cy, roundClip);
             PaintBkColor(hDC);
             PaintBkImage(hDC);
             PaintStatusImage(hDC);
             PaintText(hDC);
             PaintBorder(hDC);
-        }
-        else {
-            PaintBkColor(hDC);
-            PaintBkImage(hDC);
-            PaintStatusImage(hDC);
-            PaintText(hDC);
-            PaintBorder(hDC);
-        }
     }
 
     void ControlUI::PaintBkColor(HDC hDC)
     {
-        if( m_dwBackColor != 0 ) {
-            if( m_dwBackColor2 != 0 ) {
-                if( m_dwBackColor3 != 0 ) {
-                    RECT rc = m_rcItem;
-                    rc.bottom = (rc.bottom + rc.top) / 2;
-                    RenderGDI::DrawGradient(hDC, rc, GetAdjustColor(m_dwBackColor), GetAdjustColor(m_dwBackColor2), true, 8);
-                    rc.top = rc.bottom;
-                    rc.bottom = m_rcItem.bottom;
-                    RenderGDI::DrawGradient(hDC, rc, GetAdjustColor(m_dwBackColor2), GetAdjustColor(m_dwBackColor3), true, 8);
-                }
-                else 
-                    RenderGDI::DrawGradient(hDC, m_rcItem, GetAdjustColor(m_dwBackColor), GetAdjustColor(m_dwBackColor2), true, 16);
-            }
-            else if( m_dwBackColor >= 0xFF000000 ) RenderGDI::DrawColor(hDC, m_rcPaint, GetAdjustColor(m_dwBackColor));
-            else RenderGDI::DrawColor(hDC, m_rcItem, GetAdjustColor(m_dwBackColor));
-        }
+     
     }
 
     void ControlUI::PaintBkImage(HDC hDC)
@@ -1041,45 +938,6 @@ namespace YUI
     {
         if(m_dwBorderColor != 0 || m_dwFocusBorderColor != 0)
         {
-            if(m_nBorderSize > 0 && ( m_cxyBorderRound.cx > 0 || m_cxyBorderRound.cy > 0 ))//»­Ô²½Ç±ß¿ò
-            {
-                if (IsFocused() && m_dwFocusBorderColor != 0)
-                    RenderGDI::DrawRoundRect(hDC, m_rcItem, m_nBorderSize, m_cxyBorderRound.cx, m_cxyBorderRound.cy, GetAdjustColor(m_dwFocusBorderColor));
-                else
-                    RenderGDI::DrawRoundRect(hDC, m_rcItem, m_nBorderSize, m_cxyBorderRound.cx, m_cxyBorderRound.cy, GetAdjustColor(m_dwBorderColor));
-            }
-            else
-            {
-                if (IsFocused() && m_dwFocusBorderColor != 0 && m_nBorderSize > 0)
-                    RenderGDI::DrawRect(hDC, m_rcItem, m_nBorderSize, GetAdjustColor(m_dwFocusBorderColor));
-                else if(m_rcBorderSize.left > 0 || m_rcBorderSize.top > 0 || m_rcBorderSize.right > 0 || m_rcBorderSize.bottom > 0)
-                {
-                    RECT rcBorder;
-
-                    if(m_rcBorderSize.left > 0){
-                        rcBorder		= m_rcItem;
-                        rcBorder.right	= m_rcItem.left;
-                        RenderGDI::DrawLine(hDC,rcBorder,m_rcBorderSize.left,GetAdjustColor(m_dwBorderColor),m_nBorderStyle);
-                    }
-                    if(m_rcBorderSize.top > 0){
-                        rcBorder		= m_rcItem;
-                        rcBorder.bottom	= m_rcItem.top;
-                        RenderGDI::DrawLine(hDC,rcBorder,m_rcBorderSize.top,GetAdjustColor(m_dwBorderColor),m_nBorderStyle);
-                    }
-                    if(m_rcBorderSize.right > 0){
-                        rcBorder		= m_rcItem;
-                        rcBorder.left	= m_rcItem.right;
-                        RenderGDI::DrawLine(hDC,rcBorder,m_rcBorderSize.right,GetAdjustColor(m_dwBorderColor),m_nBorderStyle);
-                    }
-                    if(m_rcBorderSize.bottom > 0){
-                        rcBorder		= m_rcItem;
-                        rcBorder.top	= m_rcItem.bottom;
-                        RenderGDI::DrawLine(hDC,rcBorder,m_rcBorderSize.bottom,GetAdjustColor(m_dwBorderColor),m_nBorderStyle);
-                    }
-                }
-                else if(m_nBorderSize > 0)
-                    RenderGDI::DrawRect(hDC, m_rcItem, m_nBorderSize, GetAdjustColor(m_dwBorderColor));
-            }
         }
     }
 
@@ -1109,6 +967,26 @@ namespace YUI
             return shared_from_this();
         else
             return std::shared_ptr<ControlUI>();
+    }
+
+     void ControlUI::AddHandler()
+    {
+        AddEntry(UIMSG_SETCURSOR,[&](const MsgWrap &msg)
+        {
+             ::SetCursor(::LoadCursor(NULL, MAKEINTRESOURCE(IDC_ARROW)));
+        });
+
+        AddEntry(UIMSG_SETFOCUS,[&](const MsgWrap &msg)
+        {
+            m_bFocused = true;
+            Invalidate();
+        });
+
+        AddEntry(UIMSG_KILLFOCUS,[&](const MsgWrap &msg)
+        {
+            m_bFocused = false;
+            Invalidate();
+        });
     }
 
 

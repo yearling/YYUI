@@ -8,6 +8,11 @@ namespace YUI
         :m_hWnd(NULL)
         ,m_fAlpha(1.0f)
         ,m_bAlphaBackGround(false)
+        ,m_DefaultFontColor(0xFF000000)
+        ,m_DisableFontColor(0xFFA7A6AA)
+        ,m_LinkFontColor(0xFF0000FF)
+        ,m_LinkHoverFontColor(0xFFD3215F)
+        ,m_SelectBKColor(0xFFBAE4FF)
     {
     }
 
