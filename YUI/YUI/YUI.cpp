@@ -39,12 +39,12 @@ public:
     }
 	virtual std::shared_ptr<ControlUI> CreateControl(std::string pstrClass)
 	{
-		if (strcmp(pstrClass.c_str(), ("Wnd")) == 0)
+		/*if (strcmp(pstrClass.c_str(), ("Wnd")) == 0)
 		{
 			auto pUI  = std::make_shared<D2DWnd>();           
             pUI->Create(m_hWnd,_T("D2D"),UI_WNDSTYLE_CHILD,WS_EX_WINDOWEDGE);
 			return pUI;
-		}
+		}*/
 
 		return NULL;
 	}

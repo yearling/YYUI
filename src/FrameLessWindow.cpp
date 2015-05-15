@@ -214,6 +214,9 @@ namespace YUI
             SendMessage(WM_CLOSE);
             return 0;
         }
+        BOOL bZoomed = ::IsZoomed(*this);
+        LRESULT lRes = WindowWnd::OnSysMessage(uMsg, wParam, lParam);
+        return lRes;
     }
 
     LRESULT FrameLessWindow::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)

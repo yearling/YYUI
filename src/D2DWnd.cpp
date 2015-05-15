@@ -7,6 +7,11 @@ namespace YUI
 
 	D2DWnd::D2DWnd()
 	{
+        m_Property.SetCaptionRect(YYRECT(0,0,0,50));
+        m_Property.SetInitSize(800,600);
+        m_Property.SetMaxInfo(1000,800);
+        m_Property.SetMinInfo(400,400);
+        m_Property.SetSizeBox(YYRECT(4,4,4,4));
 	}
 
 	D2DWnd::~D2DWnd()
@@ -54,7 +59,8 @@ namespace YUI
 		default:
 			break;
 		}
-		return WindowWnd::OnSysMessage(uMsg,wParam,lParam);
+		return FrameLessWindow::OnSysMessage(uMsg,wParam,lParam);
+		//return WindowWnd::OnSysMessage(uMsg,wParam,lParam);
 	}
 
 	void D2DWnd::Init()
@@ -100,15 +106,15 @@ namespace YUI
 		m_pBlackBrush = nullptr;
 	}
 
-    void D2DWnd::SetInternVisible(bool bVisible /*= true*/)
-    {
-        __super::SetInternVisible(bVisible);
-        ::ShowWindow(m_hWnd, bVisible);
-    }
+    //void D2DWnd::SetInternVisible(bool bVisible /*= true*/)
+    //{
+    //    __super::SetInternVisible(bVisible);
+    //    ::ShowWindow(m_hWnd, bVisible);
+    //}
 
     void D2DWnd::SetPos(RECT &rc)
     {
-        __super::SetPos(rc);
+        //__super::SetPos(rc);
         ::SetWindowPos(m_hWnd, NULL, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, SWP_NOZORDER | SWP_NOACTIVATE);
     }
 

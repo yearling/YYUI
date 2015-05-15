@@ -10,6 +10,7 @@
 #include <atlcomcli.h>
 #include "ControlUI.h"
 #include "RenderD2D.h"
+#include "FrameLessWindow.h"
 namespace YUI
 {
 	struct D2DException: public YYUIException {};
@@ -27,12 +28,12 @@ namespace YUI
 		HWND m_hWnd;
 	};
 
-	class D2DWnd: public WindowWnd, public ControlUI
+	class D2DWnd: public FrameLessWindow/*, public ControlUI*/
 	{
 	public:
 		D2DWnd();
 		virtual ~D2DWnd();
-        virtual void                    SetInternVisible(bool bVisible = true);
+        //virtual void                    SetInternVisible(bool bVisible = true);
         virtual void                    SetPos(RECT &rc);
 		virtual UINT                    GetClassStyle() const;
 		virtual LPCTSTR                 GetWindowClassName() const ;

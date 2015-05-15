@@ -52,8 +52,7 @@ namespace YUI
         virtual LONG                    GetStyle();
 #pragma endregion 子类要继承的接口
 
-    protected:
-        WindowProperty                  m_Property;
+    
     };
 }
 

@@ -7,6 +7,7 @@
 #include "UIDef.h"
 #include "MessageHandler.h"
 #include <map>
+#include "WindowProperty.h"
 namespace YUI
 {
 
@@ -107,6 +108,8 @@ namespace YUI
 		HWND							m_hWnd;
 		WNDPROC							m_OldWndProc;
 		bool							m_bSubClassed; //用自己的WndProc代替了原有的Proc
+    protected:
+        WindowProperty                  m_Property;
     private:
         WindowWnd(const WindowWnd &);
         WindowWnd & operator=(const WindowWnd &);
