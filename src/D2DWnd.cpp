@@ -26,7 +26,7 @@ namespace YUI
 
 	void D2DWnd::OnFinalMessage(HWND hWnd)
 	{
-
+       // PostQuitMessage(0);
 	}
 
 	LRESULT D2DWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -43,6 +43,14 @@ namespace YUI
 				OnResize(LOWORD(lParam),HIWORD(lParam));
 			}
             break;
+        case WM_SYSCOMMAND:
+            {
+                if( wParam ==SC_CLOSE)
+                {
+                    Close(0);
+                    return 0;
+                }
+            }
 		default:
 			break;
 		}

@@ -68,6 +68,7 @@ namespace YUI
 	class WindowWnd
 	{
 	public:
+        friend  class  WindowManger;
 		                                WindowWnd();
 		virtual                         ~WindowWnd();
 
@@ -126,4 +127,5 @@ namespace YUI
         WindowWnd(const WindowWnd &);
         WindowWnd & operator=(const WindowWnd &);
 	};
+    
 }

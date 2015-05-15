@@ -8,7 +8,7 @@
 #include "UIDef.h"
 #include "UIUtility.h"
 #include "PaintManagerUI.h"
-
+#include "WindowManager.h"
 
 namespace YUI
 {
@@ -17,7 +17,6 @@ namespace YUI
         m_OldWndProc( ::DefWindowProc ),
         m_bSubClassed( false )
     {
-
     }
 
     void WindowWnd::RegisterWindowClass()
@@ -25,7 +24,8 @@ namespace YUI
         WNDCLASS wc;
         ZeroMemory(&wc,sizeof(wc));
         wc.style = GetClassStyle();
-        wc.lpfnWndProc = WindowWnd::WndProc; //用自己的WndProc
+        //wc.lpfnWndProc = WindowWnd::WndProc; //用自己的WndProc
+        wc.lpfnWndProc =WindowManger::WndProc; //用自己的WndProc
         wc.cbClsExtra = 0;
         wc.cbWndExtra = 0;
         wc.hInstance = PaintManagerUI::GetInstance();
@@ -93,8 +93,8 @@ namespace YUI
                 RegisterSuperClass();   //如果SuperClassName存在的话就创建SuperClass
             else
                 RegisterWindowClass();
-            m_hWnd = CreateWindowEx( dwExStyle, GetWindowClassName(), pstrName, dwStyple, x, y, cx, cy, hWndParent, hMenu, PaintManagerUI::GetInstance(), this);
-
+            m_hWnd = CreateWindowEx( dwExStyle, GetWindowClassName(), pstrName, dwStyple, x, y, cx, cy, hWndParent, hMenu, PaintManagerUI::GetInstance(),this);
+            
             assert( m_hWnd != NULL );
             return m_hWnd;
         }
@@ -117,7 +117,7 @@ namespace YUI
     LRESULT CALLBACK WindowWnd::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
         WindowWnd *pWnd = NULL;
-
+        SPWindowWnd spWnd;
         if(uMsg == WM_NCCREATE )
         {
             //窗口刚开始创建时CreateWindowEx，最后一个参数LPVOID lpParam，保存了当前的this指针，这里取出来；

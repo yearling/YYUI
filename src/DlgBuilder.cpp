@@ -237,6 +237,8 @@ namespace YUI
             }
             else
             {
+                if(strcmp(pstrClass,CTR_LABEL)== 0)
+                    pControl = std::make_shared<Label>();
                 if(strcmp(pstrClass,CTR_BUTTON)== 0)
                     pControl = std::make_shared<Button>();
 				else if(strcmp(pstrClass,CTR_CONTAINER) == 0)

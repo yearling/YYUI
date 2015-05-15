@@ -11,6 +11,7 @@
 #include <iostream>
 #include "D2DWnd.h"
 #include "Canvas2D.h"
+#include "MessageSystem.h"
 using namespace YUI;
 class MyWindow : public WindowWnd
 {
@@ -63,7 +64,7 @@ int APIENTRY _tWinMain( __in HINSTANCE hInstance, __in_opt HINSTANCE hPrevInstan
 		spWindow->Create(NULL,_T("DUIWND"),WS_CAPTION,WS_EX_WINDOWEDGE);
 		spWindow->CenterWindow();
 		spWindow->SetIcon(IDI_ICON1);
-		spWindow->ShowModal();
+		//spWindow->ShowModal();
     //PaintManagerUI::MessageLoop();
 	}
 #endif
@@ -72,7 +73,14 @@ int APIENTRY _tWinMain( __in HINSTANCE hInstance, __in_opt HINSTANCE hPrevInstan
 		spD2D->Init();
 		spD2D->Create(NULL,_T("D2DWnd"),UI_WNDSTYLE_FRAME,WS_EX_WINDOWEDGE);
 		spD2D->CenterWindow();
-		spD2D->ShowModal();
+
+        std::shared_ptr<D2DWnd> spD3D = std::make_shared<D2DWnd>();
+        spD3D->Init();
+        spD3D->Create(NULL,_T("D2DWnd"),UI_WNDSTYLE_FRAME,WS_EX_WINDOWEDGE);
+        spD3D->CenterWindow();
+
+		//spD2D->ShowModal();
+        MessageSystem::GetInstance()->MeesageLoop();
 		CoUninitialize();
     } 
     catch(YYUIException &e)
@@ -80,6 +88,7 @@ int APIENTRY _tWinMain( __in HINSTANCE hInstance, __in_opt HINSTANCE hPrevInstan
         UNREFERENCED_PARAMETER(e);
         Ycout<<"catched in main"<<std::endl;
         std::cout<<YYCOM::CurrentExceptionDiagnosticInformation();
+        CoUninitialize();
     }
 	return 0; 
 }

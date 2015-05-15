@@ -46,6 +46,8 @@ namespace YUI
 	typedef YYCOM::ErrorInfo<struct tag_err_str,YString> UIErrorStr;
 	typedef YYCOM::ErrorInfo<struct tag_err_hr,HRESULT>	 UIErrorHr;
 
+    
+
     //定义消息名
 #define  MSG_WindowInit                 (_T("windowinit"))
 #define  MSG_KillFocus                  (_T("killfocus"))
@@ -118,9 +120,12 @@ namespace YUI
     class ITranslateAccelerator;
     class PaintManagerUI;
     class RenderD2D;
+    class WindowWnd;
+    //定义常用的SP
 	typedef std::shared_ptr<ControlUI>  SPControlUI;
 	typedef std::weak_ptr<ControlUI>	WPControlUI;
-
+    typedef std::shared_ptr<WindowWnd>  SPWindowWnd;
+    typedef std::weak_ptr<WindowWnd>    WPWindowWnd;
     //定义消息体
     struct NotifyMsg
     {

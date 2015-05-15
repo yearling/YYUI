@@ -49,6 +49,12 @@
     <Filter Include="YYUI\src\Sys">
       <UniqueIdentifier>{60d49b4d-1fb6-4e3f-bfc8-134e803ff93a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="YYUI\include\base\Draw">
+      <UniqueIdentifier>{3fcb5d34-d4ca-4610-9f6c-5712529cbc91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="YYUI\include\WindowManger">
+      <UniqueIdentifier>{e9392b8d-335f-4a3a-84e2-20dba84e59c9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -102,9 +108,6 @@
     <ClInclude Include="..\..\include\WindowWnd.h">
       <Filter>YYUI\include\base</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\UIDef.h">
-      <Filter>YYUI\include\base</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\UIUtility.h">
       <Filter>YYUI\include\base</Filter>
     </ClInclude>
@@ -112,9 +115,6 @@
       <Filter>YYUI\include\base</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\MutiScreen.h">
-      <Filter>YYUI\include\base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\RenderDGI.h">
       <Filter>YYUI\include\base</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\thirdparty\tinyxml2\tinyxml2.h">
@@ -150,20 +150,32 @@
     <ClInclude Include="..\..\include\D2DWnd.h">
       <Filter>YYUI\include\base</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\FontDef.h">
-      <Filter>YYUI\include\base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\BrushDef.h">
-      <Filter>YYUI\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Canvas2D.h">
-      <Filter>YYUI\include\base</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\FileSystem.h">
       <Filter>YYUI\include\Sys</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\Canvas2D.h">
+      <Filter>YYUI\include\base\Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FontDef.h">
+      <Filter>YYUI\include\base\Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\RenderDGI.h">
+      <Filter>YYUI\include\base\Draw</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\TextureDef.h">
-      <Filter>YYUI\include\base</Filter>
+      <Filter>YYUI\include\base\Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\UIDef.h">
+      <Filter>YYUI\include\base\Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\BrushDef.h">
+      <Filter>YYUI\include\base\Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\WindowManager.h">
+      <Filter>YYUI\include\WindowManger</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MessageSystem.h">
+      <Filter>YYUI\include\WindowManger</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -247,6 +259,12 @@
     </ClCompile>
     <ClCompile Include="..\..\src\TextureDef.cpp">
       <Filter>YYUI\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\MessageSystem.cpp">
+      <Filter>YYUI\include\WindowManger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\WindowManager.cpp">
+      <Filter>YYUI\include\WindowManger</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

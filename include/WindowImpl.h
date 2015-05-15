@@ -22,7 +22,7 @@ namespace YUI
         , public INotifyUI
         , public IMessageFilterUI
         , public IDialogBuilderCallback
-        , public std::enable_shared_from_this<WindowImpl>
+        //, public std::enable_shared_from_this<WindowImpl>
     {
     public:
                                         WindowImpl();

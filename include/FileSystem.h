@@ -1,3 +1,4 @@
+#pragma once
 #include "YUI.h"
 
 namespace YUI

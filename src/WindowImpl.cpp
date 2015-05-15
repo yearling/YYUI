@@ -308,7 +308,7 @@ namespace YUI
         ::SetWindowPos(*this, NULL, rcClient.left, rcClient.top, rcClient.right - rcClient.left, rcClient.bottom - rcClient.top, SWP_FRAMECHANGED);
 
         m_spPaintManager->Init(m_hWnd);
-        m_spPaintManager->AddPreMessageFilter(shared_from_this());
+        //m_spPaintManager->AddPreMessageFilter(shared_from_this());
         
         DialogBuilder builder;
         if (m_spPaintManager->GetResourcePath().empty())
@@ -378,7 +378,7 @@ namespace YUI
             return 0;
         }
         m_spPaintManager->AttachDialog(pRoot);
-        m_spPaintManager->AddNotifier(shared_from_this());
+        //m_spPaintManager->AddNotifier(shared_from_this());
         m_spPaintManager->SetBackgroundTransparent(TRUE);
         InitWindow();
         return 0;
