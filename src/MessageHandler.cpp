@@ -19,7 +19,7 @@ namespace YUI
             sp->HandleMsg(msg);
     }
 
-    void MsgHandleChainBase::SetSuccessor(std::shared_ptr<MsgHandleChainBase> & sp)
+    void MsgHandleChainBase::SetSuccessor(std::shared_ptr<MsgHandleChainBase> sp)
     {
         m_wpSuccessor = sp;
     }

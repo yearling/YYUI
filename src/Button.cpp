@@ -1,5 +1,4 @@
 #include "Button.h"
-#include "PaintManagerUI.h"
 #include "RenderDGI.h"
 #include "ControlUI.h"
 
@@ -54,15 +53,9 @@ namespace YUI
         }
     }
 
-    void Button::DoEvent(ControlEvent& eve)
-    {
-       
-        Label::DoEvent(eve);
-    }
-
     SIZE Button::EstimateSize(SIZE szAvailable)
     {
-        if( m_cXYFixed.cy == 0 ) return YSize(m_cXYFixed.cx, m_pManager->GetFontInfo(GetFont())->m_tm.tmHeight + 8);
+        //if( m_cXYFixed.cy == 0 ) return YSize(m_cXYFixed.cx, m_pManager->GetFontInfo(GetFont())->m_tm.tmHeight + 8);
 		return ControlUI::EstimateSize(szAvailable);
     }
 
@@ -125,8 +118,8 @@ namespace YUI
         if( !IsEnabled() ) m_uButtonState |= UISTATE_DISABLED;
         else m_uButtonState &= ~ UISTATE_DISABLED;
 
-        if( m_dwTextColor == 0 ) m_dwTextColor = m_pManager->GetDefaultFontColor();
-        if( m_dwDisabledTextColor == 0 ) m_dwDisabledTextColor = m_pManager->GetDefaultDisabledColor();
+        /*if( m_dwTextColor == 0 ) m_dwTextColor = m_pManager->GetDefaultFontColor();
+        if( m_dwDisabledTextColor == 0 ) m_dwDisabledTextColor = m_pManager->GetDefaultDisabledColor();*/
 
         if( m_strText.empty() ) return;
         int nLinks = 0;
@@ -145,12 +138,12 @@ namespace YUI
         else if( ((m_uButtonState & UISTATE_FOCUSED) != 0) && (GetFocusedTextColor() != 0) )
             clrColor = GetFocusedTextColor();
 
-        if( m_bShowHtml )
+        /*if( m_bShowHtml )
             RenderGDI::DrawHtmlText(hDC, m_pManager, rc, m_strText, clrColor, \
             NULL, NULL, nLinks, m_uTextStyle);
         else
             RenderGDI::DrawText(hDC, m_pManager, rc, m_strText, clrColor, \
-            m_Fontid, m_uTextStyle);
+            m_Fontid, m_uTextStyle);*/
     }
 
     void Button::PaintStatusImage(HDC hDC)
@@ -195,7 +188,7 @@ namespace YUI
                 else goto Label_ForeImage;
             }
             else if(m_dwHotBkColor != 0) {
-                RenderGDI::DrawColor(hDC, m_rcPaint, GetAdjustColor(m_dwHotBkColor));
+                //RenderGDI::DrawColor(hDC, m_rcPaint, GetAdjustColor(m_dwHotBkColor));
                 return;
             }
         }

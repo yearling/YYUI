@@ -17,7 +17,6 @@ namespace YUI
         virtual UINT                    GetControlFlags() const;
         virtual bool                    Activate();
         virtual void                    SetEnabled(bool bEnable = true);
-        virtual void                    DoEvent(ControlEvent& eve);
         virtual SIZE                    EstimateSize(SIZE szAvailable);
         virtual void SetAttribute(const std::string &strName, const std::string& strValue);
         virtual void                    PaintText(HDC hDC);

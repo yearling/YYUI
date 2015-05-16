@@ -17,7 +17,6 @@ namespace YUI
         void                            SetSepImmMode(bool bImmediately);
         bool                            IsSepImmMode() const;
         virtual void SetAttribute(const std::string &strName, const std::string& strValue);
-        virtual void                    DoEvent(ControlEvent& eve);
         virtual void                    SetPos(RECT &rc);
         virtual void                    DoPostPaint(HDC hDC, const RECT& rcPaint);
 

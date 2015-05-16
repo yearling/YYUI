@@ -157,14 +157,19 @@ namespace YUI
 #define  UIMSG_SETCURSOR    _T("SETCURSOR")
 #define  UIMSG_TIMER        _T("TIMER")
 #define  UIMSG_KEYDOWN      _T("KEYDOWN")
+#define  UIMSG_KEYUP        _T("KEYUP")
 #define  UIMSG_LBUTTONDOWN  _T("LBUTTONDOWN")
 #define  UIMSG_LBUTTONBLICK _T("LBUTTONBLICK")
 #define  UIMSG_DBLCLICK     _T("DLBUTTONBLICK")
 #define  UIMSG_LBUTTONUP    _T("LBUTTONUP")
+#define  UIMSG_RBUTTONDOWN  _T("RBUTTONDOWN")
 #define  UIMSG_MOUSEMOVE    _T("MOUSEMOVE")
 #define  UIMSG_MOUSEENTER   _T("MOUSEENTER")
 #define  UIMSG_MOUSELEAVE   _T("MOUSELEAVE")
 #define  UIMSG_WINDOWSIZE   _T("WINDOWSIZE")
+#define  UIMSG_MOUSEHOVER   _T("MOUSEHOVER")
+#define  UIMSG_MOUSEWHEEL   _T("MOUSEWHEEL")
+#define  UIMSG_CHAR         _T("CHAR")
     typedef enum EVENTTYPE_UI
     {
         UIEVENT__FIRST = 1,
@@ -440,6 +445,7 @@ namespace YUI
         YYPOINT(int ix,int iy):x(float(ix)),y((float)iy){};
         YYPOINT(unsigned int ix,unsigned int iy):x(float(ix)),y((float)iy){};
         YYPOINT(const D2D_POINT_2F &d2dpoint):x(d2dpoint.x),y(d2dpoint.y){};
+        YYPOINT(const POINT& pt ) : x(float(pt.x)),y(float(pt.y)){};
         operator POINT() const { POINT tmp; tmp.x = (LONG) x;tmp.y = (LONG)y; return tmp;}
         operator D2D_POINT_2F () const { D2D_POINT_2F tmp;tmp.x = x; tmp.y =y;return tmp;}
     };

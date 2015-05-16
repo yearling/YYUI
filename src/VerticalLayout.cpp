@@ -153,7 +153,7 @@ namespace YUI
     {
         if( (m_uButtonState & UISTATE_CAPTURED) != 0 && !m_bImmMode ) {
             RECT rcSeparator = GetThumbRect(true);
-            RenderGDI::DrawColor(hDC, rcSeparator, 0xAA000000);
+            //RenderGDI::/*DrawColor*/(hDC, rcSeparator, 0xAA000000);
         }
     }
 

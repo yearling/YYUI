@@ -150,7 +150,6 @@ namespace YUI
         void                            NeedParentUpdate();
 
         virtual void                    Init();
-        virtual void                    DoInit();
 
         void                            AddHandler();
         virtual void                    SetAttribute(const std::string &strName, const std::string& strValue);

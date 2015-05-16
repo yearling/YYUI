@@ -21,6 +21,8 @@ namespace YUI
         void                            SetFocus(SPControlUI &pControl);
         bool                            MessageHandler(UINT uMesg, WPARAM wParam, LPARAM lParam, LRESULT &lRes);
         SPControlUI                     FindControl(const YYPOINT& pt);
+        void                            SetCapture();
+        void                            ReleaseCapture();
     private:    
         HWND                            m_hWnd;
         SPControlUI                     m_pFocus;
@@ -31,6 +33,7 @@ namespace YUI
         bool                            m_bNeedUpdate;
         bool                            m_bMouseTracking;
         TOOLINFO                        m_ToolTip;
+        bool                            m_bMouseCapture;
     };
 
 

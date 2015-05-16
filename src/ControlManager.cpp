@@ -21,7 +21,7 @@ namespace YUI
 
     YUI::SPControlUI ControlManager::GetFocus() const
     {
-
+        return m_pFocus;
     }
 
     void ControlManager::SetFocus(SPControlUI &pControl)
@@ -101,17 +101,20 @@ namespace YUI
                 msg.lTimeStamp = ::GetTickCount();
                 if( m_pHover )
                 {
+                    //向当前悬停的控件发送mouse_leave的消息
                     msg.strType = UIMSG_MOUSELEAVE;
                     msg.pSender = m_pHover;
                     SendMsg(m_pHover,msg);
                 }
                 if( m_pClick)
                 {
+                    //向当前Click的控件发送Buttonup的消息
                     msg.strType = UIMSG_LBUTTONUP;
                     msg.pSender = m_pClick;
                     SendMsg(m_pClick,msg);
                 }
                 ::SetFocus(NULL);
+                //父窗口设为焦点
                 HWND hWndParent = GetWindowOwner(m_hWnd);
                 if( hWndParent != NULL )
                 {
@@ -179,7 +182,6 @@ namespace YUI
 
         case WM_MOUSEHOVER:
             {
-                m_bMouseTracking = false;
                 POINT pt= { GET_X_LPARAM( lParam ), GET_Y_LPARAM(lParam) };
                 auto spControl = FindControl(pt);
                 if(! spControl)
@@ -199,7 +201,6 @@ namespace YUI
         case WM_MOUSELEAVE:
             {
                 if( m_bMouseTracking ) ::SendMessage(m_hWnd, WM_MOUSEMOVE, 0, (LPARAM) -1);
-                m_bMouseTracking = false;
             }
             break;
         case WM_MOUSEMOVE:
@@ -210,42 +211,44 @@ namespace YUI
                 std::shared_ptr<ControlUI> spNewHover = FindControl(pt);
                 if( spNewHover != NULL && spNewHover->GetManager() != this->shared_from_this() )
                     break;
-                ControlEvent eve;
-                eve.m_ptMouse = pt;
-                eve.m_dwTimestamp = ::GetTickCount();
+                MsgWrap msg;
+                msg.strType = UIMSG_MOUSELEAVE;
+                msg.lTimeStamp = ::GetTickCount();
+                msg.ptMouse = pt;
+                //新旧hover的不一样，给旧的发送mouse leave,给新的发送mousehover
                 if(spNewHover != m_pHover && m_pHover)
                 {
-                    eve.m_Type = UIEVENT_MOUSELEAVE;
-                    eve.m_pSender = m_pEventHover;
-                    m_pEventHover->Event(eve);
-                    m_pEventHover = NULL;
-                
+                    msg.pSender = m_pHover;
+                    SendMsg(m_pHover,msg);
+                    m_pHover = NULL;
                 }
-                if(spNewHover != m_pEventHover && spNewHover)
+                //新旧的hover不一样，新的存在
+                if(spNewHover != m_pHover && spNewHover)
                 {
-                    eve.m_Type= UIEVENT_MOUSEENTER;
-                    eve.m_pSender = spNewHover;
-                    spNewHover->Event(eve);
-                    m_pEventHover = spNewHover;
+                    msg.strType = UIMSG_MOUSEENTER;
+                    msg.pSender = spNewHover;
+                    SendMsg(spNewHover ,msg);
+                    m_pHover = spNewHover;
                 }
-                if(m_pEventClick != NULL )
+                //点击的控件不为空
+                if(m_pClick != NULL )
                 {
-                    eve.m_Type = UIEVENT_MOUSEMOVE;
-                    eve.m_pSender = m_pEventClick;
-                    m_pEventClick->Event(eve);
+                    msg.strType = UIMSG_MOUSEMOVE;
+                    msg.pSender = m_pClick;
+                    SendMsg(m_pClick,msg);
                 }
                 else if( spNewHover )
                 {
-                    eve.m_Type = UIEVENT_MOUSEMOVE;
-                    eve.m_pSender  = spNewHover;
-                    spNewHover->Event(eve);
+                    msg.strType = UIEVENT_MOUSEMOVE;
+                    msg.pSender = spNewHover;
+                    SendMsg(spNewHover,msg);
                 }
 
             }
             break;
         case WM_LBUTTONDOWN:
             {
-                ::SetFocus(m_hWndPaint);
+                ::SetFocus(m_hWnd);
                 POINT pt= { GET_X_LPARAM(lParam),GET_Y_LPARAM(lParam)};
                 m_ptLastMousePos = pt;
                 auto spControl = FindControl(pt);
@@ -253,23 +256,22 @@ namespace YUI
                     break;
                 if( spControl->GetManager() != shared_from_this())
                     break;
-                m_pEventClick = spControl;
+                m_pClick = spControl;
                 spControl->SetFocus();
                 SetCapture();
-                ControlEvent eve;
-                eve.m_Type = UIEVENT_BUTTONDOWN;
-                eve.m_pSender = spControl;
-                eve.m_wParam = wParam;
-                eve.m_lParam = lParam;
-                eve.m_ptMouse = pt;
-                eve.m_wKeyState = (WORD )wParam;
-                eve.m_dwTimestamp = ::GetTickCount();
-                spControl->Event(eve);
+                MsgWrap msg;
+                msg.strType = UIMSG_LBUTTONDOWN;
+                msg.pSender = spControl;
+                msg.wParam = wParam;
+                msg.lParam = lParam;
+                msg.ptMouse = pt;
+                msg.lTimeStamp = ::GetTickCount();
+                SendMsg(spControl,msg);
             }
             break;
         case WM_LBUTTONDBLCLK:
             {
-                ::SetFocus(m_hWndPaint);
+                ::SetFocus(m_hWnd);
                 POINT pt= { GET_X_LPARAM(lParam),GET_Y_LPARAM(lParam)};
                 m_ptLastMousePos = pt;
                 auto spControl = FindControl(pt);
@@ -278,37 +280,37 @@ namespace YUI
                 if( spControl->GetManager() != shared_from_this())
                     break;
                 SetCapture();
-                ControlEvent eve;
-                eve.m_Type = UIEVENT_DBLCLICK;
-                eve.m_pSender = spControl;
-                eve.m_ptMouse = pt;
-                eve.m_wKeyState = (WORD )wParam;
-                eve.m_dwTimestamp = ::GetTickCount();
-                spControl->Event(eve);
-                m_pEventClick = spControl;
+                MsgWrap msg;
+                msg.strType = UIMSG_DBLCLICK;
+                msg.pSender = spControl;
+                msg.wParam = wParam;
+                msg.lParam = lParam;
+                msg.ptMouse = pt;
+                msg.lTimeStamp = ::GetTickCount();
+                SendMsg(spControl,msg);
+                m_pClick = spControl;
             }
             break;
         case WM_LBUTTONUP:
             {
                 POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
                 m_ptLastMousePos = pt;
-                if( m_pEventClick == NULL ) break;
+                if( m_pClick == NULL ) break;
                 ReleaseCapture();
-                ControlEvent eve ;
-                eve.m_Type = UIEVENT_BUTTONUP;
-                eve.m_pSender = m_pEventClick;
-                eve.m_wParam = wParam;
-                eve.m_lParam = lParam;
-                eve.m_ptMouse = pt;
-                eve.m_wKeyState = (WORD)wParam;
-                eve.m_dwTimestamp = ::GetTickCount();
-                m_pEventClick->Event(eve);
-                m_pEventClick = NULL;
+                MsgWrap msg;
+                msg.strType = UIMSG_LBUTTONUP;
+                msg.pSender = m_pClick;
+                msg.wParam = wParam;
+                msg.lParam = lParam;
+                msg.ptMouse = pt;
+                msg.lTimeStamp = ::GetTickCount();
+                SendMsg(m_pClick,msg);
+                m_pClick = NULL;
             }
             break;
         case WM_RBUTTONDOWN:
             {
-                ::SetFocus(m_hWndPaint);
+                ::SetFocus(m_hWnd);
                 POINT pt= { GET_X_LPARAM(lParam),GET_Y_LPARAM(lParam)};
                 m_ptLastMousePos = pt;
                 auto spControl = FindControl(pt);
@@ -318,22 +320,20 @@ namespace YUI
                     break;
                 spControl->SetFocus();
                 SetCapture();
-                ControlEvent eve;
-                eve.m_Type = UIEVENT_RBUTTONDOWN;
-                eve.m_pSender = spControl;
-                eve.m_wParam = wParam;
-                eve.m_lParam = lParam;
-                eve.m_ptMouse = pt;
-                eve.m_wKeyState = (WORD )wParam;
-                eve.m_dwTimestamp = ::GetTickCount();
-                spControl->Event(eve);
-                eve.m_lParam = lParam;
-                m_pEventClick = spControl;
+                MsgWrap msg;
+                msg.strType = UIMSG_RBUTTONDOWN;
+                msg.pSender = spControl;
+                msg.wParam = wParam;
+                msg.lParam = lParam;
+                msg.ptMouse = pt;
+                msg.lTimeStamp = ::GetTickCount();
+                SendMsg(spControl,msg);
+                m_pClick = spControl;
             }
             break;
         case WM_CONTEXTMENU:
             {
-                POINT pt = { GET_X_LPARAM(lParam),GET_Y_LPARAM(lParam)};
+              /*  POINT pt = { GET_X_LPARAM(lParam),GET_Y_LPARAM(lParam)};
                 ::ScreenToClient(m_hWndPaint,&pt);
                 m_ptLastMousePos = pt;
                 if( m_pEventClick == NULL )
@@ -347,12 +347,12 @@ namespace YUI
                 eve.m_lParam = (LPARAM) m_pEventClick.get();
                 eve.m_dwTimestamp = ::GetTickCount();
                 m_pEventClick->Event( eve );
-                m_pEventClick = NULL;
+                m_pEventClick = NULL;*/
             }
             break;
         case WM_MOUSEWHEEL:
             {
-                ::SetFocus(m_hWndPaint);
+                ::SetFocus(m_hWnd);
                 POINT pt= { GET_X_LPARAM(lParam),GET_Y_LPARAM(lParam)};
                 m_ptLastMousePos = pt;
                 auto spControl = FindControl(pt);
@@ -361,56 +361,54 @@ namespace YUI
                 if( spControl->GetManager() != shared_from_this())
                     break;
                 int ZDelta = (int)(short)HIWORD(wParam);
-                ControlEvent eve;
-                eve.m_Type = UIEVENT_SCROLLWHEEL;
-                eve.m_pSender = spControl;
-                eve.m_wParam = MAKELPARAM( ZDelta <0 ? SB_LINEDOWN :SB_LINEUP  ,0 );
-                eve.m_lParam = lParam;
-                eve.m_wKeyState = MapKeyState();
-                eve.m_dwTimestamp = ::GetTickCount();
-                spControl->Event(eve);
+                MsgWrap msg;
+                msg.strType = UIMSG_MOUSEWHEEL;
+                msg.pSender = spControl;
+                msg.wParam =MAKELPARAM( ZDelta <0 ? SB_LINEDOWN :SB_LINEUP  ,0 ); 
+                msg.lParam = lParam;
+                msg.lTimeStamp = ::GetTickCount();
+                SendMsg(spControl,msg);
                 // Let's make sure that the scroll item below the cursor is the same as before...
-                ::SendMessage(m_hWndPaint, WM_MOUSEMOVE, 0,(LPARAM)MAKELPARAM( m_ptLastMousePos.x, m_ptLastMousePos.y));
+                ::SendMessage(m_hWnd, WM_MOUSEMOVE, 0,(LPARAM)MAKELPARAM( m_ptLastMousePos.x, m_ptLastMousePos.y));
             }
             break;
         case WM_CHAR:
             {
                 if( ! m_pFocus )
                     break;
-                ControlEvent eve;
-                eve.m_Type = UIEVENT_CHAR;
-                eve.m_chKey = (TCHAR)wParam;
-                eve.m_ptMouse = m_ptLastMousePos;
-                eve.m_wKeyState = MapKeyState();
-                eve.m_dwTimestamp = ::GetTickCount();
-                m_pFocus->Event(eve);
+                MsgWrap msg;
+                msg.strType = UIMSG_CHAR;
+                msg.wParam = wParam;
+                msg.lParam = lParam;
+                msg.ptMouse = m_ptLastMousePos;
+                msg.lTimeStamp = ::GetTickCount();
+                SendMsg(m_pFocus,msg);
             }
             break;
         case WM_KEYDOWN:
             {
                 if( ! m_pFocus )
                     break;
-                ControlEvent eve;
-                eve.m_Type = UIEVENT_KEYDOWN;
-                eve.m_chKey = (TCHAR)wParam;
-                eve.m_ptMouse = m_ptLastMousePos;
-                eve.m_wKeyState = MapKeyState();
-                eve.m_dwTimestamp = ::GetTickCount();
-                m_pFocus->Event(eve);
-
+                MsgWrap msg;
+                msg.strType = UIMSG_KEYDOWN;
+                msg.wParam = wParam;
+                msg.lParam = lParam;
+                msg.ptMouse = m_ptLastMousePos;
+                msg.lTimeStamp = ::GetTickCount();
+                SendMsg(m_pFocus,msg);
             }
             break;
         case WM_KEYUP:
             {
                 if( ! m_pFocus )
                     break;
-                ControlEvent eve;
-                eve.m_Type = UIEVENT_KEYUP;
-                eve.m_chKey = (TCHAR)wParam;
-                eve.m_ptMouse = m_ptLastMousePos;
-                eve.m_wKeyState = MapKeyState();
-                eve.m_dwTimestamp = ::GetTickCount();
-                m_pFocus->Event(eve);
+                MsgWrap msg;
+                msg.strType = UIMSG_KEYUP;
+                msg.wParam = wParam;
+                msg.lParam = lParam;
+                msg.ptMouse = m_ptLastMousePos;
+                msg.lTimeStamp = ::GetTickCount();
+                SendMsg(m_pFocus,msg);
             }
             break;
         case WM_SETCURSOR:
@@ -466,7 +464,19 @@ namespace YUI
 
     YUI::SPControlUI ControlManager::FindControl(const YYPOINT &pt)
     {
+        return m_pRoot->FindControlFromPoint(pt,UIFIND_VISIBLE | UIFIND_HITTEST | UIFIND_TOP_FIRST);
+    }
 
+    void ControlManager::SetCapture()
+    {
+        ::SetCapture(m_hWnd);
+        m_bMouseCapture = true;
+    }
+
+    void ControlManager::ReleaseCapture()
+    {
+        ::ReleaseCapture();
+        m_bMouseCapture = false;
     }
 
 }

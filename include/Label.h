@@ -3,11 +3,11 @@
 #include "YUI.h"
 #include "ControlUI.h"
 
-#include <GdiPlus.h>
-#pragma comment( lib, "GdiPlus.lib" )
-using namespace Gdiplus;
-class __declspec(dllexport) Gdiplus::RectF;
-struct __declspec(dllexport) Gdiplus::GdiplusStartupInput;
+//#include <GdiPlus.h>
+//#pragma comment( lib, "GdiPlus.lib" )
+//using namespace Gdiplus;
+//class __declspec(dllexport) Gdiplus::RectF;
+//struct __declspec(dllexport) Gdiplus::GdiplusStartupInput;
 
 namespace YUI
 {
@@ -56,7 +56,7 @@ namespace YUI
         void		                    SetTextRenderingHintAntiAlias(int _TextRenderingHintAntiAlias);
         int			                    GetTextRenderingHintAntiAlias();
         void		                    SetShadowOffset(int _offset,int _angle);
-        RectF		                    GetShadowOffset();
+        YYRECT	                        GetShadowOffset();
         void		                    SetTextColor1(DWORD _TextColor1);
         DWORD		                    GetTextColor1();
         void		                    SetTextShadowColorA(DWORD _TextShadowColorA);
@@ -97,7 +97,7 @@ namespace YUI
         DWORD					        m_dwTextShadowColorA;
         DWORD					        m_dwTextShadowColorB;
         DWORD					        m_dwStrokeColor;
-        RectF					        m_ShadowOffset;
+        YYRECT					        m_ShadowOffset;
         YString				            m_TextValue;
     };
 }

@@ -16,14 +16,6 @@ namespace YUI
     {
     public:
         DialogBuilder();
-        std::shared_ptr<ControlUI>      Create(YString xml, 
-                                        LPCTSTR type, 
-                                        IDialogBuilderCallback* pCallback,
-                                        std::shared_ptr<PaintManagerUI> &pManager , 
-                                        std::weak_ptr<ControlUI> pParent);
-
-         std::shared_ptr<ControlUI>     Create(IDialogBuilderCallback* pCallback ,                                                                      std::shared_ptr<PaintManagerUI>& pManager ,
-                                        std::weak_ptr<ControlUI> pParent);
 
          std::shared_ptr<ControlUI>     Create(YString xml, 
                                         WindowProperty & Winproperty,
@@ -34,9 +26,6 @@ namespace YUI
                                         WindowProperty &Winproperty,
                                         std::weak_ptr<ControlUI> pParent);
     private:
-       std::shared_ptr<ControlUI>       Parse(tinyxml2::XMLNode* pRoot, 
-                                        std::weak_ptr<ControlUI> pParent ,
-                                        std::shared_ptr<PaintManagerUI> pManager );
        std::shared_ptr<ControlUI>       Parse(tinyxml2::XMLNode* pRoot, 
                                         std::weak_ptr<ControlUI> pParent);
        IDialogBuilderCallback*          m_pCallback;

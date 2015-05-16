@@ -9,7 +9,7 @@
 #include "UIUtility.h"
 #include "PaintManagerUI.h"
 #include "WindowManager.h"
-
+#include "SystemInfo.h"
 namespace YUI
 {
 
@@ -27,7 +27,7 @@ namespace YUI
         wc.lpfnWndProc =WindowManger::WndProc; //用自己的WndProc
         wc.cbClsExtra = 0;
         wc.cbWndExtra = 0;
-        wc.hInstance = PaintManagerUI::GetInstance();
+        wc.hInstance = SystemInfo::GetInstance()->GetProcessInstance();
         wc.hIcon = NULL;
         wc.hCursor = ::LoadCursor(NULL, IDC_ARROW);
         wc.hbrBackground = NULL;
@@ -59,14 +59,14 @@ namespace YUI
         wc.cbSize = sizeof(wc);
         if( !::GetClassInfoEx( NULL, GetSuperClassName() , &wc) )
         {
-            if( !::GetClassInfoEx(PaintManagerUI::GetInstance(),GetSuperClassName(),&wc))
+          /*  if( !::GetClassInfoEx(PaintManagerUI::GetInstance(),GetSuperClassName(),&wc))
             {
                 THROW_EXCEPTION(YYUIException()<< UIErrorStr(_T("找不到Register Class Name"))); 
-            }
+            }*/
         }
         m_OldWndProc = wc.lpfnWndProc;
         wc.lpfnWndProc = WindowWnd::ControlProc;
-        wc.hInstance = PaintManagerUI::GetInstance();
+        wc.hInstance = SystemInfo::GetInstance()->GetProcessInstance();;
         wc.lpszClassName = GetWindowClassName();
 
         ATOM hr = ::RegisterClassEx(&wc);
@@ -92,7 +92,7 @@ namespace YUI
                 RegisterSuperClass();   //如果SuperClassName存在的话就创建SuperClass
             else
                 RegisterWindowClass();
-            m_hWnd = CreateWindowEx( dwExStyle, GetWindowClassName(), pstrName, dwStyple, x, y, cx, cy, hWndParent, hMenu, PaintManagerUI::GetInstance(),this);
+            m_hWnd = CreateWindowEx( dwExStyle, GetWindowClassName(), pstrName, dwStyple, x, y, cx, cy, hWndParent, hMenu, SystemInfo::GetInstance()->GetProcessInstance(),this);
             
             assert( m_hWnd != NULL );
             return m_hWnd;
@@ -215,7 +215,8 @@ namespace YUI
                 ::EnableWindow( hWndParent, TRUE ) ;
                 ::SetFocus( hWndParent );
             }
-            if( !PaintManagerUI::TranslateMessage(& msg ) )
+            //if( !PaintManagerUI::TranslateMessage(& msg ) )
+
             {
                 ::TranslateMessage(&msg);
                 ::DispatchMessage(&msg);
@@ -299,14 +300,14 @@ namespace YUI
 
     void WindowWnd::SetIcon(UINT nRes)
     {
-        HICON hIcon = (HICON)::LoadImage(PaintManagerUI::GetInstance(), 
-                                        MAKEINTRESOURCE(nRes), 
-                                        IMAGE_ICON,
-                                        (::GetSystemMetrics(SM_CXICON) + 15) & ~15,
-                                        (::GetSystemMetrics(SM_CYICON) + 15) & ~15,	// 防止高DPI下图标模糊
-                                        LR_DEFAULTCOLOR);
-        assert(hIcon);
-        ::SendMessage( m_hWnd, WM_SETICON, (WPARAM)FALSE, (LPARAM)hIcon);
+        //HICON hIcon = (HICON)::LoadImage(PaintManagerUI::GetInstance(), 
+        //                                MAKEINTRESOURCE(nRes), 
+        //                                IMAGE_ICON,
+        //                                (::GetSystemMetrics(SM_CXICON) + 15) & ~15,
+        //                                (::GetSystemMetrics(SM_CYICON) + 15) & ~15,	// 防止高DPI下图标模糊
+        //                                LR_DEFAULTCOLOR);
+       /* assert(hIcon);
+        ::SendMessage( m_hWnd, WM_SETICON, (WPARAM)FALSE, (LPARAM)hIcon);*/
     }
 
     WindowWnd::~WindowWnd()

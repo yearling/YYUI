@@ -96,13 +96,7 @@
     <ClInclude Include="..\..\include\ControlUI.h">
       <Filter>YYUI\include\base</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\PaintManagerUI.h">
-      <Filter>YYUI\include\base</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\DlgBuilder.h">
-      <Filter>YYUI\include\base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\WindowImpl.h">
       <Filter>YYUI\include\base</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\WindowWnd.h">
@@ -147,9 +141,6 @@
     <ClInclude Include="..\..\include\FontDef.h">
       <Filter>YYUI\include\base\Draw</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\RenderDGI.h">
-      <Filter>YYUI\include\base\Draw</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\TextureDef.h">
       <Filter>YYUI\include\base\Draw</Filter>
     </ClInclude>
@@ -171,33 +162,27 @@
     <ClInclude Include="..\..\include\MessageHandler.h">
       <Filter>YYUI\include\WindowManger</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\WindowProperty.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\RenderD2D.h">
       <Filter>YYUI\include\base\Draw</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\ControlManager.h">
       <Filter>YYUI\include\WindowManger</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\WindowProperty.h">
+      <Filter>YYUI\include\WindowManger</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\SystemInfo.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="YUI.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\ControlUI.cpp">
       <Filter>YYUI\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\PaintManagerUI.cpp">
-      <Filter>YYUI\src</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\DlgBuilder.cpp">
-      <Filter>YYUI\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\WindowImpl.cpp">
       <Filter>YYUI\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\WindowWnd.cpp">
@@ -207,12 +192,6 @@
       <Filter>YYUI\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\MutiScreen.cpp">
-      <Filter>YYUI\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\RenderDGI.cpp">
-      <Filter>YYUI\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\stb_image.c">
       <Filter>YYUI\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\include\thirdparty\tinyxml2\tinyxml2.cpp">
@@ -233,26 +212,14 @@
     <ClCompile Include="..\..\src\VerticalLayout.cpp">
       <Filter>YYUI\src\Layout</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\RenderD2D.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\D2DWnd.cpp">
       <Filter>YYUI\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\include\FontDef.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\include\BrushDef.cpp">
-      <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\Canvas2D.cpp">
       <Filter>YYUI\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\FileSystem.cpp">
       <Filter>YYUI\src\Sys</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\TextureDef.cpp">
-      <Filter>YYUI\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\MessageSystem.cpp">
       <Filter>YYUI\include\WindowManger</Filter>
@@ -266,11 +233,29 @@
     <ClCompile Include="..\..\src\FrameLessWindow.cpp">
       <Filter>YYUI\include\WindowManger</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\WindowProperty.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\ControlManager.cpp">
       <Filter>YYUI\include\WindowManger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\RenderD2D.cpp">
+      <Filter>YYUI\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\FontDef.cpp">
+      <Filter>YYUI\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\BrushDef.cpp">
+      <Filter>YYUI\src</Filter>
+    </ClCompile>
+    <ClCompile Include="YUI.cpp">
+      <Filter>YYUI\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\WindowProperty.cpp">
+      <Filter>YYUI\include\WindowManger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TextureDef.cpp">
+      <Filter>YYUI\include\WindowManger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\SystemInfo.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

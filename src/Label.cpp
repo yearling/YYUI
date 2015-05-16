@@ -7,15 +7,7 @@
 namespace YUI
 {
 
-    Color _MakeRGB(int a, Color cl)
-    {
-        return Color(a, cl.GetR(), cl.GetG(), cl.GetB());
-    }
-
-    Color _MakeRGB(int r, int g, int b)
-    {
-        return Color(255, r, g, b);
-    }
+   
     Label::Label()
         :m_uTextStyle(DT_VCENTER)
         ,m_dwTextColor(0)
@@ -38,11 +30,6 @@ namespace YUI
         ,m_EnabledShadow(false)
         ,m_GradientLength(0)
     {
-        m_ShadowOffset.X		= 0.0f;
-        m_ShadowOffset.Y		= 0.0f;
-        m_ShadowOffset.Width	= 0.0f;
-        m_ShadowOffset.Height	= 0.0f;
-
         ::ZeroMemory(&m_rcTextPadding, sizeof(m_rcTextPadding));
         AddHander();
     }
@@ -133,7 +120,7 @@ namespace YUI
 
     SIZE Label::EstimateSize(SIZE szAvailable)
     {
-        if( m_cXYFixed.cy == 0 ) return YSize(m_cXYFixed.cx, m_pManager->GetFontInfo((HFONT)_ttoi(GetFont().c_str()))->m_tm.tmHeight + 4);
+        //if( m_cXYFixed.cy == 0 ) return YSize(m_cXYFixed.cx, m_pManager->GetFontInfo((HFONT)_ttoi(GetFont().c_str()))->m_tm.tmHeight + 4);
         return ControlUI::EstimateSize(szAvailable);
     }
 
@@ -371,11 +358,11 @@ namespace YUI
         else if( _angle > 90 || _angle < -90)
             rc.left += _offset;
 
-        m_ShadowOffset.X = (float)rc.top;
-        m_ShadowOffset.Y = (float)rc.left;
+        m_ShadowOffset.top = (float)rc.top;
+        m_ShadowOffset.left = (float)rc.left;
     }
 
-    RectF Label::GetShadowOffset()
+    YYRECT Label::GetShadowOffset()
     {
         return m_ShadowOffset;
     }

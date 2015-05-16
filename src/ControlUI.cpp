@@ -1,7 +1,6 @@
 #include "YUI.h"
 #include "UIDef.h"
 #include "ControlUI.h"
-#include "PaintManagerUI.h"
 #include "RenderDGI.h"
 #include "ControlManager.h"
 namespace YUI
@@ -705,9 +704,6 @@ namespace YUI
     }
     void ControlUI::Init()
     {
-        DoInit();
-        if( OnInit )
-            OnInit(shared_from_this());
     }
 
     void ControlUI::SetAttribute(const std::string &strName, const std::string& strValue)
@@ -900,41 +896,38 @@ namespace YUI
         return m_cXYFixed;
     }
 
-    void ControlUI::DoPaint(HDC hDC, const RECT& rcPaint)
+    void ControlUI::DoPaint()
     {
-        if( !::IntersectRect(&m_rcPaint, &rcPaint, &m_rcItem) ) return;
+        //if( !::IntersectRect(&m_rcPaint, &rcPaint, &m_rcItem) ) return;
 
         // »æÖÆÑ­Ðò£º±³¾°ÑÕÉ«->±³¾°Í¼->×´Ì¬Í¼->ÎÄ±¾->±ß¿ò
-            PaintBkColor(hDC);
+       /*     PaintBkColor(hDC);
             PaintBkImage(hDC);
             PaintStatusImage(hDC);
             PaintText(hDC);
-            PaintBorder(hDC);
+            PaintBorder(hDC);*/
     }
 
-    void ControlUI::PaintBkColor(HDC hDC)
+    void ControlUI::PaintBkColor()
     {
      
     }
 
-    void ControlUI::PaintBkImage(HDC hDC)
+    void ControlUI::PaintBkImage()
     {
-        if( m_strBKImage.empty() ) return;
-        if( !DrawImage(hDC, m_strBKImage )) 
-            m_strBKImage.clear();
     }
 
-    void ControlUI::PaintStatusImage(HDC hDC)
+    void ControlUI::PaintStatusImage()
     {
         return ;
     }
 
-    void ControlUI::PaintText(HDC hDC)
+    void ControlUI::PaintText()
     {
         return;
     }
 
-    void ControlUI::PaintBorder(HDC hDC)
+    void ControlUI::PaintBorder()
     {
         if(m_dwBorderColor != 0 || m_dwFocusBorderColor != 0)
         {
