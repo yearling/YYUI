@@ -441,7 +441,6 @@ namespace YUI
 
     void Label::AddHander()
     {
-        SetSuccessor(std::static_pointer_cast<ControlUI>(shared_from_this()));
         AddEntry(UIMSG_SETFOCUS,[&](const MsgWrap &msg)
         {
             m_bFocused = true;

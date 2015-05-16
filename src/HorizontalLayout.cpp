@@ -190,7 +190,6 @@ namespace YUI
 
     void HorizontalLayout::AddHandler()
     {
-       SetSuccessor(std::static_pointer_cast<Container>(shared_from_this()));
     }
 
 }

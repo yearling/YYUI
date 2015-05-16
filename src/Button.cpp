@@ -337,17 +337,16 @@ Label_ForeImage:
 
     void Button::AddHander()
     {
-        SetSuccessor(std::static_pointer_cast<Label>(shared_from_this()));
 
         AddEntry(UIMSG_SETFOCUS,[&](const MsgWrap &msg)
         {
             Invalidate();
-            MsgHandleChainBase::HandleMsg(msg);
+            Label::HandleMsg(msg);
         });
         AddEntry(UIMSG_KILLFOCUS,[&](const MsgWrap &msg)
         {
             Invalidate();
-            MsgHandleChainBase::HandleMsg(msg);
+            Label::HandleMsg(msg);
         });
         
         AddEntry(UIMSG_KEYDOWN,[&](const MsgWrap &msg)

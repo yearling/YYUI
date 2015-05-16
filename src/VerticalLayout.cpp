@@ -204,7 +204,6 @@ namespace YUI
 
     void VerticalLayout::AddHandler()
     {
-        SetSuccessor(std::static_pointer_cast<ControlUI>(shared_from_this()));
     }
 
 }
