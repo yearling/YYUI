@@ -1,6 +1,9 @@
 #include "YUI.h"
 #include "D2DWnd.h"
 #include "Canvas2D.h"
+using std::cout;
+using std::wcout;
+using std::endl;
 namespace YUI
 {
 
@@ -29,6 +32,7 @@ namespace YUI
        // PostQuitMessage(0);
 	}
 
+  
 	LRESULT D2DWnd::OnSysMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 		switch (uMsg)
@@ -50,6 +54,12 @@ namespace YUI
                     Close(0);
                     return 0;
                 }
+            }
+            break;
+        case WM_SETCURSOR:
+            {
+               static int i = 0;
+               Ycout<<"!!!!!!SetCursor  "<<i++<<endl;
             }
 		default:
 			break;
@@ -73,6 +83,7 @@ namespace YUI
 
 	void D2DWnd::OnRender()
 	{
+        Ycout<<"D2DWnd OnRender"<<endl;
         Canvas2D cavas(m_hWnd);
         if(!cavas.BeginDraw())
             return;

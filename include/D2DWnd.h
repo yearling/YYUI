@@ -28,7 +28,7 @@ namespace YUI
 		HWND m_hWnd;
 	};
 
-	class D2DWnd: public FrameLessWindow/*, public ControlUI*/
+	class D2DWnd: public FrameLessWindow
 	{
 	public:
 		D2DWnd();

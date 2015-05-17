@@ -3,14 +3,15 @@
 #include <windows.h>
 #include "DlgBuilder.h"
 #include "ControlUI.h"
-
+using std::cout;
+using std::wcout;
+using std::endl;
 namespace YUI
 {
 
 
-    FrameLessWindow::FrameLessWindow()
+    FrameLessWindow::FrameLessWindow():m_spControlManger(new ControlManager)
     {
-
     }
 
     FrameLessWindow::~FrameLessWindow()
@@ -49,8 +50,8 @@ namespace YUI
 
         if (bHandled) return lRes;
 
-       /* if (m_spPaintManager->MessageHandler(uMsg, wParam, lParam, lRes))
-            return lRes;*/
+        if (m_spControlManger->MessageHandler(uMsg, wParam, lParam, lRes))
+            return lRes;
         return WindowWnd::OnSysMessage(uMsg, wParam, lParam);
     }
 
@@ -221,7 +222,8 @@ namespace YUI
         LRESULT lRes = WindowWnd::OnSysMessage(uMsg, wParam, lParam);
         return lRes;
     }
-
+   
+#if 1
     LRESULT FrameLessWindow::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
     {
         LONG styleValue = ::GetWindowLong(*this, GWL_STYLE);
@@ -238,13 +240,18 @@ namespace YUI
         std::shared_ptr<ControlUI> pRoot;
         std::shared_ptr<ControlUI> spNull;
         pRoot=builder.Create(_T("duilib.xml"),m_Property,nullptr,spNull);
+        m_spControlManger->Init(m_hWnd);
+        m_spControlManger->AttachDialog(pRoot);
         InitWindow();
+        Ycout<<"FrameLess: OnCreate"<<endl;
+        bHandled = FALSE;
         return 0;
     }
-
+#endif
     LRESULT FrameLessWindow::OnKeyDown(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
     {
         bHandled = FALSE;
+        Ycout<<"FrameLess: OnKeyDown"<<endl;
         return 0;
     }
 
@@ -280,7 +287,8 @@ namespace YUI
 
     UINT FrameLessWindow::GetClassStyle() const
     {
-         return CS_DBLCLKS|CS_HREDRAW|CS_VREDRAW;
+         //return CS_DBLCLKS|CS_HREDRAW|CS_VREDRAW;
+         return CS_DBLCLKS;
     }
 
     LONG FrameLessWindow::GetStyle()

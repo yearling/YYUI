@@ -123,11 +123,16 @@ namespace YUI
     class RenderD2D;
     class WindowWnd;
     class WindowProperty;
+    class ControlManager;
     //定义常用的SP
 	typedef std::shared_ptr<ControlUI>  SPControlUI;
 	typedef std::weak_ptr<ControlUI>	WPControlUI;
     typedef std::shared_ptr<WindowWnd>  SPWindowWnd;
     typedef std::weak_ptr<WindowWnd>    WPWindowWnd;
+    typedef std::shared_ptr<ControlManager>
+                                        SPControlManger;
+    typedef std::weak_ptr<ControlManager>
+                                        WPControlManger;
     //定义消息体
     struct NotifyMsg
     {

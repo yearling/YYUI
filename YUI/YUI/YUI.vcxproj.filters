@@ -185,9 +185,6 @@
     <ClCompile Include="..\..\src\DlgBuilder.cpp">
       <Filter>YYUI\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\WindowWnd.cpp">
-      <Filter>YYUI\src</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\UIUtility.cpp">
       <Filter>YYUI\src</Filter>
     </ClCompile>
@@ -256,6 +253,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\SystemInfo.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\WindowWnd.cpp">
+      <Filter>YYUI\include\WindowManger</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
