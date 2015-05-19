@@ -80,7 +80,7 @@ namespace YUI
         rc.right -= m_rcInset.right;
         rc.bottom -= m_rcInset.bottom;
 
-        if( m_SetItems.empty()) 
+        if( m_ListItems.empty()) 
         {
             ProcessScrollBar(rc, 0, 0);
             return;
@@ -97,7 +97,7 @@ namespace YUI
         int nAdjustables = 0;
         int cxFixed = 0;
         int nEstimateNum = 0;
-        for( auto &pControl : m_SetItems)
+        for( auto &pControl : m_ListItems)
         {
             if( !pControl->IsVisible() ) continue;
             if( pControl->IsFloat() ) continue;
@@ -125,7 +125,7 @@ namespace YUI
         }*/
         int iAdjustable = 0;
         int cxFixedRemaining = cxFixed;
-        for( auto pControl : m_SetItems)
+        for( auto pControl : m_ListItems)
         {
             if( !pControl->IsVisible() ) continue;
             if( pControl->IsFloat() ) {

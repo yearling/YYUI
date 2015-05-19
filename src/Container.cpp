@@ -40,7 +40,7 @@ namespace YUI
 
     int Container::GetCount() const
     {
-        return m_SetItems.size();
+        return m_ListItems.size();
     }
 
     bool Container::Add(std::shared_ptr<ControlUI>& pControl)
@@ -53,7 +53,7 @@ namespace YUI
             NeedUpdate();
         else
             pControl->SetInternVisible(false);
-        m_SetItems.insert(pControl);
+        m_ListItems.push_back(pControl);
         return true;
     }
 
@@ -61,20 +61,16 @@ namespace YUI
 
     bool Container::Remove(std::shared_ptr<ControlUI> &pControl)
     {
-        auto iter = m_SetItems.find(pControl);
-        if( iter!= m_SetItems.end() )
-        {
-            NeedUpdate();
-            m_SetItems.erase(iter);
-        }
-        return false;
+         m_ListItems.remove(pControl);
+         NeedUpdate();
+        return true;
     }
 
   
 
     void Container::RemoveAll()
     {
-        m_SetItems.clear();
+        m_ListItems.clear();
         NeedUpdate();
     }
 
@@ -84,7 +80,7 @@ namespace YUI
         if( m_bVisible == bVisible )
             return;
         ControlUI::SetVisible(true);
-        for(auto iter: m_SetItems)
+        for(auto iter: m_ListItems)
             iter->SetInternVisible(IsVisible());
     }
 
@@ -95,7 +91,7 @@ namespace YUI
         ControlUI::SetInternVisible(bVisible);
         // 控制子控件显示状态
         // InternVisible状态应由子控件自己控制
-        for(auto iter: m_SetItems)
+        for(auto iter: m_ListItems)
             iter->SetInternVisible(IsVisible()); 
     }
 
@@ -168,13 +164,13 @@ namespace YUI
     void Container::SetPos(RECT &rc)
     {
         ControlUI::SetPos(rc);
-        if( m_SetItems.empty() ) return;
+        if( m_ListItems.empty() ) return;
         rc.left += m_rcInset.left;
         rc.top += m_rcInset.top;
         rc.right -= m_rcInset.right;
         rc.bottom -= m_rcInset.bottom;
 
-        for(auto pControl : m_SetItems)
+        for(auto pControl : m_ListItems)
         {
             if( !pControl->IsVisible() ) continue;
             if( pControl->IsFloat() ) {
@@ -200,7 +196,7 @@ namespace YUI
 
         ControlUI::DoPaint(rcPaint);
 
-        if( !m_SetItems.empty())
+        if( !m_ListItems.empty())
         {
             RECT subRC = m_rcItem;
             subRC.left += m_rcInset.left;
@@ -212,7 +208,7 @@ namespace YUI
                 ClipRegionDef subRegion(rcTemp);
                 canvas.ClipRect(subRegion);
                
-                 for(auto &item : m_SetItems )
+                 for(auto &item : m_ListItems )
                  {
                      if(!item->IsVisible())
                          continue;
@@ -271,7 +267,7 @@ namespace YUI
 
     void Container::SetManager(std::shared_ptr<ControlManager> &pManager, std::weak_ptr<ControlUI> pParent, bool bInit/*=true*/)
     {
-        for( auto &pControl : m_SetItems ) {
+        for( auto &pControl : m_ListItems ) {
             pControl->SetManager(pManager, shared_from_this(), bInit);
         }
 
@@ -505,7 +501,7 @@ namespace YUI
     void Container::SetFloatPos(std::shared_ptr<ControlUI> &pControl)
     {
         // 因为CControlUI::SetPos对float的操作影响，这里不能对float组件添加滚动条的影响
-        if( !pControl || m_SetItems.empty() ) return;
+        if( !pControl || m_ListItems.empty() ) return;
 
         if( !pControl->IsVisible() ) return;
         if( !pControl->IsFloat() ) return;
@@ -595,7 +591,7 @@ namespace YUI
                         return pControl;
                 }            
             }*/
-            for(auto iter = m_SetItems.begin();iter!=m_SetItems.end();++iter)
+            for(auto iter = m_ListItems.begin();iter!=m_ListItems.end();++iter)
             {
                 pResult = (*iter)->FindControlFromPoint(pt,flag);
                 if( pResult != nullptr)

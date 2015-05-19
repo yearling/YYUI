@@ -1,7 +1,7 @@
 #include "YUI.h"
 #include "VerticalLayout.h"
 #include "RenderDGI.h"
-
+using std::endl;
 namespace YUI
 {
 
@@ -48,8 +48,15 @@ namespace YUI
     void VerticalLayout::SetPos(RECT &rc)
     {
         ControlUI::SetPos(rc);
+        //////////////////////////////////////////////////////////////////////////
+        static int traceid= 0;
+        //if(traceid % 3 == 0)
+        Ycout<<"[Verti "<<traceid++<<"] :"<<rc.left<<"  "<<rc.top<<"  "<<rc.right<<"  "<<rc.bottom<<endl;
+       
+        //////////////////////////////////////////////////////////////////////////
         rc = m_rcItem;
-
+        if(traceid%3==1)
+        Ycout<<"m_rcInset "<<m_rcInset.left<<"  "<<m_rcInset.top<<"  "<<m_rcInset.right<<"  "<<m_rcInset.bottom<<endl;
         // Adjust for inset
         rc.left += m_rcInset.left;
         rc.top += m_rcInset.top;
@@ -58,7 +65,7 @@ namespace YUI
       /*  if( m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible() ) rc.right -= m_pVerticalScrollBar->GetFixedWidth();
         if( m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible() ) rc.bottom -= m_pHorizontalScrollBar->GetFixedHeight();*/
 
-        if( m_SetItems.empty()) {
+        if( m_ListItems.empty()) {
             ProcessScrollBar(rc, 0, 0);
             return;
         }
@@ -67,11 +74,11 @@ namespace YUI
         SIZE szAvailable = { rc.right - rc.left, rc.bottom - rc.top };
        /* if( m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible() ) 
             szAvailable.cx += m_pHorizontalScrollBar->GetScrollRange();*/
-
+  
         int nAdjustables = 0;
         int cyFixed = 0;
         int nEstimateNum = 0;
-        for( auto pControl : m_SetItems ) {
+        for( auto pControl : m_ListItems ) {
             if( !pControl->IsVisible() ) continue;
             if( pControl->IsFloat() ) continue;
             SIZE sz = pControl->EstimateSize(szAvailable);
@@ -86,7 +93,8 @@ namespace YUI
             nEstimateNum++;
         }
         cyFixed += (nEstimateNum - 1) * m_iChildPadding;
-
+        if(traceid%3==1)
+        Ycout<<"NAdjustables "<<nAdjustables<<"   cyFixed "<<cyFixed<<"    nEstimateNum "<<nEstimateNum<<endl;
         // Place elements
         int cyNeeded = 0;
         int cyExpand = 0;
@@ -104,15 +112,20 @@ namespace YUI
         }*/
         int iAdjustable = 0;
         int cyFixedRemaining = cyFixed;
-        for( auto pControl: m_SetItems ) {
-            if( !pControl->IsVisible() ) continue;
-            if( pControl->IsFloat() ) {
+        for( auto pControl: m_ListItems ) 
+        {
+            if( !pControl->IsVisible() ) 
+                continue;
+            if( pControl->IsFloat() ) 
+            {
                 SetFloatPos(pControl);
                 continue;
             }
 
             RECT rcPadding = pControl->GetPadding();
             szRemaining.cy -= rcPadding.top;
+                if(traceid%3==1)
+            Ycout<<"szRemaining.cy "<<szRemaining.cy<<endl;
             SIZE sz = pControl->EstimateSize(szRemaining);
             if( sz.cy == 0 ) {
                 iAdjustable++;
@@ -135,7 +148,8 @@ namespace YUI
             if( sz.cx < 0 ) sz.cx = 0;
             if( sz.cx < pControl->GetMinWidth() ) sz.cx = pControl->GetMinWidth();
             if( sz.cx > pControl->GetMaxWidth() ) sz.cx = pControl->GetMaxWidth();
-
+                        if(traceid%3==1)
+            Ycout<<"final sz.cx :"<<sz.cx<<"  sz.cy: "<<sz.cy<<endl;
             RECT rcCtrl = { iPosX + rcPadding.left, iPosY + rcPadding.top, iPosX + rcPadding.left + sz.cx, iPosY + sz.cy + rcPadding.top + rcPadding.bottom };
             pControl->SetPos(rcCtrl);
 
