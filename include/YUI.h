@@ -454,4 +454,25 @@ namespace YUI
         operator POINT() const { POINT tmp; tmp.x = (LONG) x;tmp.y = (LONG)y; return tmp;}
         operator D2D_POINT_2F () const { D2D_POINT_2F tmp;tmp.x = x; tmp.y =y;return tmp;}
     };
+
+
+
+
+
+
+#ifdef  UTF8ToGBK
+#undef UTF8ToGBK
+#endif 
+
+#ifdef GBKToUTF8
+#undef GBKToUTF8
+#endif
+
+#if defined _UNICODE | defined UNICODE
+#define UTF8ToGBK UTF8ToGBKW 
+#define GBKToUTF8 GBKToUTF8W
+#else 
+#define UTF8ToGBK UTF8ToGBKA 
+#define GBKToUTF8 GBKToUTF8A
+#endif
 }

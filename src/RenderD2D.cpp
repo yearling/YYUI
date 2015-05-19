@@ -362,18 +362,18 @@ namespace YUI
             &pDecoder
             )))
         {
-            THROW_EXCEPTION(Render2DException()<<UIErrorStr("Create Picture Decoder["+uri+"]  failed!")<<UIErrorHr(hr));
+            THROW_EXCEPTION(Render2DException()<<UIErrorStr(_T("Create Picture Decoder[")+uri+_T("]  failed!"))<<UIErrorHr(hr));
         }
 
         if(FAILED(hr = pDecoder->GetFrame(0, &pSource)))
         {
-            THROW_EXCEPTION(Render2DException()<<UIErrorStr("Create Picture Frame0["+uri+"]  failed!")<<UIErrorHr(hr));
+            THROW_EXCEPTION(Render2DException()<<UIErrorStr(_T("Create Picture Frame0[")+uri+_T("]  failed!"))<<UIErrorHr(hr));
         }
         // Convert the image format to 32bppPBGRA
         // (DXGI_FORMAT_B8G8R8A8_UNORM + D2D1_ALPHA_MODE_PREMULTIPLIED).
         if(FAILED(hr = RenderD2D::GetWICFactory()->CreateFormatConverter(&pConverter)))
         {
-            THROW_EXCEPTION(Render2DException()<<UIErrorStr("Convert Picture ["+uri+"]  failed!")<<UIErrorHr(hr)); 
+            THROW_EXCEPTION(Render2DException()<<UIErrorStr(_T("Convert Picture [")+uri+_T("]  failed!"))<<UIErrorHr(hr)); 
         }
 
         // If a new width or height was specified, create an
@@ -383,7 +383,7 @@ namespace YUI
             UINT originalWidth, originalHeight;
             if(FAILED(hr = pSource->GetSize(&originalWidth, &originalHeight)))
             {
-                THROW_EXCEPTION(Render2DException()<<UIErrorStr("Get Picture ["+uri+"] size failed!")<<UIErrorHr(hr)); 
+                THROW_EXCEPTION(Render2DException()<<UIErrorStr(_T("Get Picture [")+uri+_T("] size failed!"))<<UIErrorHr(hr)); 
             }
             if (desWidth == 0)
             {
@@ -398,7 +398,7 @@ namespace YUI
 
             if(FAILED(hr = RenderD2D::GetWICFactory()->CreateBitmapScaler(&pScaler)))
             {
-                THROW_EXCEPTION(Render2DException()<<UIErrorStr("Create bitmapScalar ["+uri+"] failed!")<<UIErrorHr(hr)); 
+                THROW_EXCEPTION(Render2DException()<<UIErrorStr(_T("Create bitmapScalar [")+uri+_T("] failed!"))<<UIErrorHr(hr)); 
             }
             if(FAILED  (hr = pScaler->Initialize(
                 pSource,
@@ -407,7 +407,7 @@ namespace YUI
                 WICBitmapInterpolationModeCubic
                 )))
             {
-                THROW_EXCEPTION(Render2DException()<<UIErrorStr("Init bitmap scalar ["+uri+"] failed!")<<UIErrorHr(hr)); 
+                THROW_EXCEPTION(Render2DException()<<UIErrorStr(_T("Init bitmap scalar [")+uri+_T("] failed!"))<<UIErrorHr(hr)); 
             }
             if(FAILED(  hr = pConverter->Initialize(
                 pScaler,
@@ -418,7 +418,7 @@ namespace YUI
                 WICBitmapPaletteTypeMedianCut
                 )))
             {
-                THROW_EXCEPTION(Render2DException()<<UIErrorStr("Init bitmap convert ["+uri+"] failed!")<<UIErrorHr(hr)); 
+                THROW_EXCEPTION(Render2DException()<<UIErrorStr(_T("Init bitmap convert [")+uri+_T("] failed!"))<<UIErrorHr(hr)); 
             }
         }
         else // Don't scale the image.
@@ -432,7 +432,7 @@ namespace YUI
                 WICBitmapPaletteTypeMedianCut
                 )))
             {
-                THROW_EXCEPTION(Render2DException()<<UIErrorStr("Init bitmap convert ["+uri+"] failed!")<<UIErrorHr(hr)); 
+                THROW_EXCEPTION(Render2DException()<<UIErrorStr(_T("Init bitmap convert [")+uri+_T("] failed!"))<<UIErrorHr(hr)); 
             }
         }
         // Create a Direct2D bitmap from the WIC bitmap.
@@ -442,7 +442,7 @@ namespace YUI
             &pBitmap
             )))
         {
-            THROW_EXCEPTION(Render2DException()<<UIErrorStr("D2D CreateBitmap form wicbitmap  ["+uri+"] failed!")<<UIErrorHr(hr)); 
+            THROW_EXCEPTION(Render2DException()<<UIErrorStr(_T("D2D CreateBitmap form wicbitmap  [")+uri+_T("] failed!"))<<UIErrorHr(hr)); 
         }
         m_mapBitmap[tex] = pBitmap;
         return pBitmap;

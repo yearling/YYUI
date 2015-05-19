@@ -37,9 +37,6 @@
     <Filter Include="YYUI\src\Control">
       <UniqueIdentifier>{83bcd38a-79e9-49e4-b241-4d1945e81014}</UniqueIdentifier>
     </Filter>
-    <Filter Include="YYUI\Layout">
-      <UniqueIdentifier>{c08d616b-b346-4330-ae33-b9d7ed7e07fc}</UniqueIdentifier>
-    </Filter>
     <Filter Include="YYUI\src\Layout">
       <UniqueIdentifier>{d4189fbc-16ab-461e-ab00-c9968e12618f}</UniqueIdentifier>
     </Filter>
@@ -54,6 +51,9 @@
     </Filter>
     <Filter Include="YYUI\include\WindowManger">
       <UniqueIdentifier>{e9392b8d-335f-4a3a-84e2-20dba84e59c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="YYUI\include\Layout">
+      <UniqueIdentifier>{c08d616b-b346-4330-ae33-b9d7ed7e07fc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -124,10 +124,10 @@
       <Filter>YYUI\include\base</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\HorizontalLayout.h">
-      <Filter>YYUI\Layout</Filter>
+      <Filter>YYUI\include\Layout</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\VerticalLayout.h">
-      <Filter>YYUI\Layout</Filter>
+      <Filter>YYUI\include\Layout</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\D2DWnd.h">
       <Filter>YYUI\include\base</Filter>

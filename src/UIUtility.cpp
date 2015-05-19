@@ -208,4 +208,76 @@ namespace YUI
          cy = y;
     }
 
+    std::string UTF8ToGBKA(LPCSTR szUFT8)
+    {
+        int nLen = ::MultiByteToWideChar( CP_UTF8, 0, szUFT8, -1, NULL, 0);
+        if( !nLen )
+            return std::string();
+        std::unique_ptr<wchar_t[]> pwstr( new wchar_t[ nLen ] ); 
+        if( !pwstr )
+            return std::string();
+        ::MultiByteToWideChar( CP_UTF8, 0, szUFT8, -1, pwstr.get(), nLen );
+        pwstr[nLen-1] = L'\0';
+        nLen = ::WideCharToMultiByte( CP_ACP, 0, pwstr.get(), -1, NULL, 0, NULL, NULL);
+        if( !nLen )
+            return std::string();
+        std::unique_ptr<char[] > pstrDes (new char[ nLen ] );
+        if( !pstrDes )
+            return std::string();
+        WideCharToMultiByte(CP_ACP, 0, pwstr.get(), -1, pstrDes.get(), nLen, NULL, NULL);
+        pstrDes[ nLen-1 ] = '\0';
+
+        return std::string(pstrDes.get());
+    }
+
+
+    std::string GBKToUTF8A(LPCSTR szGBK)
+    {
+        int nLen = ::MultiByteToWideChar( CP_ACP, 0, szGBK, -1, NULL, 0);
+        if( !nLen )
+            return std::string();
+        std::unique_ptr<wchar_t[]> pwstr( new wchar_t[ nLen ] ); 
+        if( !pwstr )
+            return std::string();
+        ::MultiByteToWideChar( CP_ACP, 0, szGBK, -1, pwstr.get(), nLen );
+        pwstr[nLen-1] = L'\0';
+
+        nLen = ::WideCharToMultiByte( CP_UTF8, 0, pwstr.get(), -1, NULL, 0, NULL, NULL);
+        if( !nLen )
+            return std::string();
+        std::unique_ptr<char[] > pstrDes (new char[ nLen ] );
+        if( !pstrDes )
+            return std::string();
+        WideCharToMultiByte(CP_UTF8, 0, pwstr.get(), -1, pstrDes.get(), nLen, NULL, NULL);
+        pstrDes[ nLen-1 ] = '\0';
+
+        return std::string(pstrDes.get());
+    }
+
+    std::wstring UTF8ToGBKW(LPCSTR szUTF8)
+    {
+        int nLen = ::MultiByteToWideChar( CP_UTF8, 0, szUTF8, -1, NULL, 0);
+        if( !nLen )
+            return std::wstring();
+        std::unique_ptr<wchar_t[]> pwstr( new wchar_t[ nLen ] ); 
+        if( !pwstr )
+            return std::wstring();
+        ::MultiByteToWideChar( CP_UTF8, 0, szUTF8, -1, pwstr.get(), nLen );
+        pwstr[nLen-1] = L'\0';
+        return std::wstring(pwstr.get());
+    }
+
+    std::wstring GBKToUTF8W(LPCSTR szGBK)
+    {
+        int nLen = ::MultiByteToWideChar( CP_UTF8, 0, szGBK, -1, NULL, 0);
+        if( !nLen )
+            return std::wstring();
+        std::unique_ptr<wchar_t[]> pwstr( new wchar_t[ nLen ] ); 
+        if( !pwstr )
+            return std::wstring();
+        ::MultiByteToWideChar( CP_UTF8, 0, szGBK, -1, pwstr.get(), nLen );
+        pwstr[nLen-1] = L'\0'; 
+        return std::wstring(pwstr.get());
+    }
+
 }

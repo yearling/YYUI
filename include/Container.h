@@ -90,7 +90,7 @@ namespace YUI
         virtual void                    ProcessScrollBar(RECT rc, int cxRequired, int cyRequired);
     protected:
         std::set<std::shared_ptr<ControlUI> > m_SetItems;
-        RECT                            m_rcInset;
+        RECT                            m_rcInset;    //tag 'inset',基本上相当于收缩当前区域
         int                             m_iChildPadding;
         bool                            m_bAutoDestroy;
         bool                            m_bDelayedDestroy;

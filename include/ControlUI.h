@@ -177,45 +177,45 @@ namespace YUI
         std::shared_ptr<ControlManager> m_pManager;
         std::weak_ptr<ControlUI>        m_pParent;
         YString                         m_strVirtualWnd;
-        YString                         m_strName;
+        YString                         m_strName; // tag 'name'
         bool                            m_bUpdateNeeded;
         bool                            m_bMenuUsed;
-        RECT                            m_rcPadding;
-        SIZE                            m_cXY;
-        SIZE                            m_cXYFixed;
-        SIZE                            m_cxyMin;
-        SIZE                            m_cxyMax;
+        RECT                            m_rcPadding; //tag 'padding'
+        SIZE                            m_cXY; // maybe control 左上角的点  tag 'pos'
+        SIZE                            m_cXYFixed; //fix宽高 tag 'pos' 'width' 'height'
+        SIZE                            m_cxyMin;// tag 'minwidth' 'minheight'
+        SIZE                            m_cxyMax;//tag 'maxwidth' 'maxheight'
         RECT                            m_rcItem;
 
         
         int                             m_nTooltipWidth;
-        bool                            m_bVisible;
+        bool                            m_bVisible;// tag 'visible'
         bool                            m_bInternVisible;
-        bool                            m_bEnable;
-        bool                            m_bMouseEnabled;
-        bool                            m_bKeyboardEnabled;
-        bool                            m_bFocused;
-        bool                            m_bFloat;
+        bool                            m_bEnable; // tag 'endable'
+        bool                            m_bMouseEnabled; // tag 'mouse'
+        bool                            m_bKeyboardEnabled; // tag 'keyboard'
+        bool                            m_bFocused; //
+        bool                            m_bFloat; // tag 'float'
         bool                            m_bSetPos; //防止SetPos循环调用
-        RelativePosUI                   m_RelativePos;
+        RelativePosUI                   m_RelativePos; //相对于父节点的坐标 tag 'relativepos'
 
-        YString                         m_strText;
-        YString                         m_strToolTip;
-        TCHAR                           m_chShortcut;
-        YString                         m_strUserData;
-        UINT_PTR                        m_pTag;
+        YString                         m_strText;  //文本，对应'text'标签
+        YString                         m_strToolTip; // tag 'tooltip'
+        TCHAR                           m_chShortcut; // tag 'shortcut'
+        YString                         m_strUserData;// tag 'userdata'
+        UINT_PTR                        m_pTag; 
 
-        DWORD                           m_dwBackColor;
-        DWORD                           m_dwBackColor2;
-        DWORD                           m_dwBackColor3;
-        YString                         m_strBKImage;
+        DWORD                           m_dwBackColor; // tag 'bkcolor' 'bkcolor'
+        DWORD                           m_dwBackColor2;//tag 'bkcolor2'
+        DWORD                           m_dwBackColor3; //tag 'bkcolor3'
+        YString                         m_strBKImage; //tag 'bkimage'
         YString                         m_strForeImage;
-        DWORD                           m_dwBorderColor;
-        DWORD                           m_dwFocusBorderColor;
-        int                             m_nBorderSize;
-        int                             m_nBorderStyle;
-        RECT                            m_rcPaint;
-        RECT                            m_rcBorderSize;
+        DWORD                           m_dwBorderColor; //tag 'bordercolor'
+        DWORD                           m_dwFocusBorderColor;//tag 'focusbordercolor'
+        int                             m_nBorderSize;//tag 'boradersize'  
+        int                             m_nBorderStyle; // tag 'borderstyple'
+        RECT                            m_rcPaint; 
+        RECT                            m_rcBorderSize;//tag 'boradersize' 'leftbordersize' 'topboradersize' 'bottombordersize' 
     protected:
     };
 }

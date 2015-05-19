@@ -21,7 +21,7 @@ namespace YUI
     public:
         size_t operator()(const TextureD2D & s)
         {
-            std::hash<std::string> stringHash;
+            std::hash<YString> stringHash;
             return stringHash(s.GetPath());
         }
     };

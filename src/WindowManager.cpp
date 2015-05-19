@@ -61,7 +61,7 @@ namespace YUI
           assert((m_mapHWNDToWindow.find(hWnd)== m_mapHWNDToWindow.end())&&"register agian");
           auto iter = m_mapHWNDToWindow.find(hWnd);
           if(iter!=m_mapHWNDToWindow.end())
-              THROW_EXCEPTION(WindowMangerExcption()<<UIErrorStr("register window again"));
+              THROW_EXCEPTION(WindowMangerExcption()<<UIErrorStr(_T("register window again")));
           m_mapHWNDToWindow[hWnd]=pWindow;
       }
 
@@ -70,7 +70,7 @@ namespace YUI
           assert((m_mapHWNDToWindow.find(hWnd)!= m_mapHWNDToWindow.end())&&"can't find window to unregister it ");
           auto iter = m_mapHWNDToWindow.find(hWnd);
           if(iter==m_mapHWNDToWindow.end())
-              THROW_EXCEPTION(WindowMangerExcption()<<UIErrorStr("can't find window to unregister it"));
+              THROW_EXCEPTION(WindowMangerExcption()<<UIErrorStr(_T("can't find window to unregister it")));
           m_mapHWNDToWindow.erase(iter);
       }
 

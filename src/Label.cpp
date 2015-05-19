@@ -158,12 +158,7 @@ namespace YUI
             if( strcmp(pstrValue, ("true")) == 0 ) m_uTextStyle |= DT_END_ELLIPSIS;
             else m_uTextStyle &= ~DT_END_ELLIPSIS;
         }  
-        else if( strcmp(pstrName, ("font")) == 0 )  
-#if defined _UNICODE | defined UNICODE
-        SetFont(Ansi2Wchar(pstrValue)); 
-#else 
-        SetFont(pstrValue);
-#endif
+        else if( strcmp(pstrName, ("font")) == 0 )   SetFont(UTF8ToGBK(pstrValue)); 
         else if( strcmp(pstrName, ("textcolor")) == 0 ) {
             if( *pstrValue == ('#')) pstrValue = ::CharNextA(pstrValue);
             LPSTR pstr = NULL;

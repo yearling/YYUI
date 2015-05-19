@@ -35,6 +35,14 @@ namespace YUI
 #define CWSTRLength(a) (S2W(a).length())
 #endif
 
+    std::string UTF8ToGBKA( LPCSTR szUFT8 );
+    
+    std::string GBKToUTF8A(LPCSTR szGBK);
+   
+    std::wstring UTF8ToGBKW(LPCSTR szUTF8 );
+    std::wstring GBKToUTF8W(LPCSTR szGBK);
+
+
 
     //template<class T>
     //std::wstring ToWString(const T & );

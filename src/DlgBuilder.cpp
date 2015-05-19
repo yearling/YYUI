@@ -264,15 +264,17 @@ namespace YUI
                     pControl = m_pCallback->CreateControl(pstrClass);
                 }
                 assert(pControl);
+                
                 if( !pChild->NoChildren() )
                 {
+                    //如果有子节点，递归解析
                     Parse(pChild,pControl);
                 }
                 //attach to parent
                 auto spParent = pParent.lock();
                 if(spParent)
                 {
-                    //std::shared_ptr<IContainer> pContianer = static_cast<std::shared_ptr<IContainer>>(spParent->QueryInterface(_T("IContainer")));
+                    //如果父空间是个container,把当前control加到containerk中去
                     std::shared_ptr<IContainer> pContianer = std::dynamic_pointer_cast<IContainer >(spParent);
                     if(!pContianer)
                         return nullptr;
@@ -280,9 +282,11 @@ namespace YUI
                 }
                 for(const XMLAttribute *pAttribue = pChild->FirstAttribute();pAttribue;pAttribue= pAttribue->Next())
                 {
+                    //设置当前节点的属性
                     pControl->SetAttribute(pAttribue->Name(),pAttribue->Value());
                 }
             }
+            //用来返回的是第一个节点~~
             if( pReturn == nullptr)
             {
                 pReturn = pControl;

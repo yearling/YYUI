@@ -3,6 +3,10 @@
 #include "ControlUI.h"
 #include "RenderDGI.h"
 #include "ControlManager.h"
+
+using  std::cout;
+using  std::wcout;
+using  std::endl;
 namespace YUI
 {
     ControlUI::ControlUI():
@@ -804,42 +808,17 @@ namespace YUI
             cxyRound.cx = strtol(pstrValue, &pstr, 10);  assert(pstr);    
             cxyRound.cy = strtol(pstr + 1, &pstr, 10);    assert(pstr);     
         }
-        else if( strcmp(pstrName, ("bkimage")) == 0 ) 
-#if defined _UNICODE | defined UNICODE
-            SetBkImage(Ansi2Wchar(pstrValue));
-#else
-            SetBkImage(pstrValue);
-#endif
+        else if( strcmp(pstrName, ("bkimage")) == 0 )   SetBkImage(UTF8ToGBK(pstrValue));
         else if( strcmp(pstrName, ("width")) == 0 ) SetFixedWidth(atoi(pstrValue));
         else if( strcmp(pstrName, ("height")) == 0 ) SetFixedHeight(atoi(pstrValue));
         else if( strcmp(pstrName, ("minwidth")) == 0 ) SetMinWidth(atoi(pstrValue));
         else if( strcmp(pstrName, ("minheight")) == 0 ) SetMinHeight(atoi(pstrValue));
         else if( strcmp(pstrName, ("maxwidth")) == 0 ) SetMaxWidth(atoi(pstrValue));
         else if( strcmp(pstrName, ("maxheight")) == 0 ) SetMaxHeight(atoi(pstrValue));
-        else if( strcmp(pstrName, ("name")) == 0 ) 
-#if defined _UNICODE | defined UNICODE
-        SetName(Ansi2Wchar(pstrValue));
-#else
-        SetName(pstrValue);
-#endif
-        else if( strcmp(pstrName, ("text")) == 0 )
-#if defined _UNICODE | defined UNICODE
-        SetText(Ansi2Wchar(pstrValue));
-#else
-        SetText(pstrValue);
-#endif
-        else if( strcmp(pstrName, ("tooltip")) == 0 )
-#if defined _UNICODE | defined UNICODE
-        SetToolTip(Ansi2Wchar(pstrValue));
-#else
-        SetToolTip(pstrValue);
-#endif
-        else if( strcmp(pstrName, ("userdata")) == 0 )
-#if defined _UNICODE | defined UNICODE
-        SetUserData(Ansi2Wchar(pstrValue));
-#else
-        SetUserData(pstrValue);
-#endif 
+        else if( strcmp(pstrName, ("name")) == 0 ) SetName(UTF8ToGBK(pstrValue));
+        else if( strcmp(pstrName, ("text")) == 0 ) SetText(UTF8ToGBK(pstrValue));
+        else if( strcmp(pstrName, ("tooltip")) == 0 )SetToolTip(UTF8ToGBK(pstrValue));
+        else if( strcmp(pstrName, ("userdata")) == 0 ) SetUserData(UTF8ToGBK(pstrValue));
         else if( strcmp(pstrName, ("enabled")) == 0 ) SetEnabled(strcmp(pstrValue, ("true")) == 0);
         else if( strcmp(pstrName, ("mouse")) == 0 ) SetMouseEnabled(strcmp(pstrValue, ("true")) == 0);
         else if( strcmp(pstrName, ("keyboard")) == 0 ) SetKeyboardEnabled(strcmp(pstrValue, ("true")) == 0);
@@ -847,12 +826,8 @@ namespace YUI
         else if( strcmp(pstrName, ("float")) == 0 ) SetFloat(strcmp(pstrValue, ("true")) == 0);
         else if( strcmp(pstrName, ("shortcut")) == 0 ) SetShortcut(pstrValue[0]);
         else if( strcmp(pstrName, ("menu")) == 0 ) SetContextMenuUsed(strcmp(pstrValue, ("true")) == 0);
-        else if( strcmp(pstrName, ("virtualwnd")) == 0 ) 
-#if defined _UNICODE | defined UNICODE
-        SetVirtualWnd(Ansi2Wchar(pstrValue).c_str());
-#else
-        SetVirtualWnd(pstrValue);
-#endif 
+        else if( strcmp(pstrName, ("virtualwnd")) == 0 )  SetVirtualWnd(UTF8ToGBK(pstrValue).c_str());
+
     }
 
     std::shared_ptr<ControlUI> ControlUI::ApplyAttributeList(const std::string & strList)

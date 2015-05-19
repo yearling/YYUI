@@ -63,23 +63,13 @@ namespace YUI
     {
         auto pstrName = strName.c_str();
         auto pstrValue = strValue.c_str();
-#if defined _UNICODE | defined UNICODE
-        if( strcmp(pstrName, ("normalimage")) == 0 ) SetNormalImage(Ansi2Wchar(pstrValue));
-        else if( strcmp(pstrName, ("hotimage")) == 0 ) SetHotImage(Ansi2Wchar(pstrValue));
-        else if( strcmp(pstrName, ("pushedimage")) == 0 ) SetPushedImage(Ansi2Wchar(pstrValue));
-        else if( strcmp(pstrName, ("focusedimage")) == 0 ) SetFocusedImage(Ansi2Wchar(pstrValue));
-        else if( strcmp(pstrName, ("disabledimage")) == 0 ) SetDisabledImage(Ansi2Wchar(pstrValue));
-        else if( strcmp(pstrName, ("foreimage")) == 0 ) SetForeImage(Ansi2Wchar(pstrValue));
-        else if( strcmp(pstrName, ("hotforeimage")) == 0 ) SetHotForeImage(Ansi2Wchar(pstrValue));
-#else 
-        if( strcmp(pstrName, ("normalimage")) == 0 ) SetNormalImage(pstrValue);
-        else if( strcmp(pstrName, ("hotimage")) == 0 ) SetHotImage(pstrValue);
-        else if( strcmp(pstrName, ("pushedimage")) == 0 ) SetPushedImage(pstrValue);
-        else if( strcmp(pstrName, ("focusedimage")) == 0 ) SetFocusedImage(pstrValue);
-        else if( strcmp(pstrName, ("disabledimage")) == 0 ) SetDisabledImage(pstrValue);
-        else if( strcmp(pstrName, ("foreimage")) == 0 ) SetForeImage(pstrValue);
-        else if( strcmp(pstrName, ("hotforeimage")) == 0 ) SetHotForeImage(pstrValue);
-#endif
+        if( strcmp(pstrName, ("normalimage")) == 0 ) SetNormalImage(UTF8ToGBK(pstrValue));
+        else if( strcmp(pstrName, ("hotimage")) == 0 ) SetHotImage(UTF8ToGBK(pstrValue));
+        else if( strcmp(pstrName, ("pushedimage")) == 0 ) SetPushedImage(UTF8ToGBK(pstrValue));
+        else if( strcmp(pstrName, ("focusedimage")) == 0 ) SetFocusedImage(UTF8ToGBK(pstrValue));
+        else if( strcmp(pstrName, ("disabledimage")) == 0 ) SetDisabledImage(UTF8ToGBK(pstrValue));
+        else if( strcmp(pstrName, ("foreimage")) == 0 ) SetForeImage(UTF8ToGBK(pstrValue));
+        else if( strcmp(pstrName, ("hotforeimage")) == 0 ) SetHotForeImage(UTF8ToGBK(pstrValue));
         else if( strcmp(pstrName, ("hotbkcolor")) == 0 )
         {
             if( *pstrValue == ('#')) pstrValue = ::CharNextA(pstrValue);
