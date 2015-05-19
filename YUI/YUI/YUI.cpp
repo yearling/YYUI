@@ -81,6 +81,11 @@ int APIENTRY _tWinMain( __in HINSTANCE hInstance, __in_opt HINSTANCE hPrevInstan
         spD3D->Create(NULL,_T("D2DWnd"),UI_WNDSTYLE_FRAME,WS_EX_WINDOWEDGE);
         spD3D->CenterWindow();
 
+       /* std::shared_ptr<D2DWnd> spD4D = std::make_shared<D2DWnd>();
+        spD4D->Init();
+        spD4D->Create(NULL,_T("D2DWnd"),UI_WNDSTYLE_FRAME,WS_EX_WINDOWEDGE);
+        spD4D->CenterWindow();
+*/
 		//spD2D->ShowModal();
         MessageSystem::GetInstance()->MeesageLoop();
 		CoUninitialize();

@@ -85,9 +85,9 @@ namespace YUI
 	{
         Ycout<<"D2DWnd OnRender"<<endl;
         Canvas2D cavas(m_hWnd);
-        if(!cavas.BeginDraw())
-            return;
-        cavas.Clear(YYRGB(155,155,244));
+        /*if(!cavas.BeginDraw())
+            return;*/
+      /*  cavas.Clear(YYRGB(155,155,244));
         YString strOut= _T("HELLO D2D");
         FontD2D defaultFont(_T("Verdana"),50);
         YYCOLOR color(YYRGB(0,0,0));
@@ -100,8 +100,8 @@ namespace YUI
         YYRECT rcCenter(200,200,600,400);
         cavas.DrawRect(rcCenter,YYRGB(0,255,0),1.0f);
         YYRECT rcFill(650,100,750,300);
-        cavas.FillRect(rcFill,YYRGBA(155,155,244,128));
-        cavas.EndDraw();
+        cavas.FillRect(rcFill,YYRGBA(155,155,244,128));*/
+        //cavas.EndDraw();
 	}
 
 	void D2DWnd::CreateDeviceDependResource()

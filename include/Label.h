@@ -31,7 +31,6 @@ namespace YUI
         void                            SetTextPadding(RECT rc);
         bool                            IsShowHtml();
         void                            SetShowHtml(bool bShowHtml = true);
-
         SIZE                            EstimateSize(SIZE szAvailable);
         virtual void SetAttribute(const std::string &strName, const std::string& strValue);
 

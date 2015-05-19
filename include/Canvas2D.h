@@ -2,12 +2,13 @@
 #include "YUI.h"
 #include "RenderDGI.h"
 #include "RenderD2D.h"
-
+#include "ClipRegionDef.h"
 namespace YUI
 {
 
     class Canvas2D
     {
+       
     public:
         Canvas2D(HWND hWnd);
     public:
@@ -20,6 +21,7 @@ namespace YUI
         void                            FillRect(const YYRECT rc,const YYCOLOR &brush);
         void                            OnResize(float width,float height);
         void                            Clear(const YYCOLOR & color);
+        void                            ClipRect(ClipRegionDef& clip);
         YYSIZE                          GetSize();
         static  void                    Init();
         CComPtr<ID2D1HwndRenderTarget>  GetHWNDRT(HWND hWnd);

@@ -174,6 +174,9 @@
     <ClInclude Include="..\..\include\SystemInfo.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\ClipRegionDef.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -256,6 +259,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\WindowWnd.cpp">
       <Filter>YYUI\include\WindowManger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ClipRegionDef.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

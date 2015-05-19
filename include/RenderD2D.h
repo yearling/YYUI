@@ -16,9 +16,11 @@
 #include "BrushDef.h"
 #include "TextureDef.h"
 #include <set>
+#include "ClipRegionDef.h"
 namespace YUI
 {
 	struct Render2DException: YYUIException{};
+    
     class RenderTargetHWND
     {
     public:
@@ -38,6 +40,7 @@ namespace YUI
         void                            DrawLine(YYPOINT start,YYPOINT end,const YYCOLOR &brush,float strokewidth=1.0f);
         void                            DrawRect(const YYRECT rc,const YYCOLOR &brush,float strokewidth=1.0f);
         void                            FillRect(const YYRECT rc,const YYCOLOR &brush);
+        void                            ClipRect(ClipRegionDef &clip);
     private:
         RenderTargetHWND(CComPtr<ID2D1HwndRenderTarget>& rt);
         CComPtr<ID2D1HwndRenderTarget>  m_rt;
@@ -68,6 +71,7 @@ namespace YUI
         void                            DrawLine(HWND hWnd,YYPOINT start,YYPOINT end,const YYCOLOR &brush,float strokewidth=1.0f);
         void                            DrawRect(HWND hWnd,const YYRECT rc,const YYCOLOR &brush,float strokewidth=1.0f);
         void                            FillRect(HWND hWnd,const YYRECT rc,const YYCOLOR &brush);
+        void                            ClipRect(HWND hwnd,ClipRegionDef &clip);
 	public: /*Get & Set*/
 		std::shared_ptr<RenderTargetHWND>	GetHwndRenderTarget(HWND hwnd);
 		std::shared_ptr<RenderTargetHWND>	GetHwndRenderTarget(HWND hwnd,unsigned int width, unsigned int height);

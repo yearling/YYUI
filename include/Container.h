@@ -50,7 +50,7 @@ namespace YUI
 
         virtual int                     FindSelectable(int iIndex, bool bForward = true) const;
         virtual void                    SetPos(RECT &rc);
-        virtual void                    DoPaint(HDC hDC, const RECT& rcPaint);
+        virtual void                    DoPaint(const YYRECT &rc);
         virtual void SetAttribute(const std::string &strName, const std::string& strValue);
         virtual void SetManager(std::shared_ptr<ControlManager> &pManager,
                                         std::weak_ptr<ControlUI> pParent,

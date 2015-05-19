@@ -3,6 +3,7 @@
 #include "ControlUI.h"
 #include "RenderDGI.h"
 #include "ControlManager.h"
+#include "Canvas2D.h"
 
 using  std::cout;
 using  std::wcout;
@@ -871,21 +872,26 @@ namespace YUI
         return m_cXYFixed;
     }
 
-    void ControlUI::DoPaint()
+   
+
+    void ControlUI::DoPaint(const YYRECT &rc)
     {
-        //if( !::IntersectRect(&m_rcPaint, &rcPaint, &m_rcItem) ) return;
+        RECT rcPaint = rc;
+         if( !::IntersectRect(&m_rcPaint, &rcPaint, &m_rcItem) ) 
+             return;
 
         // »æÖÆÑ­Ðò£º±³¾°ÑÕÉ«->±³¾°Í¼->×´Ì¬Í¼->ÎÄ±¾->±ß¿ò
-       /*     PaintBkColor(hDC);
-            PaintBkImage(hDC);
-            PaintStatusImage(hDC);
-            PaintText(hDC);
-            PaintBorder(hDC);*/
+            PaintBkColor();
+            PaintBkImage();
+            PaintStatusImage();
+            PaintText();
+            PaintBorder();
     }
 
     void ControlUI::PaintBkColor()
     {
-     
+        Canvas2D canvas(m_pManager->GetHWND());
+        canvas.FillRect(m_rcItem,m_dwBackColor);
     }
 
     void ControlUI::PaintBkImage()

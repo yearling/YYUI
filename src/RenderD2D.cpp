@@ -202,6 +202,11 @@ namespace YUI
          return GetHwndRenderTarget(hWnd)->FillRect(rc,brush);
     }
 
+    void RenderD2D::ClipRect(HWND hwnd,ClipRegionDef &clip)
+    {
+        return GetHwndRenderTarget(hwnd)->ClipRect(clip);
+    }
+
     CComPtr<IDWriteFactory> RenderD2D::m_pDWriteFactory;
 
     CComPtr<IWICImagingFactory> RenderD2D::m_pWICFactory;
@@ -490,6 +495,15 @@ namespace YUI
     void RenderTargetHWND::FillRect(const YYRECT rc,const YYCOLOR &brush)
     {
         m_rt->FillRectangle(rc,GetSolidColorBrush(brush));
+    }
+
+    void RenderTargetHWND::ClipRect(ClipRegionDef &clip)
+    {
+        auto rc = clip.GetClipRect();
+        m_rt->PushAxisAlignedClip(rc,D2D1_ANTIALIAS_MODE_PER_PRIMITIVE);
+        clip.SetDestroy([&](){
+            m_rt->PopAxisAlignedClip();
+        });
     }
 
     

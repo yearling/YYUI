@@ -70,6 +70,11 @@ namespace YUI
         return m_RenderEngine->FillRect(m_hWnd,rc,brush);
     }
 
+    void Canvas2D::ClipRect(ClipRegionDef& clip)
+    {
+        return m_RenderEngine->ClipRect(m_hWnd,clip);
+    }
+
    
 
     std::shared_ptr<RenderD2D> Canvas2D::m_RenderEngine;

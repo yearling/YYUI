@@ -1,6 +1,7 @@
 #include "YUI.h"
 #include "ControlManager.h"
 #include "ControlUI.h"
+#include "Canvas2D.h"
 
 using std::cout;
 using std::wcout;
@@ -158,8 +159,10 @@ namespace YUI
 						}
 					}
 				}
-			    m_pRoot->DoPaint();
-
+                Canvas2D canvas(m_hWnd);
+                canvas.BeginDraw();
+			    m_pRoot->DoPaint(rcPaint);
+                canvas.EndDraw();
                 PAINTSTRUCT ps;
                 HDC hdc;
                 ::BeginPaint(m_hWnd,&ps);

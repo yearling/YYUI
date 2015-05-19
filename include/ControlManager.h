@@ -23,6 +23,7 @@ namespace YUI
         SPControlUI                     FindControl(const YYPOINT& pt);
         void                            SetCapture();
         void                            ReleaseCapture();
+        HWND                            GetHWND() const { return m_hWnd;}
     private:    
         HWND                            m_hWnd;
         SPControlUI                     m_pFocus;

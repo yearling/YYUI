@@ -2,8 +2,7 @@
 #include "Container.h"
 #include "ControlUI.h"
 #include "PaintManagerUI.h"
-#include "RenderDGI.h"
-
+#include "Canvas2D.h"
 namespace YUI
 {
 
@@ -187,10 +186,65 @@ namespace YUI
         }
     }
 
-    void Container::DoPaint(HDC hDC, const RECT& rcPaint)
+   
+
+    void Container::DoPaint(const YYRECT &rc)
     {
         RECT rcTemp = { 0 };
-        if( !::IntersectRect(&rcTemp, &rcPaint, &m_rcItem) ) return;
+        RECT rcPaint = rc;
+        if( !::IntersectRect(&rcTemp, &rcPaint, &m_rcItem) ) 
+            return;
+        Canvas2D canvas(m_pManager->GetHWND());
+        ClipRegionDef clipregion(rcTemp);
+        canvas.ClipRect(clipregion);
+
+        ControlUI::DoPaint(rcPaint);
+
+        if( !m_SetItems.empty())
+        {
+            RECT subRC = m_rcItem;
+            subRC.left += m_rcInset.left;
+            subRC.top += m_rcInset.top;
+            subRC.right -= m_rcInset.right;
+            subRC.bottom -= m_rcInset.bottom;
+            if(::IntersectRect(&rcTemp,&rcPaint,&subRC))
+            { 
+                ClipRegionDef subRegion(rcTemp);
+                canvas.ClipRect(subRegion);
+               
+                 for(auto &item : m_SetItems )
+                 {
+                     if(!item->IsVisible())
+                         continue;
+                     if(!::IntersectRect(&rcTemp,&rcPaint,&item->GetPos()))
+                         continue;
+                     if(item->IsFloat())
+                     {
+                         if(!::IntersectRect(&rcTemp,&m_rcItem,&item->GetPos()))
+                             continue;
+                         item->DoPaint(rcPaint);
+                     }
+                     else
+                     {
+                         if(!::IntersectRect(&rcTemp,&subRC,&item->GetPos()))
+                             continue; 
+                         item->DoPaint(rcPaint);
+                     }
+                 }
+            }
+            else
+            {
+             /*for( auto &item : m_SetItems)
+                 {
+                if(!item->IsVisible())
+                    continue;
+               if(!::IntersectRect(&rcTemp,&rcPaint,&item->GetPos()))
+                    continue;
+
+            }*/
+            }
+         
+        }
 
     }
 

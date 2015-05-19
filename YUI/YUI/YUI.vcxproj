@@ -229,6 +229,7 @@
     <ClInclude Include="..\..\include\BrushDef.h" />
     <ClInclude Include="..\..\include\Button.h" />
     <ClInclude Include="..\..\include\Canvas2D.h" />
+    <ClInclude Include="..\..\include\ClipRegionDef.h" />
     <ClInclude Include="..\..\include\Container.h" />
     <ClInclude Include="..\..\include\ControlManager.h" />
     <ClInclude Include="..\..\include\ControlUI.h" />
@@ -271,6 +272,7 @@
     <ClCompile Include="..\..\include\thirdparty\tinyxml2\tinyxml2.cpp" />
     <ClCompile Include="..\..\src\Button.cpp" />
     <ClCompile Include="..\..\src\Canvas2D.cpp" />
+    <ClCompile Include="..\..\src\ClipRegionDef.cpp" />
     <ClCompile Include="..\..\src\Container.cpp" />
     <ClCompile Include="..\..\src\ControlManager.cpp" />
     <ClCompile Include="..\..\src\ControlUI.cpp" />

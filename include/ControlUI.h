@@ -157,7 +157,7 @@ namespace YUI
 
         virtual SIZE                    EstimateSize(SIZE szAvailable);
 
-        virtual void                    DoPaint();
+        virtual void                    DoPaint(const YYRECT &rc);
         virtual void                    PaintBkColor();
         virtual void                    PaintBkImage();
         virtual void                    PaintStatusImage();
