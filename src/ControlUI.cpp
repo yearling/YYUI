@@ -1058,19 +1058,18 @@ namespace YUI
 
      void ControlUI::AddHandler()
     {
-        m_pControlMsgHandler = std::make_shared<IMsgHandler>();
-        m_pControlMsgHandler->AddEntry(UIMSG_SETCURSOR,[&](const MsgWrap &msg)
+        m_ControlMsgHandler.AddEntry(UIMSG_SETCURSOR,[&](const MsgWrap &msg)
         {
              ::SetCursor(::LoadCursor(NULL, MAKEINTRESOURCE(IDC_ARROW)));
         });
 
-        m_pControlMsgHandler->AddEntry(UIMSG_SETFOCUS,[&](const MsgWrap &msg)
+        m_ControlMsgHandler.AddEntry(UIMSG_SETFOCUS,[&](const MsgWrap &msg)
         {
             m_bFocused = true;
             Invalidate();
         });
 
-        m_pControlMsgHandler->AddEntry(UIMSG_KILLFOCUS,[&](const MsgWrap &msg)
+        m_ControlMsgHandler.AddEntry(UIMSG_KILLFOCUS,[&](const MsgWrap &msg)
         {
             m_bFocused = false;
             Invalidate();
@@ -1091,8 +1090,7 @@ namespace YUI
 
      void ControlUI::HandleMsg(const MsgWrap & msg) throw()
      {
-         assert(m_pControlMsgHandler);
-         m_pControlMsgHandler->HandleMsg(msg);
+         m_ControlMsgHandler.HandleMsg(msg);
      }
 
 

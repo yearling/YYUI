@@ -7,24 +7,22 @@ namespace YUI
 
     void MsgHandleChainBase::HandleMsg(const NotifyMsg & msg)
     {
-        auto sp= m_wpSuccessor.lock();
-        if(sp)
-            sp->HandleMsg(msg);
+            m_pSuccessor->HandleMsg(msg);
     }
 
     void MsgHandleChainBase::HandleMsg(const MsgWrap & msg)
     {
-        auto sp= m_wpSuccessor.lock();
-        if(sp)
-            sp->HandleMsg(msg);
+		if( m_pSuccessor )
+            m_pSuccessor->HandleMsg(msg);
     }
 
-    void MsgHandleChainBase::SetSuccessor(std::shared_ptr<MsgHandleChainBase> sp)
+    void MsgHandleChainBase::SetSuccessor(MsgHandleChainBase* pBase)
     {
-        m_wpSuccessor = sp;
+        m_pSuccessor = pBase;
     }
 
     MsgHandleChainBase::MsgHandleChainBase()
+		:m_pSuccessor( nullptr)
     {
 
     }
@@ -35,17 +33,17 @@ namespace YUI
     }
 
 
-    IMsgHandler::IMsgHandler()
+    MsgHandler::MsgHandler()
     {
 
     }
 
-    IMsgHandler::~IMsgHandler()
+    MsgHandler::~MsgHandler()
     {
 
     }
 
-    void IMsgHandler::HandleMsg(const MsgWrap & msg) throw()
+    void MsgHandler::HandleMsg(const MsgWrap & msg) throw()
     {
         auto iterLow = m_MessageMap.lower_bound(msg.strType);
         auto iterUp = m_MessageMap.upper_bound(msg.strType);
@@ -58,12 +56,12 @@ namespace YUI
         }
     }
 
-    void IMsgHandler::AddEntry(const YString &strType,FucHandleMsg fuc)
+    void MsgHandler::AddEntry(const YString &strType,FucHandleMsg fuc)
     {
         m_MessageMap.insert(MsgMap::value_type(strType,fuc));
     }
 
-    void IMsgHandler::DeleteEntry(const YString &strType,FucHandleMsg)
+    void MsgHandler::DeleteEntry(const YString &strType,FucHandleMsg)
     {
         assert(0 && "unimplement");
     }

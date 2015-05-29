@@ -446,15 +446,14 @@ namespace YUI
 
     void Label::AddHander()
     {
-        m_pLabelMsgHandler= std::make_shared<IMsgHandler>();
-        m_pLabelMsgHandler->SetSuccessor(m_pControlMsgHandler);
-        m_pLabelMsgHandler->AddEntry(UIMSG_SETFOCUS,[&](const MsgWrap &msg)
+        m_LabelMsgHandler.SetSuccessor(&m_ControlMsgHandler);
+        m_LabelMsgHandler.AddEntry(UIMSG_SETFOCUS,[&](const MsgWrap &msg)
         {
             m_bFocused = true;
             Invalidate();
         });
 
-        m_pLabelMsgHandler->AddEntry(UIMSG_KILLFOCUS,[&](const MsgWrap &msg)
+        m_LabelMsgHandler.AddEntry(UIMSG_KILLFOCUS,[&](const MsgWrap &msg)
         {
             m_bFocused = false;
             Invalidate();
@@ -463,8 +462,7 @@ namespace YUI
 
     void Label::HandleMsg(const MsgWrap & msg) throw()
     {
-        assert(m_pLabelMsgHandler);
-        m_pLabelMsgHandler->HandleMsg(msg);
+        m_LabelMsgHandler.HandleMsg(msg);
     }
 
 }

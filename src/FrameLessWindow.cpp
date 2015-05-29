@@ -55,10 +55,6 @@ namespace YUI
         return WindowWnd::OnSysMessage(uMsg, wParam, lParam);
     }
 
-    void FrameLessWindow::HandleMsg(const MsgWrap & msg) throw()
-    {
-
-    }
 
     void FrameLessWindow::InitWindow()
     {

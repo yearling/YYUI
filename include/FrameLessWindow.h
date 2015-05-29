@@ -5,7 +5,6 @@
 namespace YUI
 {
     class FrameLessWindow:public WindowWnd,
-                          public IMsgHandler,
                           public std::enable_shared_from_this<FrameLessWindow>
     {
 
@@ -21,7 +20,6 @@ namespace YUI
 #pragma region inherite the interfaces
     public:
         virtual LRESULT                 OnSysMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
-        virtual void					HandleMsg(const MsgWrap & msg)throw();	
         virtual UINT                    GetClassStyle() const;
 #pragma endregion 继承来的接口
 

@@ -63,7 +63,7 @@ namespace YUI
         YString                         m_sPushedForeImage;
         YString                         m_sFocusedImage;
         YString                         m_sDisabledImage;
-        std::shared_ptr<IMsgHandler>    m_pButtonMsgHandler;
+        MsgHandler						m_ButtonMsgHandler;
     };
 
 }

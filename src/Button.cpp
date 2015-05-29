@@ -306,21 +306,20 @@ namespace YUI
 
     void Button::AddHander()
     {
-        m_pButtonMsgHandler = std::make_shared<IMsgHandler>();
-        m_pButtonMsgHandler->SetSuccessor(m_pLabelMsgHandler);
+        m_ButtonMsgHandler.SetSuccessor(&m_LabelMsgHandler);
         
-       m_pButtonMsgHandler->AddEntry(UIMSG_SETFOCUS,[&](const MsgWrap &msg)
+       m_ButtonMsgHandler.AddEntry(UIMSG_SETFOCUS,[&](const MsgWrap &msg)
         {
             Invalidate();
-           m_pButtonMsgHandler->MsgHandleChainBase::HandleMsg(msg);
+           m_ButtonMsgHandler.MsgHandleChainBase::HandleMsg(msg);
         });
-        m_pButtonMsgHandler->AddEntry(UIMSG_KILLFOCUS,[&](const MsgWrap &msg)
+        m_ButtonMsgHandler.AddEntry(UIMSG_KILLFOCUS,[&](const MsgWrap &msg)
         {
             Invalidate();
-           m_pButtonMsgHandler->MsgHandleChainBase::HandleMsg(msg);
+           m_ButtonMsgHandler.MsgHandleChainBase::HandleMsg(msg);
         });
         
-        m_pButtonMsgHandler->AddEntry(UIMSG_KEYDOWN,[&](const MsgWrap &msg)
+        m_ButtonMsgHandler.AddEntry(UIMSG_KEYDOWN,[&](const MsgWrap &msg)
         {
             if (IsKeyboardEnabled()) {
                 if( msg.wParam == VK_SPACE || msg.wParam == VK_RETURN ) {
@@ -329,7 +328,7 @@ namespace YUI
             }
         });
 
-        m_pButtonMsgHandler->AddEntry(UIMSG_LBUTTONDOWN,[&](const MsgWrap &msg)
+        m_ButtonMsgHandler.AddEntry(UIMSG_LBUTTONDOWN,[&](const MsgWrap &msg)
         {
             POINT pt= { GET_X_LPARAM(msg.lParam),GET_Y_LPARAM(msg.lParam)};
             if( ::PtInRect(&m_rcItem, pt) && IsEnabled() ) 
@@ -339,7 +338,7 @@ namespace YUI
             }
         });
 
-        m_pButtonMsgHandler->AddEntry(UIMSG_DBLCLICK,[&](const MsgWrap &msg)
+        m_ButtonMsgHandler.AddEntry(UIMSG_DBLCLICK,[&](const MsgWrap &msg)
         {
             POINT pt= { GET_X_LPARAM(msg.lParam),GET_Y_LPARAM(msg.lParam)};
             if( ::PtInRect(&m_rcItem, pt) && IsEnabled() ) 
@@ -349,7 +348,7 @@ namespace YUI
             }
         });
 
-        m_pButtonMsgHandler->AddEntry(UIMSG_MOUSEMOVE,[&](const MsgWrap &msg)
+        m_ButtonMsgHandler.AddEntry(UIMSG_MOUSEMOVE,[&](const MsgWrap &msg)
         {
             POINT pt= { GET_X_LPARAM(msg.lParam),GET_Y_LPARAM(msg.lParam)};
             if( (m_uButtonState & UISTATE_CAPTURED) != 0 ) 
@@ -360,7 +359,7 @@ namespace YUI
             }
         });
 
-        m_pButtonMsgHandler->AddEntry(UIMSG_LBUTTONUP,[&](const MsgWrap &msg)
+        m_ButtonMsgHandler.AddEntry(UIMSG_LBUTTONUP,[&](const MsgWrap &msg)
         {
             POINT pt= { GET_X_LPARAM(msg.lParam),GET_Y_LPARAM(msg.lParam)};
             if( (m_uButtonState & UISTATE_CAPTURED) != 0 )
@@ -372,27 +371,27 @@ namespace YUI
             }
         }); 
        
-        m_pButtonMsgHandler->AddEntry(UIMSG_MOUSEENTER,[&](const MsgWrap &msg)
+        m_ButtonMsgHandler.AddEntry(UIMSG_MOUSEENTER,[&](const MsgWrap &msg)
         {
             if( IsEnabled() ) 
             {
                 m_uButtonState |= UISTATE_HOT;
                 Invalidate();
             }
-           m_pButtonMsgHandler->MsgHandleChainBase::HandleMsg(msg);
+           m_ButtonMsgHandler.MsgHandleChainBase::HandleMsg(msg);
         }); 
         
-        m_pButtonMsgHandler->AddEntry(UIMSG_MOUSELEAVE,[&](const MsgWrap &msg)
+        m_ButtonMsgHandler.AddEntry(UIMSG_MOUSELEAVE,[&](const MsgWrap &msg)
         {
             if( IsEnabled() ) 
             {
                 m_uButtonState &= ~UISTATE_HOT;
                 Invalidate();
             }
-            m_pButtonMsgHandler->MsgHandleChainBase::HandleMsg(msg);
+            m_ButtonMsgHandler.MsgHandleChainBase::HandleMsg(msg);
         }); 
 
-        m_pButtonMsgHandler->AddEntry(UIMSG_SETCURSOR,[&](const MsgWrap &msg)
+        m_ButtonMsgHandler.AddEntry(UIMSG_SETCURSOR,[&](const MsgWrap &msg)
         {
            ::SetCursor(::LoadCursor(NULL, MAKEINTRESOURCE(IDC_HAND)));
         });
@@ -402,8 +401,7 @@ namespace YUI
 
     void Button::HandleMsg(const MsgWrap & msg) throw()
     {
-        assert(m_pButtonMsgHandler);
-        m_pButtonMsgHandler->HandleMsg(msg);
+        m_ButtonMsgHandler.HandleMsg(msg);
     }
 
   }

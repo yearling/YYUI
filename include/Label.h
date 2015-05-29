@@ -99,6 +99,6 @@ namespace YUI
         DWORD					        m_dwStrokeColor;
         YYRECT					        m_ShadowOffset;
         YString				            m_TextValue;
-        std::shared_ptr<IMsgHandler>    m_pLabelMsgHandler;
+        MsgHandler						m_LabelMsgHandler;
     };
 }

@@ -216,6 +216,6 @@ namespace YUI
         RECT                            m_rcPaint; 
         RECT                            m_rcBorderSize;//tag 'boradersize' 'leftbordersize' 'topboradersize' 'bottombordersize' 
     protected:
-        std::shared_ptr<IMsgHandler>    m_pControlMsgHandler;
+        MsgHandler					    m_ControlMsgHandler;
     };
 }

@@ -578,15 +578,14 @@ namespace YUI
 
     void Container::AddHandler()
     {
-        m_pContainerMsgHandler= std::make_shared<IMsgHandler>();
-        m_pContainerMsgHandler->SetSuccessor(m_pControlMsgHandler);
-        m_pContainerMsgHandler->AddEntry(UIMSG_SETFOCUS,[&](const MsgWrap &msg)
+        m_ContainerMsgHandler.SetSuccessor(&m_ControlMsgHandler);
+        m_ContainerMsgHandler.AddEntry(UIMSG_SETFOCUS,[&](const MsgWrap &msg)
         {
             m_bFocused = true;
             Invalidate();
         });
 
-        m_pContainerMsgHandler->AddEntry(UIMSG_KILLFOCUS,[&](const MsgWrap &msg)
+        m_ContainerMsgHandler.AddEntry(UIMSG_KILLFOCUS,[&](const MsgWrap &msg)
         {
             m_bFocused = false;
             Invalidate();
@@ -595,8 +594,7 @@ namespace YUI
 
     void Container::HandleMsg(const MsgWrap & msg) throw()
     {
-        assert(m_pContainerMsgHandler);
-        m_pContainerMsgHandler->HandleMsg(msg);
+        m_ContainerMsgHandler.HandleMsg(msg);
     }
 
 }

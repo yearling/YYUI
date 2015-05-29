@@ -8,25 +8,25 @@ namespace YUI
     {
     public:
         MsgHandleChainBase();
-        virtual                      ~MsgHandleChainBase();
-        virtual void                 HandleMsg(const NotifyMsg & msg)throw();
+        virtual                         ~MsgHandleChainBase();
+        virtual void					HandleMsg(const NotifyMsg & msg)throw();
         virtual void					HandleMsg(const MsgWrap & msg)throw();
         //设计继承的对象，就是下一步要交给处理的对像
-        void                         SetSuccessor(std::shared_ptr<MsgHandleChainBase> sp);
+        void							SetSuccessor(MsgHandleChainBase* pBase);
 
     private:
-        std::weak_ptr<MsgHandleChainBase>  m_wpSuccessor;//下一个要交给的处理的对像
+        MsgHandleChainBase*			   m_pSuccessor;//下一个要交给的处理的对像
     };
 
    
 
-    class IMsgHandler : public MsgHandleChainBase
+    class MsgHandler : public MsgHandleChainBase
     {
     public:
         typedef std::multimap<const YString,FucHandleMsg> MsgMap;
     public:
-        IMsgHandler();
-        virtual ~IMsgHandler();
+        MsgHandler();
+        virtual ~MsgHandler();
         virtual void					HandleMsg(const MsgWrap & msg)throw();	
         void							AddEntry(const YString &strType,FucHandleMsg  );
         void							DeleteEntry(const YString &strType,FucHandleMsg );	

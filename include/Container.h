@@ -100,6 +100,6 @@ namespace YUI
 
         std::shared_ptr<Scrollbar>      m_pVerticalScrollBar;
         std::shared_ptr<Scrollbar>      m_pHorizontalScrollBar;
-        std::shared_ptr<IMsgHandler>    m_pContainerMsgHandler;
+        MsgHandler						m_ContainerMsgHandler;
     };
 }
