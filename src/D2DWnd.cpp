@@ -33,40 +33,6 @@ namespace YUI
 	}
 
   
-	LRESULT D2DWnd::OnSysMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
-	{
-		switch (uMsg)
-		{
-		case WM_PAINT:
-			{
-				OnRender();
-			}
-			break;
-		case WM_SIZE:
-			{
-				OnResize(LOWORD(lParam),HIWORD(lParam));
-			}
-            break;
-        case WM_SYSCOMMAND:
-            {
-                if( wParam ==SC_CLOSE)
-                {
-                    Close(0);
-                    return 0;
-                }
-            }
-            break;
-        case WM_SETCURSOR:
-            {
-               static int i = 0;
-               Ycout<<"!!!!!!SetCursor  "<<i++<<endl;
-            }
-		default:
-			break;
-		}
-		return FrameLessWindow::OnSysMessage(uMsg,wParam,lParam);
-	}
-
 	void D2DWnd::Init()
 	{
 		YString msc_fontName = _T("Verdana");

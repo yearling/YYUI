@@ -9,18 +9,21 @@ namespace YUI
     class Button:public Label
     {
     public:
+        typedef std::function<void() throw()> EventClick;
         Button();
         virtual ~Button();
         void                            AddHander();
+        virtual void					HandleMsg(const MsgWrap & msg)throw();
         LPCTSTR                         GetClass() const;
         virtual std::shared_ptr<ControlUI> QueryInterface(const std::string & strName);
         virtual UINT                    GetControlFlags() const;
         virtual bool                    Activate();
         virtual void                    SetEnabled(bool bEnable = true);
         virtual SIZE                    EstimateSize(SIZE szAvailable);
-        virtual void SetAttribute(const std::string &strName, const std::string& strValue);
-        virtual void                    PaintText(HDC hDC);
-        virtual void                    PaintStatusImage(HDC hDC);
+        virtual void                    SetAttribute(const std::string &strName, const std::string& strValue);
+        virtual void                    PaintText();
+        virtual void                    PaintStatusImage();
+        void                            SetClickEvent(EventClick& eve) { m_eventClick = eve;}
         YString                         GetNormalImage();
         void                            SetNormalImage(const YString& pStrImage);
         YString                         GetHotImage();
@@ -52,7 +55,7 @@ namespace YUI
         DWORD                           m_dwHotTextColor;
         DWORD                           m_dwPushedTextColor;
         DWORD                           m_dwFocusedTextColor;
-
+        EventClick                      m_eventClick;
         YString                         m_sNormalImage;
         YString                         m_sHotImage;
         YString                         m_sHotForeImage;
@@ -60,6 +63,7 @@ namespace YUI
         YString                         m_sPushedForeImage;
         YString                         m_sFocusedImage;
         YString                         m_sDisabledImage;
+        std::shared_ptr<IMsgHandler>    m_pButtonMsgHandler;
     };
 
 }

@@ -11,7 +11,6 @@ namespace YUI
         LPCTSTR                         GetClass() const;
         virtual std::shared_ptr<ControlUI> QueryInterface(const std::string & strName);
         UINT                            GetControlFlags() const;
-        void                            AddHandler();
         void                            SetSepWidth(int iWidth);
         int                             GetSepWidth() const;
         void                            SetSepImmMode(bool bImmediately);

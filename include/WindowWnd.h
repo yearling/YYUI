@@ -88,6 +88,7 @@ namespace YUI
 #pragma region GET/SET
     public: 
         void                            SetIcon(UINT nRes);
+        const WindowProperty*           GetWindowProperty() const { return &m_Property;}
 #pragma endregion GET/SET
     public: 
         HWND                            GetHWND() const  { return m_hWnd; }

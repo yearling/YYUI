@@ -185,9 +185,115 @@ namespace YUI
 
   
 
-    bool ControlUI::DrawImage(HDC hDc, const YString strImg, const YString strModify /*=_T("")*/)
+    void ControlUI::DrawImage(const YString &strImg)
     {
-        return true; 
+        Canvas2D canvas(m_pManager->GetHWND());
+        //canvas.DrawBitmap(strImg,m_rcItem);
+        // 1¡¢aaa.jpg
+        // 2¡¢file='aaa.jpg' res='' restype='0' dest='0,0,0,0' source='0,0,0,0' corner='0,0,0,0' 
+        // mask='#FF0000' fade='255' hole='false' xtiled='false' ytiled='false'
+
+        YString sImageName = strImg;
+        LPCTSTR pStrImage = strImg.c_str();
+        YString sImageResType;
+        RECT rcItem = m_rcItem;
+        RECT rc = m_rcItem;
+        RECT rcBmpPart = {0};
+        RECT rcCorner = {0};
+        DWORD dwMask = 0;
+        BYTE bFade = 0xFF;
+        bool bHole = false;
+        bool bTiledX = false;
+        bool bTiledY = false;
+
+        int image_count = 0;
+        YString sItem;
+        YString sValue;
+        LPTSTR pstr = NULL;
+        for( int i = 0; i < 2; ++i,image_count = 0 )
+        {
+            if(strImg.empty())
+                continue;
+            while( *pStrImage != _T('\0') ) {
+                sItem.clear();
+                sValue.clear();
+                while( *pStrImage > _T('\0') && *pStrImage <= _T(' ') ) pStrImage = ::CharNext(pStrImage);
+                while( *pStrImage != _T('\0') && *pStrImage != _T('=') && *pStrImage > _T(' ') ) {
+                    LPTSTR pstrTemp = ::CharNext(pStrImage);
+                    while( pStrImage < pstrTemp) {
+                        sItem += *pStrImage++;
+                    }
+                }
+                while( *pStrImage > _T('\0') && *pStrImage <= _T(' ') ) pStrImage = ::CharNext(pStrImage);
+                if( *pStrImage++ != _T('=') ) break;
+                while( *pStrImage > _T('\0') && *pStrImage <= _T(' ') ) pStrImage = ::CharNext(pStrImage);
+                if( *pStrImage++ != _T('\'') ) break;
+                while( *pStrImage != _T('\0') && *pStrImage != _T('\'') ) {
+                    LPTSTR pstrTemp = ::CharNext(pStrImage);
+                    while( pStrImage < pstrTemp) {
+                        sValue += *pStrImage++;
+                    }
+                }
+                if( *pStrImage++ != _T('\'') ) break;
+                if( !sValue.empty() ) {
+                    if( sItem == _T("file") || sItem == _T("res") ) {
+                        if( image_count > 0 )
+                        {
+                            assert(0&&"should not be here");
+                        }
+                        sImageName = sValue;
+                        if( sItem == _T("file") )
+                            ++image_count;
+                    }
+                    else if( sItem == _T("restype") ) {
+                        if( image_count > 0 )
+                        {
+                            assert(0&&"should not be here");
+                        }
+                        sImageResType = sValue;
+                        ++image_count;
+                    }
+                    else if( sItem == _T("dest") ) {
+                        rcItem.left = rc.left + _tcstol(sValue.c_str(), &pstr, 10);  assert(pstr);    
+                        rcItem.top = rc.top + _tcstol(pstr + 1, &pstr, 10);    assert(pstr);
+                        rcItem.right = rc.left + _tcstol(pstr + 1, &pstr, 10);  assert(pstr);
+                        if (rcItem.right > rc.right) rcItem.right = rc.right;
+                        rcItem.bottom = rc.top + _tcstol(pstr + 1, &pstr, 10); assert(pstr);
+                        if (rcItem.bottom > rc.bottom) rcItem.bottom = rc.bottom;
+                    }
+                    else if( sItem == _T("source") ) {
+                        rcBmpPart.left = _tcstol(sValue.c_str(), &pstr, 10);  assert(pstr);    
+                        rcBmpPart.top = _tcstol(pstr + 1, &pstr, 10);    assert(pstr);    
+                        rcBmpPart.right = _tcstol(pstr + 1, &pstr, 10);  assert(pstr);    
+                        rcBmpPart.bottom = _tcstol(pstr + 1, &pstr, 10); assert(pstr);  
+                    }
+                    else if( sItem == _T("corner") ) {
+                        rcCorner.left = _tcstol(sValue.c_str(), &pstr, 10);  assert(pstr);    
+                        rcCorner.top = _tcstol(pstr + 1, &pstr, 10);    assert(pstr);    
+                        rcCorner.right = _tcstol(pstr + 1, &pstr, 10);  assert(pstr);    
+                        rcCorner.bottom = _tcstol(pstr + 1, &pstr, 10); assert(pstr);
+                    }
+                    else if( sItem == _T("mask") ) {
+                        if( sValue[0] == _T('#')) dwMask = _tcstoul(sValue.c_str() + 1, &pstr, 16);
+                        else dwMask = _tcstoul(sValue.c_str(), &pstr, 16);
+                    }
+                    else if( sItem == _T("fade") ) {
+                        bFade = (BYTE)_tcstoul(sValue.c_str(), &pstr, 10);
+                    }
+                    else if( sItem == _T("hole") ) {
+                        bHole = (_tcscmp(sValue.c_str(), _T("true")) == 0);
+                    }
+                    else if( sItem == _T("xtiled") ) {
+                        bTiledX = (_tcscmp(sValue.c_str(), _T("true")) == 0);
+                    }
+                    else if( sItem == _T("ytiled") ) {
+                        bTiledY = (_tcscmp(sValue.c_str(), _T("true")) == 0);
+                    }
+                }
+                if( *pStrImage++ != _T(' ') ) break;
+            }
+        }
+        canvas.DrawBitmap(sImageName,rcItem,rcBmpPart,((float)dwMask)/255.0f);
     }
 
     int ControlUI::GetBorderSize() const
@@ -647,9 +753,9 @@ namespace YUI
 
     std::shared_ptr<ControlUI> ControlUI::FindControlFromPoint(POINT pt,UINT flag)
     {
-        if( (flag & UIFIND_VISIBLE) != 0 && !IsVisible() ) return NULL;
-        if( (flag & UIFIND_ENABLED) != 0 && !IsEnabled() ) return NULL;
-        if( (flag & UIFIND_HITTEST) != 0 && (!m_bMouseEnabled || !::PtInRect(&m_rcItem, pt ) ))
+        if( !IsVisible() ) 
+            return NULL;
+        if( !IsEnabled() ) 
             return NULL;
         return ::PtInRect(&m_rcItem,pt)? shared_from_this() : NULL;
     }
@@ -896,6 +1002,13 @@ namespace YUI
 
     void ControlUI::PaintBkImage()
     {
+        /*Canvas2D canvas(m_pManager->GetHWND());
+        if(m_strBKImage.empty())
+            return;
+        canvas.DrawBitmap(m_strBKImage,m_rcItem);*/
+        if(m_strBKImage.empty())
+            return;
+        DrawImage(m_strBKImage);
     }
 
     void ControlUI::PaintStatusImage()
@@ -910,9 +1023,9 @@ namespace YUI
 
     void ControlUI::PaintBorder()
     {
-        if(m_dwBorderColor != 0 || m_dwFocusBorderColor != 0)
-        {
-        }
+        Canvas2D canvas(m_pManager->GetHWND());
+        if(IsFocused() && m_dwFocusBorderColor != 0 && m_nBorderSize >0)
+            canvas.DrawRect(m_rcItem,m_dwFocusBorderColor,m_nBorderSize);
     }
 
     void ControlUI::DoPostPaint(HDC hDC, const RECT& rcPaint)
@@ -945,23 +1058,42 @@ namespace YUI
 
      void ControlUI::AddHandler()
     {
-        AddEntry(UIMSG_SETCURSOR,[&](const MsgWrap &msg)
+        m_pControlMsgHandler = std::make_shared<IMsgHandler>();
+        m_pControlMsgHandler->AddEntry(UIMSG_SETCURSOR,[&](const MsgWrap &msg)
         {
              ::SetCursor(::LoadCursor(NULL, MAKEINTRESOURCE(IDC_ARROW)));
         });
 
-        AddEntry(UIMSG_SETFOCUS,[&](const MsgWrap &msg)
+        m_pControlMsgHandler->AddEntry(UIMSG_SETFOCUS,[&](const MsgWrap &msg)
         {
             m_bFocused = true;
             Invalidate();
         });
 
-        AddEntry(UIMSG_KILLFOCUS,[&](const MsgWrap &msg)
+        m_pControlMsgHandler->AddEntry(UIMSG_KILLFOCUS,[&](const MsgWrap &msg)
         {
             m_bFocused = false;
             Invalidate();
         });
+       /* m_pControlMsgHandler->AddEntry(UIMSG_MOUSEENTER,[&](const MsgWrap &msg)
+        {
+            m_pManager->SetCapture();
+            Invalidate();
+        });*/
+        /*
+        m_pControlMsgHandler->AddEntry(UIMSG_MOUSELEAVE,[&](const MsgWrap &msg)
+        {
+            m_pManager->ReleaseCapture();
+            Ycout<<GetName()<<_T(" release capture!!!")<<endl;
+            Invalidate();
+        });*/
     }
+
+     void ControlUI::HandleMsg(const MsgWrap & msg) throw()
+     {
+         assert(m_pControlMsgHandler);
+         m_pControlMsgHandler->HandleMsg(msg);
+     }
 
 
 

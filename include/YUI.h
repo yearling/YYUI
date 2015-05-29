@@ -320,7 +320,7 @@ namespace YUI
         float a;
         operator COLORREF()
         {
-           COLORREF col= RGB((byte)r*255,(byte)g*255,(byte)b*255);
+           return (COLORREF)YYRGB((byte)r*255,(byte)g*255,(byte)b*255);
         }
         operator unsigned int()
         {

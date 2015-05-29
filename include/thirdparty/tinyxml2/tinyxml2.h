@@ -78,16 +78,16 @@ distribution.
 #if defined(DEBUG)
 #   if defined(_MSC_VER)
 #       // "(void)0," is for suppressing C4127 warning in "assert(false)", "assert(true)" and the like
-#       define TIXMLASSERT( x )           if ( !((void)0,(x))) { __debugbreak(); } //if ( !(x)) WinDebugBreak()
+#       define TIXMLassert( x )           if ( !((void)0,(x))) { __debugbreak(); } //if ( !(x)) WinDebugBreak()
 #   elif defined (ANDROID_NDK)
 #       include <android/log.h>
-#       define TIXMLASSERT( x )           if ( !(x)) { __android_log_assert( "assert", "grinliz", "ASSERT in '%s' at %d.", __FILE__, __LINE__ ); }
+#       define TIXMLassert( x )           if ( !(x)) { __android_log_assert( "assert", "grinliz", "assert in '%s' at %d.", __FILE__, __LINE__ ); }
 #   else
 #       include <assert.h>
-#       define TIXMLASSERT                assert
+#       define TIXMLassert                assert
 #   endif
 #   else
-#       define TIXMLASSERT( x )           {}
+#       define TIXMLassert( x )           {}
 #endif
 
 
@@ -232,14 +232,14 @@ public:
     }
 
     void Push( T t ) {
-        TIXMLASSERT( _size < INT_MAX );
+        TIXMLassert( _size < INT_MAX );
         EnsureCapacity( _size+1 );
         _mem[_size++] = t;
     }
 
     T* PushArr( int count ) {
-        TIXMLASSERT( count >= 0 );
-        TIXMLASSERT( _size <= INT_MAX - count );
+        TIXMLassert( count >= 0 );
+        TIXMLassert( _size <= INT_MAX - count );
         EnsureCapacity( _size+count );
         T* ret = &_mem[_size];
         _size += count;
@@ -247,12 +247,12 @@ public:
     }
 
     T Pop() {
-        TIXMLASSERT( _size > 0 );
+        TIXMLassert( _size > 0 );
         return _mem[--_size];
     }
 
     void PopArr( int count ) {
-        TIXMLASSERT( _size >= count );
+        TIXMLassert( _size >= count );
         _size -= count;
     }
 
@@ -261,22 +261,22 @@ public:
     }
 
     T& operator[](int i)				{
-        TIXMLASSERT( i>= 0 && i < _size );
+        TIXMLassert( i>= 0 && i < _size );
         return _mem[i];
     }
 
     const T& operator[](int i) const	{
-        TIXMLASSERT( i>= 0 && i < _size );
+        TIXMLassert( i>= 0 && i < _size );
         return _mem[i];
     }
 
     const T& PeekTop() const            {
-        TIXMLASSERT( _size > 0 );
+        TIXMLassert( _size > 0 );
         return _mem[ _size - 1];
     }
 
     int Size() const					{
-        TIXMLASSERT( _size >= 0 );
+        TIXMLassert( _size >= 0 );
         return _size;
     }
 
@@ -297,9 +297,9 @@ private:
     void operator=( const DynArray& ); // not supported
 
     void EnsureCapacity( int cap ) {
-        TIXMLASSERT( cap > 0 );
+        TIXMLassert( cap > 0 );
         if ( cap > _allocated ) {
-            TIXMLASSERT( cap <= INT_MAX / 2 );
+            TIXMLassert( cap <= INT_MAX / 2 );
             int newAllocated = cap * 2;
             T* newMem = new T[newAllocated];
             memcpy( newMem, _mem, sizeof(T)*_size );	// warning: not using constructors, only works for PODs
@@ -545,11 +545,11 @@ class XMLUtil
 {
 public:
     static const char* SkipWhiteSpace( const char* p )	{
-        TIXMLASSERT( p );
+        TIXMLassert( p );
         while( IsWhiteSpace(*p) ) {
             ++p;
         }
-        TIXMLASSERT( p );
+        TIXMLassert( p );
         return p;
     }
     static char* SkipWhiteSpace( char* p )				{

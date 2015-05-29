@@ -79,6 +79,14 @@ namespace YUI
           return m_mapHWNDToWindow.size();
       }
 
+      const WindowProperty* WindowManger::GetWindowProperty(HWND hWnd) 
+      {
+          auto iter = m_mapHWNDToWindow.find(hWnd);
+          if(iter == m_mapHWNDToWindow.end() )
+              return nullptr;
+          m_mapHWNDToWindow[hWnd]->GetWindowProperty();
+      }
+
     YUI::WindowManger WindowManger::m_Instance;
 
 }

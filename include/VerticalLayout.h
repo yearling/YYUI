@@ -7,7 +7,6 @@ namespace YUI
     {
     public:    
         VerticalLayout();
-        void                            AddHandler();
         virtual LPCTSTR                 GetClass() const;
         virtual std::shared_ptr<ControlUI> QueryInterface(const std::string & strName);
         virtual void SetAttribute(const std::string &strName, const std::string& strValue);

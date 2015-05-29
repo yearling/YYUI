@@ -24,6 +24,7 @@ namespace YUI
         void                            SetCapture();
         void                            ReleaseCapture();
         HWND                            GetHWND() const { return m_hWnd;}
+        const WindowProperty*           GetWindowProperty() const;
     private:    
         HWND                            m_hWnd;
         SPControlUI                     m_pFocus;

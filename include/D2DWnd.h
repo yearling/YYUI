@@ -38,7 +38,6 @@ namespace YUI
 		virtual UINT                    GetClassStyle() const;
 		virtual LPCTSTR                 GetWindowClassName() const ;
 		virtual void                    OnFinalMessage(HWND hWnd);
-		virtual LRESULT                 OnSysMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
 	public:
 		virtual void					Init();
 		virtual void					OnResize(unsigned int width,unsigned int height);

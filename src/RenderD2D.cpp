@@ -187,6 +187,11 @@ namespace YUI
         return GetHwndRenderTarget(hWnd)->DrawBitmap(strBmp,rc);
     }
 
+    void RenderD2D::DrawBitmap(HWND hWnd,const YString &strBmp,const YYRECT &desRC,const YYRECT &srcRC,float alpha/*=1.0f*/)
+    {
+        return GetHwndRenderTarget(hWnd)->DrawBitmap(strBmp,desRC,srcRC,alpha);
+    }
+
     void RenderD2D::DrawLine(HWND hWnd,YYPOINT start,YYPOINT end,const YYCOLOR &brush,float strokewidth/*=1.0f*/)
     {
         return GetHwndRenderTarget(hWnd)->DrawLine(start,end,brush,strokewidth);
@@ -480,6 +485,14 @@ namespace YUI
     {
         auto m_pTexture= GetBitmap(strBmp);
         m_rt->DrawBitmap(m_pTexture,rc);
+    }
+
+    void RenderTargetHWND::DrawBitmap(const YString &strBmp,const YYRECT &desRC,const YYRECT &srcRC,float alpha/*=1.0f*/)
+    {
+        if(srcRC.Empty())
+            m_rt->DrawBitmap(GetBitmap(strBmp),desRC);
+        else
+            m_rt->DrawBitmap(GetBitmap(strBmp),desRC,alpha,D2D1_BITMAP_INTERPOLATION_MODE_LINEAR,srcRC);
     }
 
     void RenderTargetHWND::DrawLine(YYPOINT start,YYPOINT end,const YYCOLOR &brush,float strokewidth)

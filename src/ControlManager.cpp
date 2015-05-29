@@ -2,6 +2,7 @@
 #include "ControlManager.h"
 #include "ControlUI.h"
 #include "Canvas2D.h"
+#include "WindowManager.h"
 
 using std::cout;
 using std::wcout;
@@ -230,15 +231,22 @@ namespace YUI
                 POINT pt= { GET_X_LPARAM( lParam) ,GET_Y_LPARAM(lParam) };
                 m_ptLastMousePos = pt;
                 std::shared_ptr<ControlUI> spNewHover = FindControl(pt);
-                if( spNewHover != NULL && spNewHover->GetManager() != this->shared_from_this() )
-                    break;
+                if( spNewHover == NULL )
+                 {
+                     //还是有可能到的，比如说跑到了屏幕的边框~~
+                     break;
+                }
                 MsgWrap msg;
                 msg.strType = UIMSG_MOUSELEAVE;
                 msg.lTimeStamp = ::GetTickCount();
                 msg.ptMouse = pt;
                 //新旧hover的不一样，给旧的发送mouse leave,给新的发送mousehover
+                Ycout<<"move mouse find control: "<<spNewHover->GetName()<<endl;
                 if(spNewHover != m_pHover && m_pHover)
                 {
+                    msg.strType = UIMSG_MOUSELEAVE;
+                    msg.lTimeStamp = ::GetTickCount();
+                    msg.ptMouse = pt;
                     msg.pSender = m_pHover;
                     SendMsg(m_pHover,msg);
                     m_pHover = NULL;
@@ -319,6 +327,7 @@ namespace YUI
                 Ycout<<"ControlManger: WM_LBUTTON up"<<endl;
                 POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
                 m_ptLastMousePos = pt;
+             
                 if( m_pClick == NULL ) break;
                 ReleaseCapture();
                 MsgWrap msg;
@@ -452,7 +461,10 @@ namespace YUI
                 ::ScreenToClient(m_hWnd, &pt);
                 auto spControl = FindControl(pt);
                 if( spControl == NULL )
-                    break;
+                {
+                     Ycout<<"find control is null"<<endl;
+                     break;
+                }
                 if( (spControl->GetControlFlags() & UIFLAG_SETCURSOR) == 0 ) break;
                 MsgWrap msg;
                 msg.strType = UIMSG_SETCURSOR;
@@ -511,6 +523,11 @@ namespace YUI
     {
         ::ReleaseCapture();
         m_bMouseCapture = false;
+    }
+
+    const WindowProperty* ControlManager::GetWindowProperty() const
+    {
+        return WindowManger::GetInstance()->GetWindowProperty(m_hWnd);
     }
 
 }

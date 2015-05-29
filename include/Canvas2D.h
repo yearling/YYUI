@@ -16,6 +16,7 @@ namespace YUI
         void                            EndDraw();
         void                            DrawSolidText(const YString& strText,const FontD2D& font,const YYRECT &rc,const YYCOLOR color);
         void                            DrawBitmap(const YString &strBmp,const YYRECT &rc);
+        void                            DrawBitmap(const YString &strBmp,const YYRECT &desRC,const YYRECT &srcRC,float alpha=1.0f);
         void                            DrawLine(YYPOINT start,YYPOINT end,const YYCOLOR &brush,float strokewidth=1.0f);
         void                            DrawRect(const YYRECT rc,const YYCOLOR &brush,float strokewidth=1.0f);
         void                            FillRect(const YYRECT rc,const YYCOLOR &brush);

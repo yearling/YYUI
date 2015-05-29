@@ -216,8 +216,6 @@ namespace YUI
         return m_bImmMode;
     }
 
-    void VerticalLayout::AddHandler()
-    {
-    }
+    
 
 }

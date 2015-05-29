@@ -32,6 +32,7 @@ namespace YUI
         virtual bool                    Remove(std::shared_ptr<ControlUI> &pControl) ;
         virtual void                    RemoveAll();
         void                            AddHandler();
+        virtual void					HandleMsg(const MsgWrap & msg)throw();
         virtual void                    SetVisible(bool bVisible = true);
         virtual void                    SetInternVisible(bool bVisible = true); // 仅供内部调用，有些UI拥有窗口句柄，需要重写此函数
         virtual void                    SetMouseEnabled(bool bEnable = true);
@@ -99,5 +100,6 @@ namespace YUI
 
         std::shared_ptr<Scrollbar>      m_pVerticalScrollBar;
         std::shared_ptr<Scrollbar>      m_pHorizontalScrollBar;
+        std::shared_ptr<IMsgHandler>    m_pContainerMsgHandler;
     };
 }

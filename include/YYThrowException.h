@@ -2,11 +2,11 @@
 #include "YYException.hpp"
 namespace YYCOM
 {
-	inline void ThrowExceptionAssertCompatibility(std::exception const &){}
+	inline void ThrowExceptionassertCompatibility(std::exception const &){}
 	template<class E>
 	inline void ThrowException( E const & e)
 	{
-		ThrowExceptionAssertCompatibility(e);
+		ThrowExceptionassertCompatibility(e);
 		throw EnableErrorInfo(e);
 	}
 	template< class E>

@@ -9,7 +9,7 @@
 namespace YUI
 {
 
-    class ControlUI:public std::enable_shared_from_this<ControlUI>,public IMsgHandler
+    class ControlUI:public std::enable_shared_from_this<ControlUI>/*,public IMsgHandler*/
     {
     public:
         ControlUI();
@@ -22,6 +22,7 @@ namespace YUI
     public:
         virtual YString                 GetName() const;
         virtual void                    SetName(const YString & strName);
+        virtual void					HandleMsg(const MsgWrap & msg)throw();
         virtual LPCTSTR                 GetClass() const;
         virtual std::shared_ptr<ControlUI> QueryInterface(const std::string & strName);
         virtual bool                    Activate();
@@ -48,9 +49,7 @@ namespace YUI
         void                            SetBkImage(const YString &strImage);
         DWORD                           GetFocusBorderColor() const;
         void                            SetFocusBorderColor(DWORD dwBorderColor);
-        bool                            DrawImage(HDC hDc, 
-                                                  const YString strImg,
-                                                  const YString strModify =_T(""));
+        void                            DrawImage(const YString &strImg);
 
         //±ß¿ò
         int                             GetBorderSize() const;
@@ -217,5 +216,6 @@ namespace YUI
         RECT                            m_rcPaint; 
         RECT                            m_rcBorderSize;//tag 'boradersize' 'leftbordersize' 'topboradersize' 'bottombordersize' 
     protected:
+        std::shared_ptr<IMsgHandler>    m_pControlMsgHandler;
     };
 }

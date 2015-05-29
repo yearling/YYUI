@@ -1,7 +1,8 @@
 #include "Button.h"
 #include "RenderDGI.h"
 #include "ControlUI.h"
-
+#include "WindowProperty.h"
+#include "Canvas2D.h"
 namespace YUI
 {
 
@@ -14,6 +15,7 @@ namespace YUI
         ,m_dwHotBkColor(0)
     {
         m_uTextStyle = DT_SINGLELINE | DT_VCENTER | DT_CENTER;
+        AddHander();
     }
 
     Button::~Button()
@@ -40,8 +42,8 @@ namespace YUI
 
     bool Button::Activate()
     {
-        if( !ControlUI::Activate() ) return false;
-        //if( m_pManager != NULL ) m_pManager->SendNotify(shared_from_this(), MSG_Click);
+        if(m_eventClick)
+            m_eventClick();
         return true;
     }
 
@@ -63,13 +65,20 @@ namespace YUI
     {
         auto pstrName = strName.c_str();
         auto pstrValue = strValue.c_str();
-        if( strcmp(pstrName, ("normalimage")) == 0 ) SetNormalImage(UTF8ToGBK(pstrValue));
-        else if( strcmp(pstrName, ("hotimage")) == 0 ) SetHotImage(UTF8ToGBK(pstrValue));
-        else if( strcmp(pstrName, ("pushedimage")) == 0 ) SetPushedImage(UTF8ToGBK(pstrValue));
-        else if( strcmp(pstrName, ("focusedimage")) == 0 ) SetFocusedImage(UTF8ToGBK(pstrValue));
-        else if( strcmp(pstrName, ("disabledimage")) == 0 ) SetDisabledImage(UTF8ToGBK(pstrValue));
-        else if( strcmp(pstrName, ("foreimage")) == 0 ) SetForeImage(UTF8ToGBK(pstrValue));
-        else if( strcmp(pstrName, ("hotforeimage")) == 0 ) SetHotForeImage(UTF8ToGBK(pstrValue));
+        if( strcmp(pstrName, ("normalimage")) == 0 ) 
+            SetNormalImage(UTF8ToGBK(pstrValue));
+        else if( strcmp(pstrName, ("hotimage")) == 0 ) 
+            SetHotImage(UTF8ToGBK(pstrValue));
+        else if( strcmp(pstrName, ("pushedimage")) == 0 )  
+            SetPushedImage(UTF8ToGBK(pstrValue));
+        else if( strcmp(pstrName, ("focusedimage")) == 0 ) 
+            SetFocusedImage(UTF8ToGBK(pstrValue));
+        else if( strcmp(pstrName, ("disabledimage")) == 0 )
+            SetDisabledImage(UTF8ToGBK(pstrValue));
+        else if( strcmp(pstrName, ("foreimage")) == 0 ) 
+            SetForeImage(UTF8ToGBK(pstrValue));
+        else if( strcmp(pstrName, ("hotforeimage")) == 0 ) 
+            SetHotForeImage(UTF8ToGBK(pstrValue));
         else if( strcmp(pstrName, ("hotbkcolor")) == 0 )
         {
             if( *pstrValue == ('#')) pstrValue = ::CharNextA(pstrValue);
@@ -101,15 +110,17 @@ namespace YUI
         else Label::SetAttribute(pstrName, pstrValue);
     }
 
-    void Button::PaintText(HDC hDC)
+    void Button::PaintText()
     {
         if( IsFocused() ) m_uButtonState |= UISTATE_FOCUSED;
         else m_uButtonState &= ~ UISTATE_FOCUSED;
         if( !IsEnabled() ) m_uButtonState |= UISTATE_DISABLED;
         else m_uButtonState &= ~ UISTATE_DISABLED;
 
-        /*if( m_dwTextColor == 0 ) m_dwTextColor = m_pManager->GetDefaultFontColor();
-        if( m_dwDisabledTextColor == 0 ) m_dwDisabledTextColor = m_pManager->GetDefaultDisabledColor();*/
+        if( m_dwTextColor == 0 ) 
+            m_dwTextColor= m_pManager->GetWindowProperty()->GetDefaultFontColor();
+        if( m_dwDisabledTextColor == 0 ) 
+            m_dwDisabledTextColor = m_pManager->GetWindowProperty()->GetDefaultDisabledColor();
 
         if( m_strText.empty() ) return;
         int nLinks = 0;
@@ -128,16 +139,15 @@ namespace YUI
         else if( ((m_uButtonState & UISTATE_FOCUSED) != 0) && (GetFocusedTextColor() != 0) )
             clrColor = GetFocusedTextColor();
 
-        /*if( m_bShowHtml )
-            RenderGDI::DrawHtmlText(hDC, m_pManager, rc, m_strText, clrColor, \
-            NULL, NULL, nLinks, m_uTextStyle);
-        else
-            RenderGDI::DrawText(hDC, m_pManager, rc, m_strText, clrColor, \
-            m_Fontid, m_uTextStyle);*/
+        Canvas2D canvas(m_pManager->GetHWND());
+        FontD2D font(_T("Verdana"),10);
+        canvas.DrawSolidText(m_strText,font,rc,m_dwTextColor);
     }
 
-    void Button::PaintStatusImage(HDC hDC)
+    void Button::PaintStatusImage()
     {
+        Canvas2D canvas(m_pManager->GetHWND());
+
         if( IsFocused() ) m_uButtonState |= UISTATE_FOCUSED;
         else m_uButtonState &= ~ UISTATE_FOCUSED;
         if( !IsEnabled() ) m_uButtonState |= UISTATE_DISABLED;
@@ -146,66 +156,35 @@ namespace YUI
         if( (m_uButtonState & UISTATE_DISABLED) != 0 ) {
             if( !m_sDisabledImage.empty() )
             {
-                if( !DrawImage(hDC, m_sDisabledImage ) )
-                    m_sDisabledImage.clear();
-                else goto Label_ForeImage;
+                DrawImage(m_sDisabledImage);
             }
         }
         else if( (m_uButtonState & UISTATE_PUSHED) != 0 ) {
             if( !m_sPushedImage.empty() ) {
-                if( !DrawImage(hDC, m_sPushedImage) ){
-                    m_sPushedImage.clear();
-                }
-                if( !m_sPushedForeImage.empty() )
-                {
-                    if( !DrawImage(hDC, m_sPushedForeImage) )
-                        m_sPushedForeImage.clear();
-                    return;
-                }
-                else goto Label_ForeImage;
+                DrawImage(m_sPushedImage);
+                //DrawImage(m_sPushedForeImage);
             }
         }
         else if( (m_uButtonState & UISTATE_HOT) != 0 ) {
             if( !m_sHotImage.empty() ) {
-                if( !DrawImage(hDC, m_sHotImage) ){
-                    m_sHotImage.clear();
-                }
-                if( !m_sHotForeImage.empty() ) {
-                    if( !DrawImage(hDC, m_sHotForeImage) )
-                        m_sHotForeImage.clear();
-                    return;
-                }
-                else goto Label_ForeImage;
+                DrawImage(m_sHotImage);
+                //DrawImage(m_sHotForeImage);
             }
             else if(m_dwHotBkColor != 0) {
-                //RenderGDI::DrawColor(hDC, m_rcPaint, GetAdjustColor(m_dwHotBkColor));
+                canvas.FillRect(m_rcPaint,m_dwHotBkColor);
                 return;
             }
         }
         else if( (m_uButtonState & UISTATE_FOCUSED) != 0 ) {
             if( !m_sFocusedImage.empty() ) {
-                if( !DrawImage(hDC, m_sFocusedImage) ) 
-                    m_sFocusedImage.clear();
-                else goto Label_ForeImage;
+                DrawImage(m_sFocusedImage);
             }
         }
 
         if( !m_sNormalImage.empty() ) {
-            if( !DrawImage(hDC, m_sNormalImage) ) 
-                m_sNormalImage.empty();
-            else goto Label_ForeImage;
+            DrawImage(m_sNormalImage);
         }
 
-        if(!m_strForeImage.empty() )
-            goto Label_ForeImage;
-
-        return;
-
-Label_ForeImage:
-        if(!m_strForeImage.empty() ) {
-            if( !DrawImage(hDC, m_strForeImage) ) 
-                m_strForeImage.clear();
-        }
     }
 
     YUI::YString Button::GetNormalImage()
@@ -327,19 +306,21 @@ Label_ForeImage:
 
     void Button::AddHander()
     {
-
-        AddEntry(UIMSG_SETFOCUS,[&](const MsgWrap &msg)
+        m_pButtonMsgHandler = std::make_shared<IMsgHandler>();
+        m_pButtonMsgHandler->SetSuccessor(m_pLabelMsgHandler);
+        
+       m_pButtonMsgHandler->AddEntry(UIMSG_SETFOCUS,[&](const MsgWrap &msg)
         {
             Invalidate();
-            Label::HandleMsg(msg);
+           m_pButtonMsgHandler->MsgHandleChainBase::HandleMsg(msg);
         });
-        AddEntry(UIMSG_KILLFOCUS,[&](const MsgWrap &msg)
+        m_pButtonMsgHandler->AddEntry(UIMSG_KILLFOCUS,[&](const MsgWrap &msg)
         {
             Invalidate();
-            Label::HandleMsg(msg);
+           m_pButtonMsgHandler->MsgHandleChainBase::HandleMsg(msg);
         });
         
-        AddEntry(UIMSG_KEYDOWN,[&](const MsgWrap &msg)
+        m_pButtonMsgHandler->AddEntry(UIMSG_KEYDOWN,[&](const MsgWrap &msg)
         {
             if (IsKeyboardEnabled()) {
                 if( msg.wParam == VK_SPACE || msg.wParam == VK_RETURN ) {
@@ -348,7 +329,7 @@ Label_ForeImage:
             }
         });
 
-        AddEntry(UIMSG_LBUTTONDOWN,[&](const MsgWrap &msg)
+        m_pButtonMsgHandler->AddEntry(UIMSG_LBUTTONDOWN,[&](const MsgWrap &msg)
         {
             POINT pt= { GET_X_LPARAM(msg.lParam),GET_Y_LPARAM(msg.lParam)};
             if( ::PtInRect(&m_rcItem, pt) && IsEnabled() ) 
@@ -358,7 +339,7 @@ Label_ForeImage:
             }
         });
 
-        AddEntry(UIMSG_DBLCLICK,[&](const MsgWrap &msg)
+        m_pButtonMsgHandler->AddEntry(UIMSG_DBLCLICK,[&](const MsgWrap &msg)
         {
             POINT pt= { GET_X_LPARAM(msg.lParam),GET_Y_LPARAM(msg.lParam)};
             if( ::PtInRect(&m_rcItem, pt) && IsEnabled() ) 
@@ -368,7 +349,7 @@ Label_ForeImage:
             }
         });
 
-        AddEntry(UIMSG_MOUSEMOVE,[&](const MsgWrap &msg)
+        m_pButtonMsgHandler->AddEntry(UIMSG_MOUSEMOVE,[&](const MsgWrap &msg)
         {
             POINT pt= { GET_X_LPARAM(msg.lParam),GET_Y_LPARAM(msg.lParam)};
             if( (m_uButtonState & UISTATE_CAPTURED) != 0 ) 
@@ -379,7 +360,7 @@ Label_ForeImage:
             }
         });
 
-        AddEntry(UIMSG_LBUTTONUP,[&](const MsgWrap &msg)
+        m_pButtonMsgHandler->AddEntry(UIMSG_LBUTTONUP,[&](const MsgWrap &msg)
         {
             POINT pt= { GET_X_LPARAM(msg.lParam),GET_Y_LPARAM(msg.lParam)};
             if( (m_uButtonState & UISTATE_CAPTURED) != 0 )
@@ -391,30 +372,38 @@ Label_ForeImage:
             }
         }); 
        
-        AddEntry(UIMSG_MOUSEENTER,[&](const MsgWrap &msg)
+        m_pButtonMsgHandler->AddEntry(UIMSG_MOUSEENTER,[&](const MsgWrap &msg)
         {
             if( IsEnabled() ) 
             {
                 m_uButtonState |= UISTATE_HOT;
                 Invalidate();
             }
-            MsgHandleChainBase::HandleMsg(msg);
+           m_pButtonMsgHandler->MsgHandleChainBase::HandleMsg(msg);
         }); 
         
-        AddEntry(UIMSG_MOUSELEAVE,[&](const MsgWrap &msg)
+        m_pButtonMsgHandler->AddEntry(UIMSG_MOUSELEAVE,[&](const MsgWrap &msg)
         {
             if( IsEnabled() ) 
             {
                 m_uButtonState &= ~UISTATE_HOT;
                 Invalidate();
             }
-            MsgHandleChainBase::HandleMsg(msg);
+            m_pButtonMsgHandler->MsgHandleChainBase::HandleMsg(msg);
         }); 
 
-        AddEntry(UIMSG_SETCURSOR,[&](const MsgWrap &msg)
+        m_pButtonMsgHandler->AddEntry(UIMSG_SETCURSOR,[&](const MsgWrap &msg)
         {
            ::SetCursor(::LoadCursor(NULL, MAKEINTRESOURCE(IDC_HAND)));
         });
+
+        m_eventClick = [](){ ::MessageBeep(MB_OK);};
+    }
+
+    void Button::HandleMsg(const MsgWrap & msg) throw()
+    {
+        assert(m_pButtonMsgHandler);
+        m_pButtonMsgHandler->HandleMsg(msg);
     }
 
   }

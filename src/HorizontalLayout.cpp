@@ -188,8 +188,6 @@ namespace YUI
         }
     }
 
-    void HorizontalLayout::AddHandler()
-    {
-    }
+    
 
 }

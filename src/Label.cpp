@@ -3,6 +3,10 @@
 #include "UIUtility.h"
 #include "RenderDGI.h"
 #include <atlconv.h>
+#include "ControlUI.h"
+#include "ControlManager.h"
+#include "WindowProperty.h"
+#include "Canvas2D.h"
 
 namespace YUI
 {
@@ -226,16 +230,22 @@ namespace YUI
         else ControlUI::SetAttribute(pstrName, pstrValue);
     }
 
-    void Label::PaintText(HDC hDC)
+    void Label::PaintText()
     {
-        if( m_dwTextColor == 0 ) m_dwTextColor ;
-        if( m_dwDisabledTextColor == 0 ) m_dwDisabledTextColor;
+        if( m_dwTextColor == 0 ) 
+            m_dwTextColor= m_pManager->GetWindowProperty()->GetDefaultFontColor();
+        if( m_dwDisabledTextColor == 0 ) 
+            m_dwDisabledTextColor = m_pManager->GetWindowProperty()->GetDefaultDisabledColor();
 
         RECT rc = m_rcItem;
         rc.left += m_rcTextPadding.left;
         rc.right -= m_rcTextPadding.right;
         rc.top += m_rcTextPadding.top;
         rc.bottom -= m_rcTextPadding.bottom;
+
+        Canvas2D canvas(m_pManager->GetHWND());
+        FontD2D font(_T("Verdana"),10);
+        canvas.DrawSolidText(m_strText,font,rc,m_dwTextColor);
     }
 
     void Label::SetEnabledEffect(bool _EnabledEffect)
@@ -436,17 +446,25 @@ namespace YUI
 
     void Label::AddHander()
     {
-        AddEntry(UIMSG_SETFOCUS,[&](const MsgWrap &msg)
+        m_pLabelMsgHandler= std::make_shared<IMsgHandler>();
+        m_pLabelMsgHandler->SetSuccessor(m_pControlMsgHandler);
+        m_pLabelMsgHandler->AddEntry(UIMSG_SETFOCUS,[&](const MsgWrap &msg)
         {
             m_bFocused = true;
             Invalidate();
         });
 
-        AddEntry(UIMSG_KILLFOCUS,[&](const MsgWrap &msg)
+        m_pLabelMsgHandler->AddEntry(UIMSG_KILLFOCUS,[&](const MsgWrap &msg)
         {
             m_bFocused = false;
             Invalidate();
         });
+    }
+
+    void Label::HandleMsg(const MsgWrap & msg) throw()
+    {
+        assert(m_pLabelMsgHandler);
+        m_pLabelMsgHandler->HandleMsg(msg);
     }
 
 }
