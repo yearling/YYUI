@@ -6,7 +6,6 @@
 #include "WindowWnd.h"
 #include "PaintManagerUI.h"
 #include "MutiScreen.h"
-#include "WindowImpl.h"
 #include "resource.h"
 #include <iostream>
 #include "D2DWnd.h"

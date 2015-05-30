@@ -233,6 +233,7 @@
     <ClInclude Include="..\..\include\Container.h" />
     <ClInclude Include="..\..\include\ControlManager.h" />
     <ClInclude Include="..\..\include\ControlUI.h" />
+    <ClInclude Include="..\..\include\CountRef.h" />
     <ClInclude Include="..\..\include\D2DWnd.h" />
     <ClInclude Include="..\..\include\FileSystem.h" />
     <ClInclude Include="..\..\include\FontDef.h" />

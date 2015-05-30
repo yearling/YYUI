@@ -15,11 +15,6 @@ namespace YUI
         ControlUI();
         virtual ~ControlUI();
     public:
-        typedef std::function<bool(NotifyMsg &)> FuncNotify;
-        typedef std::function<bool(std::weak_ptr<ControlUI>)> FuncInit;
-        typedef std::function<bool(std::weak_ptr<ControlUI>)> FuncSize;
-        typedef std::function<bool(ControlEvent&)> FuncEvent;
-    public:
         virtual YString                 GetName() const;
         virtual void                    SetName(const YString & strName);
         virtual void					HandleMsg(const MsgWrap & msg)throw();
@@ -168,10 +163,6 @@ namespace YUI
         //ÐéÄâ´°¿Ú²ÎÊý
         void                            SetVirtualWnd(LPCTSTR pstrValue);
         YString                         GetVirtualWnd() const;
-    public:
-        FuncNotify                      OnNotify;
-        FuncInit                        OnInit;
-        FuncSize                        OnSize;
     protected:
         std::shared_ptr<ControlManager> m_pManager;
         std::weak_ptr<ControlUI>        m_pParent;

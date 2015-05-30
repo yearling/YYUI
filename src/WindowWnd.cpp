@@ -315,39 +315,4 @@ namespace YUI
 
     }
 
-    void INotifyPump::NotifyPump(NotifyMsg & msg)
-    {
-        //to do ??没看明白加了个virtual wnd做什么用
-        HandleMsg(msg);
-    }
-
-
-
-
-
-    void INotifyPump::HandleMsg(const NotifyMsg & msg)
-    {
-        auto strMsgType = msg.strType;
-        auto spControler = msg.pSender.lock();
-        if( !spControler)
-            return ;
-        auto strControlerName = spControler->GetName();
-        YStrStr ss(strMsgType,strControlerName);
-        auto pos = m_MessageMap.find(ss);
-        if(pos == m_MessageMap.end())
-        {
-            MsgHandleChainBase::HandleMsg(msg);
-        }
-        else
-        {
-            auto &func = pos->second;
-            func(msg);
-        }
-    }
-
-    void INotifyPump::AddEntry(const YString &strType,const YString &strControlName,FunNofity fun)
-    {
-        m_MessageMap[YStrStr(strType,strControlName)] = fun;
-    }
-   
 }

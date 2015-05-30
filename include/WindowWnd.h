@@ -24,22 +24,7 @@ namespace YUI
 #define UI_CLASSSTYLE_CHILD      (CS_VREDRAW | CS_HREDRAW | CS_DBLCLKS | CS_SAVEBITS)
 #define UI_CLASSSTYLE_DIALOG     (CS_VREDRAW | CS_HREDRAW | CS_DBLCLKS | CS_SAVEBITS)
     
-    class INotifyPump: public MsgHandleChainBase  
-    {
-    public:
-        bool                            AddVirtualWnd(YString strName, INotifyPump* pObject);
-        bool                            RemoveVirtualWnd(YString strName);
-        void                            NotifyPump( NotifyMsg & msg);
-        bool                            LoopDispatch( NotifyMsg & msg);
-        virtual void                    HandleMsg(const NotifyMsg & msg);
-        virtual void                    AddEntry(const YString &strType,const YString &strControlName,FunNofity );
-    private:   
-        YMessageHash                    m_MessageMap;      
-    private:
-        std::map<YString, void *>       m_mapVWnd;
-    }; 
-
-
+   
 	class WindowWnd
 	{
 	public:
