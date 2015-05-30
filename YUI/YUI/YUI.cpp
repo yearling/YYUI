@@ -4,7 +4,6 @@
 #include "stdafx.h"
 #include "YUI.h"
 #include "WindowWnd.h"
-#include "PaintManagerUI.h"
 #include "MutiScreen.h"
 #include "resource.h"
 #include <iostream>
@@ -70,11 +69,11 @@ int APIENTRY _tWinMain( __in HINSTANCE hInstance, __in_opt HINSTANCE hPrevInstan
 #endif
 	    Canvas2D::Init(); 
         SystemInfo::GetInstance()->SetProcessInstance(hInstance);
-		std::shared_ptr<D2DWnd> spD2D = std::make_shared<D2DWnd>();
+		D2DWnd *spD2D =  new D2DWnd;
 		spD2D->Init();
 		spD2D->Create(NULL,_T("D2DWnd"),UI_WNDSTYLE_FRAME,WS_EX_WINDOWEDGE);
 		spD2D->CenterWindow();
-        std::shared_ptr<D2DWnd> spD3D = std::make_shared<D2DWnd>();
+        D2DWnd *spD3D = new D2DWnd;
         spD3D->Init();
         spD3D->Create(NULL,_T("D2DWnd"),UI_WNDSTYLE_FRAME,WS_EX_WINDOWEDGE);
         spD3D->CenterWindow();
