@@ -13,9 +13,14 @@ public:
 template< class T>
 class CountRefPtr
 {
+private:
+    typedef CountRefPtr this_type;
 public:
 	typedef T element_type;
-	CountRefPtr():px(nullptr){};
+
+	CountRefPtr()
+        :px(nullptr){};
+
 	CountRefPtr(T *p ,bool addref = true)
 		:px(p)
 	{
@@ -24,6 +29,14 @@ public:
 			px->AddRef();
 		}
 	}
+
+    template<class U>
+    CountRefPtr( CountRefPtr<U> const &rhs)
+        :px(rhs.Get())
+    {
+         if( px! = 0 )
+             px->AddRef();
+    }
 
 	T* Get() const 
 	{

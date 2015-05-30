@@ -402,12 +402,13 @@ namespace YUI
 
         m_rcItem = rc;
         if( m_pManager == NULL ) return;
-
-        if( !m_bSetPos ) {
+        
+        // FIX ME!! 在这里处理子窗口改变的消息
+       /* if( !m_bSetPos ) {
             m_bSetPos = true;
             if( OnSize ) OnSize(shared_from_this());
             m_bSetPos = false;
-        }
+        }*/
 
         if( m_bFloat ) {
             auto pParent = GetParent().lock();
