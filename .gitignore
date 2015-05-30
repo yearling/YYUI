@@ -25,7 +25,6 @@ ipch/
 *.meta
 *.tlog
 *.manifest
-*.res
 *.pch
 *.exp
 *.idb
