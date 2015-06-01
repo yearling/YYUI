@@ -1,5 +1,4 @@
 #include "YUI.h"
-#include "UIDef.h"
 #include "ControlUI.h"
 #include "ControlManager.h"
 #include "Canvas2D.h"
@@ -10,8 +9,9 @@ using  std::wcout;
 using  std::endl;
 namespace YUI
 {
-    ControlUI::ControlUI():
-         m_bUpdateNeeded(true)
+    ControlUI::ControlUI()
+        :m_pParent(nullptr) 
+        ,m_bUpdateNeeded(true)
         ,m_bMenuUsed(false)
         ,m_bVisible(true)
         ,m_bInternVisible(true)

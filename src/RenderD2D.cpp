@@ -152,7 +152,7 @@ namespace YUI
         auto & rt=GetHwndRenderTarget(hWnd)->GetRenderTarget();
         auto & textFormat = GetTextureFormat(font);
         auto & brush = GetHwndRenderTarget(hWnd)->GetSolidColorBrush(color);
-        rt->DrawText(ToCWSTR(strText),CWSTRLength(strText),textFormat,rc,brush);
+        rt->DrawText(ToCWSTR(strText),(int)CWSTRLength(strText),textFormat,rc,brush);
     }
 
     bool RenderD2D::BeginDraw(HWND hWnd)

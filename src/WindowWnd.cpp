@@ -5,7 +5,6 @@
 #include "YUI.h"
 #include "WindowWnd.h"
 #include "ControlUI.h"
-#include "UIDef.h"
 #include "UIUtility.h"
 #include "WindowManager.h"
 #include "SystemInfo.h"
@@ -97,7 +96,7 @@ namespace YUI
             assert( m_hWnd != NULL );
             return m_hWnd;
         }
-        catch( YYUIException &e )
+        catch( ... )
         {
             throw;
         }
@@ -227,7 +226,7 @@ namespace YUI
         ::EnableWindow(hWndParent,TRUE);
         ::SetFocus( hWndParent );
         if( msg.message == WM_QUIT)
-            ::PostQuitMessage(msg.wParam);
+            ::PostQuitMessage((int)msg.wParam);
         return nRet;
     }
 

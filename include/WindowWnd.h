@@ -4,7 +4,6 @@
 
 #pragma once
 #include "YUI.h"
-#include "UIDef.h"
 #include "WindowProperty.h"
 #include <map>
 namespace YUI

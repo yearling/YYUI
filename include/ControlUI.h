@@ -1,8 +1,6 @@
-
 #pragma once
 
 #include "YUI.h"
-#include "UIDef.h"
 #include <functional>
 #include "ControlManager.h"
 #include "MessageHandler.h"

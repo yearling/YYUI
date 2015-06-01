@@ -38,3 +38,5 @@ ipch/
 *.bi
 UIKind
 [Xx]64*/
+tmp/
+!YUILib/

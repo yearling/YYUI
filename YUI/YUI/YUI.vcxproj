@@ -101,6 +101,10 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>..\..\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>..\..\tmp\</IntDir>
+    <TargetName>$(ProjectName)_d</TargetName>
+    <IncludePath>..\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='FarDebug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -156,8 +160,9 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Dwrite.lib;D2D1.lib;windowscodecs.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>YUILib_d.lib;Dwrite.lib;D2D1.lib;windowscodecs.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <Profile>true</Profile>
+      <AdditionalLibraryDirectories>..\..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>
@@ -226,72 +231,14 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\BrushDef.h" />
-    <ClInclude Include="..\..\include\Button.h" />
-    <ClInclude Include="..\..\include\Canvas2D.h" />
-    <ClInclude Include="..\..\include\ClipRegionDef.h" />
-    <ClInclude Include="..\..\include\Container.h" />
-    <ClInclude Include="..\..\include\ControlManager.h" />
-    <ClInclude Include="..\..\include\ControlUI.h" />
-    <ClInclude Include="..\..\include\CountRef.h" />
     <ClInclude Include="..\..\include\D2DWnd.h" />
-    <ClInclude Include="..\..\include\FileSystem.h" />
-    <ClInclude Include="..\..\include\FontDef.h" />
-    <ClInclude Include="..\..\include\FrameLessWindow.h" />
-    <ClInclude Include="..\..\include\HorizontalLayout.h" />
-    <ClInclude Include="..\..\include\Label.h" />
-    <ClInclude Include="..\..\include\MessageHandler.h" />
-    <ClInclude Include="..\..\include\MessageSystem.h" />
-    <ClInclude Include="..\..\include\DlgBuilder.h" />
-    <ClInclude Include="..\..\include\RenderD2D.h" />
     <ClInclude Include="..\..\include\SystemInfo.h" />
-    <ClInclude Include="..\..\include\TextureDef.h" />
-    <ClInclude Include="..\..\include\thirdparty\tinyxml2\tinyxml2.h" />
-    <ClInclude Include="..\..\include\VerticalLayout.h" />
-    <ClInclude Include="..\..\include\WindowManager.h" />
-    <ClInclude Include="..\..\include\WindowProperty.h" />
-    <ClInclude Include="..\..\include\WindowWnd.h" />
-    <ClInclude Include="..\..\include\YYDisableIf.h" />
-    <ClInclude Include="..\..\include\YYErrorInfo.h" />
-    <ClInclude Include="..\..\include\YYException.hpp" />
-    <ClInclude Include="..\..\include\YYExceptionAll.h" />
-    <ClInclude Include="..\..\include\YYExceptionInfo.hpp" />
-    <ClInclude Include="..\..\include\YYExceptionToString.h" />
-    <ClInclude Include="..\..\include\YYGetErrorInfo.h" />
-    <ClInclude Include="..\..\include\MutiScreen.h" />
-    <ClInclude Include="..\..\include\YYThrowException.h" />
-    <ClInclude Include="..\..\include\YUI.h" />
-    <ClInclude Include="..\..\include\UIUtility.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\include\BrushDef.cpp" />
-    <ClCompile Include="..\..\include\FontDef.cpp" />
-    <ClCompile Include="..\..\include\thirdparty\tinyxml2\tinyxml2.cpp" />
-    <ClCompile Include="..\..\src\Button.cpp" />
-    <ClCompile Include="..\..\src\Canvas2D.cpp" />
-    <ClCompile Include="..\..\src\ClipRegionDef.cpp" />
-    <ClCompile Include="..\..\src\Container.cpp" />
-    <ClCompile Include="..\..\src\ControlManager.cpp" />
-    <ClCompile Include="..\..\src\ControlUI.cpp" />
     <ClCompile Include="..\..\src\D2DWnd.cpp" />
-    <ClCompile Include="..\..\src\FileSystem.cpp" />
-    <ClCompile Include="..\..\src\FrameLessWindow.cpp" />
-    <ClCompile Include="..\..\src\HorizontalLayout.cpp" />
-    <ClCompile Include="..\..\src\Label.cpp" />
-    <ClCompile Include="..\..\src\MessageSystem.cpp" />
-    <ClCompile Include="..\..\src\DlgBuilder.cpp" />
-    <ClCompile Include="..\..\src\RenderD2D.cpp" />
-    <ClCompile Include="..\..\src\SystemInfo.cpp" />
-    <ClCompile Include="..\..\src\TextureDef.cpp" />
-    <ClCompile Include="..\..\src\VerticalLayout.cpp" />
-    <ClCompile Include="..\..\src\WindowManager.cpp" />
-    <ClCompile Include="..\..\src\WindowProperty.cpp" />
-    <ClCompile Include="..\..\src\WindowWnd.cpp" />
-    <ClCompile Include="..\..\src\UIUtility.cpp" />
-    <ClCompile Include="..\..\src\MutiScreen.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='FarDebug|Win32'">Create</PrecompiledHeader>

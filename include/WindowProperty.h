@@ -25,7 +25,7 @@ namespace YUI
         void                            SetMinInfo(int cx, int cy);
         YYSIZE                          GetMaxInfo() const;
         void                            SetMaxInfo(int cx, int cy);
-        int                             GetTransparent() const;
+        float GetTransparent() const;
         void                            SetTransparent(float nOpacity);
         void                            SetBackgroundTransparent(bool bTrans);
         void                            SetDefaultDisabledColor(YYCOLOR color);

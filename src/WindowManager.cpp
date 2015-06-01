@@ -75,7 +75,7 @@ namespace YUI
 
       UINT WindowManger::GetWindowsNumber() const
       {
-          return m_mapHWNDToWindow.size();
+          return (UINT)m_mapHWNDToWindow.size();
       }
 
       const WindowProperty* WindowManger::GetWindowProperty(HWND hWnd) 

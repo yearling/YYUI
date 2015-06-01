@@ -1,0 +1,211 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="common">
+      <UniqueIdentifier>{9a2532f2-85ed-4090-ab12-23e82c43e0b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Control">
+      <UniqueIdentifier>{7fecd797-9ba7-4ff0-8276-7a34fbee8fb7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Draw">
+      <UniqueIdentifier>{ddff56fa-f555-4ec5-b216-845af7ae7116}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Exception">
+      <UniqueIdentifier>{565d4409-7fa3-4fc2-b2dc-c1bcd8549406}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Layout">
+      <UniqueIdentifier>{83093ad9-11a4-4735-aba2-1584c8260c60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sys">
+      <UniqueIdentifier>{9666a099-aa40-44bc-b9e9-86f55c737a25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tinnyxml2">
+      <UniqueIdentifier>{9de55230-0b38-43b3-a7ef-a843263fec92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WindowManger">
+      <UniqueIdentifier>{92bc84a0-3e8a-4531-9bc4-f90ab0f86248}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\UIUtility.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Button.cpp">
+      <Filter>Control</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Container.cpp">
+      <Filter>Control</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ControlUI.cpp">
+      <Filter>Control</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Label.cpp">
+      <Filter>Control</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\DlgBuilder.cpp">
+      <Filter>Control</Filter>
+    </ClCompile>
+    <ClCompile Include="..\include\BrushDef.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\include\FontDef.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Canvas2D.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ClipRegionDef.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\RenderD2D.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\HorizontalLayout.cpp">
+      <Filter>Layout</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\VerticalLayout.cpp">
+      <Filter>Layout</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\FileSystem.cpp">
+      <Filter>Sys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\SystemInfo.cpp">
+      <Filter>Sys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\MutiScreen.cpp">
+      <Filter>Sys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\include\thirdparty\tinyxml2\tinyxml2.cpp">
+      <Filter>tinnyxml2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ControlManager.cpp">
+      <Filter>WindowManger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\FrameLessWindow.cpp">
+      <Filter>WindowManger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\MessageSystem.cpp">
+      <Filter>WindowManger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\TextureDef.cpp">
+      <Filter>WindowManger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\WindowManager.cpp">
+      <Filter>WindowManger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\WindowProperty.cpp">
+      <Filter>WindowManger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\WindowWnd.cpp">
+      <Filter>WindowManger</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\CountRef.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\UIUtility.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Button.h">
+      <Filter>Control</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Container.h">
+      <Filter>Control</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ControlUI.h">
+      <Filter>Control</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Label.h">
+      <Filter>Control</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\DlgBuilder.h">
+      <Filter>Control</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\BrushDef.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Canvas2D.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ClipRegionDef.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\FontDef.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\RenderD2D.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\TextureDef.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\YYDisableIf.h">
+      <Filter>Exception</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\YYErrorInfo.h">
+      <Filter>Exception</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\YYException.hpp">
+      <Filter>Exception</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\YYExceptionAll.h">
+      <Filter>Exception</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\YYExceptionInfo.hpp">
+      <Filter>Exception</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\YYExceptionToString.h">
+      <Filter>Exception</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\YYGetErrorInfo.h">
+      <Filter>Exception</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\YYThrowException.h">
+      <Filter>Exception</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\HorizontalLayout.h">
+      <Filter>Layout</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\VerticalLayout.h">
+      <Filter>Layout</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\FileSystem.h">
+      <Filter>Sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\MutiScreen.h">
+      <Filter>Sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\thirdparty\tinyxml2\tinyxml2.h">
+      <Filter>tinnyxml2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ControlManager.h">
+      <Filter>WindowManger</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\FrameLessWindow.h">
+      <Filter>WindowManger</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\MessageHandler.h">
+      <Filter>WindowManger</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\MessageSystem.h">
+      <Filter>WindowManger</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\WindowManager.h">
+      <Filter>WindowManger</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\WindowProperty.h">
+      <Filter>WindowManger</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\WindowWnd.h">
+      <Filter>WindowManger</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\YUI.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

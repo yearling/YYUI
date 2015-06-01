@@ -89,8 +89,8 @@ namespace YUI
         m_szMaxWindow.height = (float)cy;
     }
 
-    int WindowProperty::GetTransparent() const
-    {
+    float WindowProperty::GetTransparent() const
+{
         return m_fAlpha;
     }
 
@@ -119,7 +119,7 @@ namespace YUI
         if( nOpacity >= 0 && nOpacity < 256 ) dwNewStyle |= WS_EX_LAYERED;
         else dwNewStyle &= ~WS_EX_LAYERED;
         if(dwStyle != dwNewStyle) ::SetWindowLong(m_hWnd, GWL_EXSTYLE, dwNewStyle);
-        fSetLayeredWindowAttributes(m_hWnd, 0, nOpacity, LWA_ALPHA);
+        fSetLayeredWindowAttributes(m_hWnd, 0, (BYTE)nOpacity*255, LWA_ALPHA);
     }
 
     void WindowProperty::SetBackgroundTransparent(bool bTrans)

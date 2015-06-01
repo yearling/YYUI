@@ -1,0 +1,202 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{2761BD68-26D3-4351-9ACF-3445BE38B7F3}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>YUILib</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>..\lib\</OutDir>
+    <IntDir>..\tmp\</IntDir>
+    <TargetName>$(ProjectName)_d</TargetName>
+    <IncludePath>..\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <TargetName>$(ProjectName)_d</TargetName>
+    <IncludePath>..\include;$(IncludePath)</IncludePath>
+    <OutDir>..\lib\</OutDir>
+    <IntDir>..\tmp\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\include\BrushDef.cpp" />
+    <ClCompile Include="..\include\FontDef.cpp" />
+    <ClCompile Include="..\include\thirdparty\tinyxml2\tinyxml2.cpp" />
+    <ClCompile Include="..\src\Button.cpp" />
+    <ClCompile Include="..\src\Canvas2D.cpp" />
+    <ClCompile Include="..\src\ClipRegionDef.cpp" />
+    <ClCompile Include="..\src\Container.cpp" />
+    <ClCompile Include="..\src\ControlManager.cpp" />
+    <ClCompile Include="..\src\ControlUI.cpp" />
+    <ClCompile Include="..\src\DlgBuilder.cpp" />
+    <ClCompile Include="..\src\FileSystem.cpp" />
+    <ClCompile Include="..\src\FrameLessWindow.cpp" />
+    <ClCompile Include="..\src\HorizontalLayout.cpp" />
+    <ClCompile Include="..\src\Label.cpp" />
+    <ClCompile Include="..\src\MessageSystem.cpp" />
+    <ClCompile Include="..\src\MutiScreen.cpp" />
+    <ClCompile Include="..\src\RenderD2D.cpp" />
+    <ClCompile Include="..\src\SystemInfo.cpp" />
+    <ClCompile Include="..\src\TextureDef.cpp" />
+    <ClCompile Include="..\src\UIUtility.cpp" />
+    <ClCompile Include="..\src\VerticalLayout.cpp" />
+    <ClCompile Include="..\src\WindowManager.cpp" />
+    <ClCompile Include="..\src\WindowProperty.cpp" />
+    <ClCompile Include="..\src\WindowWnd.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\BrushDef.h" />
+    <ClInclude Include="..\include\Button.h" />
+    <ClInclude Include="..\include\Canvas2D.h" />
+    <ClInclude Include="..\include\ClipRegionDef.h" />
+    <ClInclude Include="..\include\Container.h" />
+    <ClInclude Include="..\include\ControlManager.h" />
+    <ClInclude Include="..\include\ControlUI.h" />
+    <ClInclude Include="..\include\CountRef.h" />
+    <ClInclude Include="..\include\DlgBuilder.h" />
+    <ClInclude Include="..\include\FileSystem.h" />
+    <ClInclude Include="..\include\FontDef.h" />
+    <ClInclude Include="..\include\FrameLessWindow.h" />
+    <ClInclude Include="..\include\HorizontalLayout.h" />
+    <ClInclude Include="..\include\Label.h" />
+    <ClInclude Include="..\include\MessageHandler.h" />
+    <ClInclude Include="..\include\MessageSystem.h" />
+    <ClInclude Include="..\include\MutiScreen.h" />
+    <ClInclude Include="..\include\RenderD2D.h" />
+    <ClInclude Include="..\include\TextureDef.h" />
+    <ClInclude Include="..\include\thirdparty\tinyxml2\tinyxml2.h" />
+    <ClInclude Include="..\include\UIUtility.h" />
+    <ClInclude Include="..\include\VerticalLayout.h" />
+    <ClInclude Include="..\include\WindowManager.h" />
+    <ClInclude Include="..\include\WindowProperty.h" />
+    <ClInclude Include="..\include\WindowWnd.h" />
+    <ClInclude Include="..\include\YUI.h" />
+    <ClInclude Include="..\include\YYDisableIf.h" />
+    <ClInclude Include="..\include\YYErrorInfo.h" />
+    <ClInclude Include="..\include\YYException.hpp" />
+    <ClInclude Include="..\include\YYExceptionAll.h" />
+    <ClInclude Include="..\include\YYExceptionInfo.hpp" />
+    <ClInclude Include="..\include\YYExceptionToString.h" />
+    <ClInclude Include="..\include\YYGetErrorInfo.h" />
+    <ClInclude Include="..\include\YYThrowException.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

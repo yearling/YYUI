@@ -11,7 +11,14 @@ namespace YUI
 {
 
     ControlManager::ControlManager(void)
-        :m_bNeedUpdate(false)
+        :m_hWnd(NULL)
+        ,m_pFocus(nullptr)
+        ,m_pRoot(nullptr)
+        ,m_pHover(nullptr)
+        ,m_pClick(nullptr)
+        ,m_bNeedUpdate(false)
+        ,m_bMouseTracking(false)
+        ,m_bMouseCapture(false)
     {
     }
 
