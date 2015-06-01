@@ -261,7 +261,6 @@
     <ClInclude Include="..\..\include\MutiScreen.h" />
     <ClInclude Include="..\..\include\YYThrowException.h" />
     <ClInclude Include="..\..\include\YUI.h" />
-    <ClInclude Include="..\..\include\UIDef.h" />
     <ClInclude Include="..\..\include\UIUtility.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />

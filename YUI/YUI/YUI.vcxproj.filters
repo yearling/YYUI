@@ -16,44 +16,29 @@
     <Filter Include="YYUI">
       <UniqueIdentifier>{24f63a45-4915-4ca0-8ef0-d6c67111c995}</UniqueIdentifier>
     </Filter>
-    <Filter Include="YYUI\include">
-      <UniqueIdentifier>{89f02c89-3551-4a0a-afd4-70a6dd05a2bf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="YYUI\src">
-      <UniqueIdentifier>{d93cf291-7104-4013-a43c-bddcda2a6736}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="YYUI\include\base">
-      <UniqueIdentifier>{a58c1d62-9ba5-415f-ac09-833783ca0b72}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="YYUI\include\Exception">
-      <UniqueIdentifier>{e872dc81-75a6-4ea4-a6dc-fae8e2375c62}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="YYUI\include\tinnyxml2">
+    <Filter Include="YYUI\tinnyxml2">
       <UniqueIdentifier>{8d3666d0-c46e-4280-b6e5-ba83653a92f3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="YYUI\include\Control">
+    <Filter Include="YYUI\Exception">
+      <UniqueIdentifier>{e872dc81-75a6-4ea4-a6dc-fae8e2375c62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="YYUI\Layout">
+      <UniqueIdentifier>{c08d616b-b346-4330-ae33-b9d7ed7e07fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="YYUI\Control">
       <UniqueIdentifier>{5d1a1089-89c6-44b9-b27a-90b5babf5811}</UniqueIdentifier>
     </Filter>
-    <Filter Include="YYUI\src\Control">
-      <UniqueIdentifier>{83bcd38a-79e9-49e4-b241-4d1945e81014}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="YYUI\src\Layout">
-      <UniqueIdentifier>{d4189fbc-16ab-461e-ab00-c9968e12618f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="YYUI\include\Sys">
-      <UniqueIdentifier>{1ea7e22a-6c56-4b4d-8beb-baed0a198b81}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="YYUI\src\Sys">
-      <UniqueIdentifier>{60d49b4d-1fb6-4e3f-bfc8-134e803ff93a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="YYUI\include\base\Draw">
+    <Filter Include="YYUI\Draw">
       <UniqueIdentifier>{3fcb5d34-d4ca-4610-9f6c-5712529cbc91}</UniqueIdentifier>
     </Filter>
-    <Filter Include="YYUI\include\WindowManger">
+    <Filter Include="YYUI\common">
+      <UniqueIdentifier>{36d7cce0-2a09-4c1d-8a2f-25b4920b0565}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="YYUI\WindowManger">
       <UniqueIdentifier>{e9392b8d-335f-4a3a-84e2-20dba84e59c9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="YYUI\include\Layout">
-      <UniqueIdentifier>{c08d616b-b346-4330-ae33-b9d7ed7e07fc}</UniqueIdentifier>
+    <Filter Include="YYUI\Sys">
+      <UniqueIdentifier>{60d49b4d-1fb6-4e3f-bfc8-134e803ff93a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -70,198 +55,195 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\YYExceptionAll.h">
-      <Filter>YYUI\include\Exception</Filter>
+      <Filter>YYUI\Exception</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\YYExceptionInfo.hpp">
-      <Filter>YYUI\include\Exception</Filter>
+      <Filter>YYUI\Exception</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\YYExceptionToString.h">
-      <Filter>YYUI\include\Exception</Filter>
+      <Filter>YYUI\Exception</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\YYGetErrorInfo.h">
-      <Filter>YYUI\include\Exception</Filter>
+      <Filter>YYUI\Exception</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\YYThrowException.h">
-      <Filter>YYUI\include\Exception</Filter>
+      <Filter>YYUI\Exception</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\YYDisableIf.h">
-      <Filter>YYUI\include\Exception</Filter>
+      <Filter>YYUI\Exception</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\YYErrorInfo.h">
-      <Filter>YYUI\include\Exception</Filter>
+      <Filter>YYUI\Exception</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\YYException.hpp">
-      <Filter>YYUI\include\Exception</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\ControlUI.h">
-      <Filter>YYUI\include\base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\DlgBuilder.h">
-      <Filter>YYUI\include\base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\UIUtility.h">
-      <Filter>YYUI\include\base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\YUI.h">
-      <Filter>YYUI\include\base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\MutiScreen.h">
-      <Filter>YYUI\include\base</Filter>
+      <Filter>YYUI\Exception</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\thirdparty\tinyxml2\tinyxml2.h">
-      <Filter>YYUI\include\tinnyxml2</Filter>
+      <Filter>YYUI\tinnyxml2</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Button.h">
-      <Filter>YYUI\include\Control</Filter>
+      <Filter>YYUI\Control</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Label.h">
-      <Filter>YYUI\include\Control</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Container.h">
-      <Filter>YYUI\include\base</Filter>
+      <Filter>YYUI\Control</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\HorizontalLayout.h">
-      <Filter>YYUI\include\Layout</Filter>
+      <Filter>YYUI\Layout</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\VerticalLayout.h">
-      <Filter>YYUI\include\Layout</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\D2DWnd.h">
-      <Filter>YYUI\include\base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FileSystem.h">
-      <Filter>YYUI\include\Sys</Filter>
+      <Filter>YYUI\Layout</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Canvas2D.h">
-      <Filter>YYUI\include\base\Draw</Filter>
+      <Filter>YYUI\Draw</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\FontDef.h">
-      <Filter>YYUI\include\base\Draw</Filter>
+      <Filter>YYUI\Draw</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\TextureDef.h">
-      <Filter>YYUI\include\base\Draw</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\UIDef.h">
-      <Filter>YYUI\include\base\Draw</Filter>
+      <Filter>YYUI\Draw</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\BrushDef.h">
-      <Filter>YYUI\include\base\Draw</Filter>
+      <Filter>YYUI\Draw</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\WindowManager.h">
-      <Filter>YYUI\include\WindowManger</Filter>
+      <Filter>YYUI\WindowManger</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\MessageSystem.h">
-      <Filter>YYUI\include\WindowManger</Filter>
+      <Filter>YYUI\WindowManger</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\FrameLessWindow.h">
-      <Filter>YYUI\include\WindowManger</Filter>
+      <Filter>YYUI\WindowManger</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\MessageHandler.h">
-      <Filter>YYUI\include\WindowManger</Filter>
+      <Filter>YYUI\WindowManger</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\RenderD2D.h">
-      <Filter>YYUI\include\base\Draw</Filter>
+      <Filter>YYUI\Draw</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\ControlManager.h">
-      <Filter>YYUI\include\WindowManger</Filter>
+      <Filter>YYUI\WindowManger</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\WindowProperty.h">
-      <Filter>YYUI\include\WindowManger</Filter>
+      <Filter>YYUI\WindowManger</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\SystemInfo.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\ClipRegionDef.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="..\..\include\WindowWnd.h">
+      <Filter>YYUI\WindowManger</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Container.h">
+      <Filter>YYUI\Control</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\ControlUI.h">
+      <Filter>YYUI\Control</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\CountRef.h">
-      <Filter>YYUI\include\base</Filter>
+      <Filter>YYUI\common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\WindowWnd.h">
-      <Filter>YYUI\include\WindowManger</Filter>
+    <ClInclude Include="..\..\include\D2DWnd.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\ClipRegionDef.h">
+      <Filter>YYUI\Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FileSystem.h">
+      <Filter>YYUI\Sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\DlgBuilder.h">
+      <Filter>YYUI\Control</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MutiScreen.h">
+      <Filter>YYUI\Sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\UIUtility.h">
+      <Filter>YYUI\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\YUI.h">
+      <Filter>YYUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\ControlUI.cpp">
-      <Filter>YYUI\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\DlgBuilder.cpp">
-      <Filter>YYUI\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\UIUtility.cpp">
-      <Filter>YYUI\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\MutiScreen.cpp">
-      <Filter>YYUI\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\include\thirdparty\tinyxml2\tinyxml2.cpp">
-      <Filter>YYUI\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Button.cpp">
-      <Filter>YYUI\src\Control</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Label.cpp">
-      <Filter>YYUI\src\Control</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Container.cpp">
-      <Filter>YYUI\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\HorizontalLayout.cpp">
-      <Filter>YYUI\src\Layout</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\VerticalLayout.cpp">
-      <Filter>YYUI\src\Layout</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\D2DWnd.cpp">
-      <Filter>YYUI\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Canvas2D.cpp">
-      <Filter>YYUI\src</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\FileSystem.cpp">
-      <Filter>YYUI\src\Sys</Filter>
+      <Filter>YYUI\Sys</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\MessageSystem.cpp">
-      <Filter>YYUI\include\WindowManger</Filter>
+      <Filter>YYUI\WindowManger</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\WindowManager.cpp">
-      <Filter>YYUI\include\WindowManger</Filter>
+      <Filter>YYUI\WindowManger</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\FrameLessWindow.cpp">
-      <Filter>YYUI\include\WindowManger</Filter>
+      <Filter>YYUI\WindowManger</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\ControlManager.cpp">
-      <Filter>YYUI\include\WindowManger</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\RenderD2D.cpp">
-      <Filter>YYUI\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\include\FontDef.cpp">
-      <Filter>YYUI\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\include\BrushDef.cpp">
-      <Filter>YYUI\src</Filter>
-    </ClCompile>
-    <ClCompile Include="YUI.cpp">
-      <Filter>YYUI\src</Filter>
+      <Filter>YYUI\WindowManger</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\WindowProperty.cpp">
-      <Filter>YYUI\include\WindowManger</Filter>
+      <Filter>YYUI\WindowManger</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\TextureDef.cpp">
-      <Filter>YYUI\include\WindowManger</Filter>
+      <Filter>YYUI\WindowManger</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\WindowWnd.cpp">
-      <Filter>YYUI\include\WindowManger</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\ClipRegionDef.cpp">
-      <Filter>YYUI\src</Filter>
+      <Filter>YYUI\WindowManger</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\SystemInfo.cpp">
-      <Filter>YYUI\src\Sys</Filter>
+      <Filter>YYUI\Sys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Container.cpp">
+      <Filter>YYUI\Control</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ControlUI.cpp">
+      <Filter>YYUI\Control</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\thirdparty\tinyxml2\tinyxml2.cpp">
+      <Filter>YYUI\tinnyxml2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Button.cpp">
+      <Filter>YYUI\Control</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Label.cpp">
+      <Filter>YYUI\Control</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\HorizontalLayout.cpp">
+      <Filter>YYUI\Layout</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\VerticalLayout.cpp">
+      <Filter>YYUI\Layout</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\BrushDef.cpp">
+      <Filter>YYUI\Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Canvas2D.cpp">
+      <Filter>YYUI\Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ClipRegionDef.cpp">
+      <Filter>YYUI\Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\D2DWnd.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\FontDef.cpp">
+      <Filter>YYUI\Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\MutiScreen.cpp">
+      <Filter>YYUI\Sys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\RenderD2D.cpp">
+      <Filter>YYUI\Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\UIUtility.cpp">
+      <Filter>YYUI\common</Filter>
+    </ClCompile>
+    <ClCompile Include="YUI.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\DlgBuilder.cpp">
+      <Filter>YYUI\Control</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
