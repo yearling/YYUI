@@ -1,6 +1,5 @@
 #pragma once
 #include "YUI.h"
-#include "RenderDGI.h"
 #include "RenderD2D.h"
 #include "ClipRegionDef.h"
 namespace YUI

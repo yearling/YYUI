@@ -4,8 +4,7 @@
 #include "WindowProperty.h"
 namespace YUI
 {
-    class FrameLessWindow:public WindowWnd,
-                          public std::enable_shared_from_this<FrameLessWindow>
+    class FrameLessWindow:public WindowWnd
     {
 
 #pragma region Constructor&Destructor
@@ -50,7 +49,7 @@ namespace YUI
         virtual LPCTSTR                 GetWindowClassName(void) const= 0;//这是个虚基类
         virtual LONG                    GetStyle();
 #pragma endregion 子类要继承的接口
-        SPControlManger                 m_spControlManger;
+        CountRefPtr<ControlManager>     m_spControlManger;
     
     };
 }

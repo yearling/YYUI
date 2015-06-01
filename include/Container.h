@@ -9,9 +9,9 @@ namespace YUI
     {
     public:
         virtual int                     GetCount() const = 0;
-        virtual bool                    Add(std::shared_ptr<ControlUI>& pControl) = 0;
+        virtual bool                    Add(ControlUI* pControl) = 0;
 
-        virtual bool                    Remove(std::shared_ptr<ControlUI> &pControl) = 0;
+        virtual bool                    Remove(ControlUI* pControl) = 0;
         virtual void                    RemoveAll() = 0;
     };
     class Scrollbar;
@@ -22,14 +22,11 @@ namespace YUI
         virtual ~Container();
     public:
         virtual LPCTSTR                 GetClass() const;
-        virtual std::shared_ptr<ControlUI> QueryInterface(const std::string & strName);
-
-
 
         virtual int                     GetCount() const;
-        virtual bool                    Add(std::shared_ptr<ControlUI>& pControl);
+        virtual bool                    Add(ControlUI* pControl);
 
-        virtual bool                    Remove(std::shared_ptr<ControlUI> &pControl) ;
+        virtual bool                    Remove(ControlUI *pControl) ;
         virtual void                    RemoveAll();
         void                            AddHandler();
         virtual void					HandleMsg(const MsgWrap & msg)throw();
@@ -52,10 +49,8 @@ namespace YUI
         virtual int                     FindSelectable(int iIndex, bool bForward = true) const;
         virtual void                    SetPos(RECT &rc);
         virtual void                    DoPaint(const YYRECT &rc);
-        virtual void SetAttribute(const std::string &strName, const std::string& strValue);
-        virtual void SetManager(std::shared_ptr<ControlManager> &pManager,
-                                        std::weak_ptr<ControlUI> pParent,
-                                        bool bInit=true);
+        virtual void                    SetAttribute(const std::string &strName, const std::string& strValue);
+        virtual void                    SetManager(ControlManager* pManager,ControlUI* pParent,bool bInit=true);
 
         bool                            SetSubControlText(const YString & pstrSubControlName,const YString& pstrText);
         bool                            SetSubControlFixedHeight(const YString & pstrSubControlName,int cy);
@@ -65,8 +60,8 @@ namespace YUI
         int                             GetSubControlFixedHeight(const YString& pstrSubControlName);
         int                             GetSubControlFixedWdith(const YString& pstrSubControlName);
         YString                         GetSubControlUserData(LPCTSTR pstrSubControlName);
-        std::shared_ptr<ControlUI>      FindSubControl(const YString& pstrSubControlName);
-        virtual std::shared_ptr<ControlUI>
+        ControlUI*                      FindSubControl(const YString& pstrSubControlName);
+        virtual ControlUI*
                                         FindControlFromPoint(POINT pt,UINT flag);
         virtual SIZE                    GetScrollPos() const;
         virtual SIZE                    GetScrollRange() const;
@@ -84,13 +79,13 @@ namespace YUI
         virtual void                    HomeLeft();
         virtual void                    EndRight();
         virtual void                    EnableScrollBar(bool bEnableVertical = true, bool bEnableHorizontal = false);
-        virtual std::shared_ptr<Scrollbar> GetVerticalScrollBar() const;
-        virtual std::shared_ptr<Scrollbar> GetHorizontalScrollBar() const;
+        virtual Scrollbar*              GetVerticalScrollBar() const;
+        virtual Scrollbar*              GetHorizontalScrollBar() const;
     protected:
-        virtual void SetFloatPos(std::shared_ptr<ControlUI> &pControl);
+        virtual void                    SetFloatPos(ControlUI* pControl);
         virtual void                    ProcessScrollBar(RECT rc, int cxRequired, int cyRequired);
     protected:
-        std::list<std::shared_ptr<ControlUI> > m_ListItems;
+        std::list<CountRefPtr<ControlUI> > m_ListItems;
         RECT                            m_rcInset;    //tag 'inset',基本上相当于收缩当前区域
         int                             m_iChildPadding;
         bool                            m_bAutoDestroy;
@@ -98,8 +93,8 @@ namespace YUI
         bool                            m_bMouseChildEnabled;
         bool                            m_bScrollProcess; // 防止SetPos循环调用
 
-        std::shared_ptr<Scrollbar>      m_pVerticalScrollBar;
-        std::shared_ptr<Scrollbar>      m_pHorizontalScrollBar;
+    /*    CountRefPtr<Scrollbar>          m_pVerticalScrollBar;
+        CountRefPtr<Scrollbar>          m_pHorizontalScrollBar;*/
         MsgHandler						m_ContainerMsgHandler;
     };
 }

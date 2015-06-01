@@ -7,13 +7,13 @@
 #include "ControlUI.h"
 #include "UIDef.h"
 #include "UIUtility.h"
-#include "PaintManagerUI.h"
 #include "WindowManager.h"
 #include "SystemInfo.h"
 namespace YUI
 {
 
-    WindowWnd::WindowWnd() : m_hWnd( NULL ),
+    WindowWnd::WindowWnd() : 
+        m_hWnd( NULL ),
         m_OldWndProc( ::DefWindowProc ),
         m_bSubClassed( false )
     {

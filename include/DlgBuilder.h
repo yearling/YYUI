@@ -9,7 +9,7 @@ namespace YUI
     class IDialogBuilderCallback
     {
     public:
-        virtual std::shared_ptr<ControlUI> CreateControl(std::string pstrClass) =0 ;
+        virtual ControlUI*              CreateControl(std::string pstrClass) =0 ;
     };
 
     class DialogBuilder
@@ -17,17 +17,17 @@ namespace YUI
     public:
         DialogBuilder();
 
-         std::shared_ptr<ControlUI>     Create(YString xml, 
+        CountRefPtr<ControlUI>          Create(YString xml, 
                                         WindowProperty & Winproperty,
                                         IDialogBuilderCallback* pCallback,
-                                        std::weak_ptr<ControlUI> pParent);
+                                        ControlUI* pParent);
 
-         std::shared_ptr<ControlUI>     Create(IDialogBuilderCallback* pCallback , 
+        CountRefPtr<ControlUI>          Create(IDialogBuilderCallback* pCallback , 
                                         WindowProperty &Winproperty,
-                                        std::weak_ptr<ControlUI> pParent);
+                                        ControlUI* pParent);
     private:
-       std::shared_ptr<ControlUI>       Parse(tinyxml2::XMLNode* pRoot, 
-                                        std::weak_ptr<ControlUI> pParent);
+       CountRefPtr<ControlUI>           Parse(tinyxml2::XMLNode* pRoot, 
+                                        ControlUI* pParent);
        IDialogBuilderCallback*          m_pCallback;
        LPCTSTR                          m_pstrtype;
        std::shared_ptr<tinyxml2::XMLDocument>

@@ -3,7 +3,6 @@
 #include "DlgBuilder.h"
 #include "UIUtility.h"
 #include "ControlUI.h"
-#include "PaintManagerUI.h"
 #include "Label.h"
 #include "Button.h"
 
@@ -35,7 +34,7 @@ namespace YUI
     }
 
 
-    std::shared_ptr<ControlUI> DialogBuilder::Create(YString xml, WindowProperty & perperty, IDialogBuilderCallback* pCallback, std::weak_ptr<ControlUI> pParent)
+    CountRefPtr<ControlUI> DialogBuilder::Create(YString xml, WindowProperty & perperty, IDialogBuilderCallback* pCallback, ControlUI* pParent)
     {
         tinyxml2::XMLError err= tinyxml2::XML_SUCCESS;
 #if defined UNICODE || defined _UNICODE
@@ -50,8 +49,8 @@ namespace YUI
         return Create(pCallback,perperty,pParent);
     }
 
-    std::shared_ptr<ControlUI> DialogBuilder::Create(IDialogBuilderCallback* pCallback , 
-        WindowProperty &Winproperty,std::weak_ptr<ControlUI> pParent)
+    CountRefPtr<ControlUI> DialogBuilder::Create(IDialogBuilderCallback* pCallback , 
+        WindowProperty &Winproperty,ControlUI* pParent)
     {
         m_pCallback = pCallback;
         XMLElement *pRoot = m_pDoc->FirstChildElement();
@@ -214,10 +213,10 @@ namespace YUI
     }
 
 
-    std::shared_ptr<ControlUI> DialogBuilder::Parse(tinyxml2::XMLNode* pRoot, std::weak_ptr<ControlUI> pParent)
+    CountRefPtr<ControlUI> DialogBuilder::Parse(tinyxml2::XMLNode* pRoot, ControlUI* pParent)
     {
         //ContainerUI* pContainer = NULL;
-        std::shared_ptr<ControlUI> pReturn;
+        CountRefPtr<ControlUI> pReturn;
         for( XMLElement *pChild = pRoot->FirstChildElement();pChild;pChild= pChild->NextSiblingElement())
         {
             const char *pstrClass = pChild->Name();
@@ -227,7 +226,7 @@ namespace YUI
             {
                 continue;
             }
-            std::shared_ptr<ControlUI> pControl;
+            CountRefPtr<ControlUI> pControl;
             if( strcmp(pstrClass,"Include")==0)
             {
                 assert(0 && "no implement");
@@ -239,19 +238,19 @@ namespace YUI
             else
             {
                 if(strcmp(pstrClass,CTR_LABEL)== 0)
-                    pControl = std::make_shared<Label>();
+                    pControl = new Label;
                 if(strcmp(pstrClass,CTR_BUTTON)== 0)
-                    pControl = std::make_shared<Button>();
+                    pControl = new Button;
                 else if(strcmp(pstrClass,CTR_CONTAINER) == 0)
-                    pControl = std::make_shared<Container>();
+                    pControl = new Container;
                 else if(strcmp(pstrClass,CTR_VERTICALLAYOUT) == 0)
-                    pControl = std::make_shared<VerticalLayout>();
+                    pControl = new VerticalLayout;
                 else if(strcmp(pstrClass,CTR_HORIZONTALLAYOUT) == 0)
-                    pControl = std::make_shared<HorizontalLayout>();
+                    pControl = new HorizontalLayout;
                 else if(strcmp(pstrClass,CTR_CONTROL) == 0)
-                    pControl = std::make_shared<ControlUI>();
+                    pControl = new ControlUI;
                 else if(strcmp(pstrClass,CTR_CONTAINER) == 0)
-                    pControl = std::make_shared<Container>();
+                    pControl = new Container;
                 //if( !pControl )
                 //{
                 //	//load from plugin;
@@ -271,11 +270,11 @@ namespace YUI
                     Parse(pChild,pControl);
                 }
                 //attach to parent
-                auto spParent = pParent.lock();
+                auto spParent = pParent;
                 if(spParent)
                 {
                     //如果父空间是个container,把当前control加到containerk中去
-                    std::shared_ptr<IContainer> pContianer = std::dynamic_pointer_cast<IContainer >(spParent);
+                    IContainer* pContianer = dynamic_cast<IContainer* >(spParent);
                     if(!pContianer)
                         return nullptr;
                     pContianer->Add(pControl);

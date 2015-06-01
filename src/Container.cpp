@@ -1,7 +1,6 @@
 #include "YUI.h"
 #include "Container.h"
 #include "ControlUI.h"
-#include "PaintManagerUI.h"
 #include "Canvas2D.h"
 namespace YUI
 {
@@ -29,12 +28,7 @@ namespace YUI
         return _T("Container");
     }
 
-    std::shared_ptr<ControlUI> Container::QueryInterface(const std::string & strName)
-    {
-        if( strName == CTR_CONTAINER ) 
-			return this->shared_from_this();
-        return ControlUI::QueryInterface(strName);
-    }
+  
 
     
 
@@ -43,12 +37,12 @@ namespace YUI
         return m_ListItems.size();
     }
 
-    bool Container::Add(std::shared_ptr<ControlUI>& pControl)
+    bool Container::Add(ControlUI* pControl)
     {
-        if(pControl == NULL )
+        if(pControl == nullptr )
             return false;
         if( m_pManager )
-            m_pManager->InitControls(pControl,this->shared_from_this());
+            m_pManager->InitControls(pControl,this);
         if( IsVisible() )
             NeedUpdate();
         else
@@ -59,7 +53,7 @@ namespace YUI
 
 
 
-    bool Container::Remove(std::shared_ptr<ControlUI> &pControl)
+    bool Container::Remove(ControlUI* pControl)
     {
          m_ListItems.remove(pControl);
          NeedUpdate();
@@ -265,10 +259,10 @@ namespace YUI
         else ControlUI::SetAttribute(strName, strValue);
     }
 
-    void Container::SetManager(std::shared_ptr<ControlManager> &pManager, std::weak_ptr<ControlUI> pParent, bool bInit/*=true*/)
+    void Container::SetManager(ControlManager* pManager, ControlUI* pParent, bool bInit/*=true*/)
     {
         for( auto &pControl : m_ListItems ) {
-            pControl->SetManager(pManager, shared_from_this(), bInit);
+            pControl->SetManager(pManager, this, bInit);
         }
 
        /* if( m_pVerticalScrollBar != NULL ) m_pVerticalScrollBar->SetManager(pManager, this, bInit);
@@ -278,7 +272,7 @@ namespace YUI
 
     bool Container::SetSubControlText(const YString & pstrSubControlName,const YString& pstrText)
     {
-        auto &pSubControl=this->FindSubControl(pstrSubControlName);
+        auto pSubControl=FindSubControl(pstrSubControlName);
         if (pSubControl!=NULL)
         {
             pSubControl->SetText(pstrText);
@@ -290,7 +284,7 @@ namespace YUI
 
     bool Container::SetSubControlFixedHeight(const YString & pstrSubControlName,int cy)
     {
-           auto &pSubControl=this->FindSubControl(pstrSubControlName);
+           auto pSubControl=this->FindSubControl(pstrSubControlName);
            if (pSubControl!=NULL)
            {
                pSubControl->SetFixedHeight(cy);
@@ -302,7 +296,7 @@ namespace YUI
 
     bool Container::SetSubControlFixedWdith(const YString& pstrSubControlName,int cx)
     {
-           auto &pSubControl=this->FindSubControl(pstrSubControlName);
+           auto pSubControl=this->FindSubControl(pstrSubControlName);
            if (pSubControl!=NULL)
            {
                pSubControl->SetFixedWidth(cx);
@@ -315,7 +309,7 @@ namespace YUI
     bool Container::SetSubControlUserData(const YString& pstrSubControlName,const YString& pstrText)
     {
 
-           auto &pSubControl=this->FindSubControl(pstrSubControlName);
+           auto pSubControl=this->FindSubControl(pstrSubControlName);
            pSubControl=this->FindSubControl(pstrSubControlName);
            if (pSubControl!=NULL)
            {
@@ -328,7 +322,7 @@ namespace YUI
 
     YUI::YString Container::GetSubControlText(const YString& pstrSubControlName)
     {
-         auto &pSubControl=this->FindSubControl(pstrSubControlName);
+         auto pSubControl=this->FindSubControl(pstrSubControlName);
          if (pSubControl==NULL)
              return _T("");
          else
@@ -337,7 +331,7 @@ namespace YUI
 
     int Container::GetSubControlFixedHeight(const YString& pstrSubControlName)
     {
-         auto &pSubControl=this->FindSubControl(pstrSubControlName);
+         auto pSubControl=this->FindSubControl(pstrSubControlName);
          if (pSubControl==NULL)
              return -1;
          else
@@ -346,7 +340,7 @@ namespace YUI
 
     int Container::GetSubControlFixedWdith(const YString& pstrSubControlName)
     {
-        auto &pSubControl=this->FindSubControl(pstrSubControlName);
+        auto pSubControl=this->FindSubControl(pstrSubControlName);
         if (pSubControl==NULL)
             return -1;
         else
@@ -355,14 +349,14 @@ namespace YUI
 
     YUI::YString Container::GetSubControlUserData(LPCTSTR pstrSubControlName)
     {
-        auto &pSubControl=this->FindSubControl(pstrSubControlName);
+        auto pSubControl=this->FindSubControl(pstrSubControlName);
         if (pSubControl==NULL)
             return _T("");
         else
             return pSubControl->GetUserData();
     }
 
-    std::shared_ptr<ControlUI> Container::FindSubControl(const YString& pstrSubControlName)
+    ControlUI* Container::FindSubControl(const YString& pstrSubControlName)
     {
         auto spRoot = m_pManager->GetRoot();
         return spRoot->FindControlFromName(pstrSubControlName);
@@ -488,17 +482,19 @@ namespace YUI
 
     }
 
-    std::shared_ptr<Scrollbar> Container::GetVerticalScrollBar() const
+    Scrollbar* Container::GetVerticalScrollBar() const
     {
-        return m_pVerticalScrollBar;
+        //return m_pVerticalScrollBar;
+        return nullptr;
     }
 
-    std::shared_ptr<Scrollbar> Container::GetHorizontalScrollBar() const
+    Scrollbar* Container::GetHorizontalScrollBar() const
     {
-        return m_pHorizontalScrollBar;
+        //return m_pHorizontalScrollBar;
+        return nullptr;
     }
 
-    void Container::SetFloatPos(std::shared_ptr<ControlUI> &pControl)
+    void Container::SetFloatPos(ControlUI* pControl)
     {
         // 因为CControlUI::SetPos对float的操作影响，这里不能对float组件添加滚动条的影响
         if( !pControl || m_ListItems.empty() ) return;
@@ -548,9 +544,9 @@ namespace YUI
 
     }
 
-    std::shared_ptr<ControlUI> Container::FindControlFromPoint(POINT pt,UINT flag)
+    ControlUI* Container::FindControlFromPoint(POINT pt,UINT flag)
     {  
-        std::shared_ptr<ControlUI> pResult ;
+        ControlUI *pResult = nullptr ;
         if(  !IsVisible() ) 
             return NULL;
         if( !IsEnabled() ) 

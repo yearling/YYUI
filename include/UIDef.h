@@ -38,7 +38,6 @@ namespace YUI
         }
 
     };
-    typedef std::unordered_map<YStrStr,FunNofity,ssToHash,ssEql> YMessageHash;
 
     
     

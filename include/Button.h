@@ -3,6 +3,7 @@
 #include "YUI.h"
 #include "ControlUI.h"
 #include "Label.h"
+#include "UIUtility.h"
 namespace YUI
 {
 
@@ -15,7 +16,6 @@ namespace YUI
         void                            AddHander();
         virtual void					HandleMsg(const MsgWrap & msg)throw();
         LPCTSTR                         GetClass() const;
-        virtual std::shared_ptr<ControlUI> QueryInterface(const std::string & strName);
         virtual UINT                    GetControlFlags() const;
         virtual bool                    Activate();
         virtual void                    SetEnabled(bool bEnable = true);

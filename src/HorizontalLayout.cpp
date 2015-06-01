@@ -1,6 +1,5 @@
 #include "YUI.h"
 #include "HorizontalLayout.h"
-#include "RenderDGI.h"
 
 namespace YUI
 {
@@ -21,12 +20,7 @@ namespace YUI
         return _T("HorizontalLayoutUI");
     }
 
-    std::shared_ptr<ControlUI> HorizontalLayout::QueryInterface(const std::string & strName)
-    {
-        if( strName == CTR_HORIZONTALLAYOUT) 
-            return shared_from_this();
-        return Container::QueryInterface(strName);
-    }
+   
 
     UINT HorizontalLayout::GetControlFlags() const
     {

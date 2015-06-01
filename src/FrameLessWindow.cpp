@@ -233,9 +233,7 @@ namespace YUI
         ::SetWindowPos(*this, NULL, rcClient.left, rcClient.top, rcClient.right - rcClient.left, rcClient.bottom - rcClient.top, SWP_FRAMECHANGED);
         DialogBuilder builder;
         m_Property.Init(m_hWnd);
-        std::shared_ptr<ControlUI> pRoot;
-        std::shared_ptr<ControlUI> spNull;
-        pRoot=builder.Create(_T("duilib.xml"),m_Property,nullptr,spNull);
+        CountRefPtr<ControlUI> pRoot=builder.Create(_T("duilib.xml"),m_Property,nullptr,nullptr);
         m_spControlManger->Init(m_hWnd);
         m_spControlManger->AttachDialog(pRoot);
         InitWindow();

@@ -76,33 +76,7 @@ namespace YUI
     //@strFilePath,文件的相对或绝对路径,不带"\/"
     YString GetFileName(const YString & strFilePath);
     //////////////////////////////////////////////////////////////////////////
-    class YRect : public RECT
-    {
-    public:
-        YRect();
-        YRect(const RECT & src);
-        YRect(int nleft, int nTop, int nRight, int nBottom);
-
-        int                             GetWidth() const;
-        int                             GetHeight() const;
-        void                            Empty();
-        bool                            IsEmpty() const;
-        void                            Join(const RECT & rc);
-        void                            ResetOffset();
-        void                            Normalize();
-        void                            OffSet(int cx, int cy);
-        void                            Inflate(int cx,int cy);
-        void                            Defalte(int cx,int cy);
-        void                            Union(YRect & rc);
-    };
-    class YSize: public tagSIZE
-    {
-    public:
-        YSize();
-        YSize(const SIZE & src);
-        YSize(const RECT rc);
-        YSize(int cx, int cy);
-    };
+  
     //////////////////////////////////////////////////////////////////////////
     class STRINGorID
     {

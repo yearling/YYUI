@@ -28,9 +28,28 @@
 #include <map>
 #include <unordered_map>
 #include <iostream>
+#include "CountRef.h"
 using YYCOM::Exception;
 using YYCOM::ThrowException;
 using YYCOM::ErrorInfo;
+
+//
+//#ifdef  UTF8ToGBK
+//#undef UTF8ToGBK
+//#endif 
+//
+//#ifdef GBKToUTF8
+//#undef GBKToUTF8
+//#endif
+
+#if defined _UNICODE | defined UNICODE
+#define UTF8ToGBK UTF8ToGBKW 
+#define GBKToUTF8 GBKToUTF8W
+#else 
+#define UTF8ToGBK UTF8ToGBKA 
+#define GBKToUTF8 GBKToUTF8A
+#endif
+
 namespace YUI
 {
     //YString 用的就是标准string
@@ -116,45 +135,24 @@ namespace YUI
 #define UIFIND_ME_FIRST      0x80000000
     //前置定义
     class ControlUI;
-    class INotifyUI;
     class IMessageFilterUI;
     class ITranslateAccelerator;
-    class PaintManagerUI;
     class RenderD2D;
     class WindowWnd;
     class WindowProperty;
     class ControlManager;
     //定义常用的SP
-	typedef std::shared_ptr<ControlUI>  SPControlUI;
-	typedef std::weak_ptr<ControlUI>	WPControlUI;
-    typedef std::shared_ptr<WindowWnd>  SPWindowWnd;
-    typedef std::weak_ptr<WindowWnd>    WPWindowWnd;
-    typedef std::shared_ptr<ControlManager>
-                                        SPControlManger;
-    typedef std::weak_ptr<ControlManager>
-                                        WPControlManger;
-    //定义消息体
-    struct NotifyMsg
-    {
-        YString                         strType;
-        YString                         strVirtualWnd;
-        std::weak_ptr<ControlUI>		pSender;
-        unsigned long                   lTimeStamp;
-        POINT                           ptMouse;
-        WPARAM                          wParam;
-        LPARAM                          lParam;
-    };
+
     //新的消息体
 	struct MsgWrap
 	{
 		YString							strType;
-		SPControlUI						pSender;
+		ControlUI*						pSender;
 		unsigned long					lTimeStamp;
 		POINT							ptMouse;
 		WPARAM							wParam;
 		LPARAM							lParam;
 	};
-    typedef std::function<void(const NotifyMsg&)> FunNofity;
     typedef std::function<void(const MsgWrap&)> FucHandleMsg;
 
 #define  UIMSG_SETFOCUS     _T("SETFOCUS")
@@ -236,71 +234,7 @@ namespace YUI
 #define UISTATE_READONLY     0x00000020
 #define UISTATE_CAPTURED     0x00000040
 
-    struct FontInfo
-    {
-        HFONT                           m_hFont;
-        YString                         m_strFontName;
-        int                             m_nSize;
-        bool                            m_bBold;                     
-        bool                            m_bUnderline;
-        bool                            m_bItalic;
-        TEXTMETRIC                      m_tm;
-        static void                     FontInfoDeleter(FontInfo *pFont)
-        {
-            if(pFont->m_hFont)
-                ::DeleteObject(pFont->m_hFont);
-            delete pFont;
-        }
-    };
-
-    struct ImageInfo
-    {
-        HBITMAP                         m_hBitmap;
-        int                             m_nX;
-        int                             m_nY;
-        bool                            m_alphaChannel;
-        YString                         m_strResType;
-        DWORD                           m_dwMask;
-
-        static void                     ImageInfoDeleter(ImageInfo * pImag )
-        {
-            if(pImag->m_hBitmap) 
-                ::DeleteObject(pImag->m_hBitmap);
-            delete pImag;
-        } 
-    };
-    struct TimerInfo
-    {
-        std::weak_ptr<ControlUI>       pSender;
-        UINT                            nLocalID;
-        HWND                            hWnd;
-        UINT                            uWinTimer;
-        bool                            bKilled;
    
-    };
-    struct ControlEvent
-    {
-        int                             m_Type;
-        std::weak_ptr<ControlUI>        m_pSender;
-        DWORD                           m_dwTimestamp;
-        POINT                           m_ptMouse;
-        TCHAR                           m_chKey;
-        WORD                            m_wKeyState;
-        WPARAM                          m_wParam;
-        LPARAM                          m_lParam;
-        ControlEvent():m_Type( UIEVENT__FIRST )
-                                        ,m_dwTimestamp(0)
-                                        ,m_wKeyState(0)
-                                        ,m_wParam(0)
-                                        ,m_lParam(0)
-        {
-            m_ptMouse.x = -1;
-            m_ptMouse.y = -1;
-            m_chKey = _T('\0');
-        }
-
-    };
-
     struct RelativePosUI
     {
         bool                            m_bRelative;
@@ -457,22 +391,34 @@ namespace YUI
 
 
 
+    class YRect : public RECT
+    {
+    public:
+        YRect();
+        YRect(const RECT & src);
+        YRect(int nleft, int nTop, int nRight, int nBottom);
+
+        int                             GetWidth() const;
+        int                             GetHeight() const;
+        void                            Empty();
+        bool                            IsEmpty() const;
+        void                            Join(const RECT & rc);
+        void                            ResetOffset();
+        void                            Normalize();
+        void                            OffSet(int cx, int cy);
+        void                            Inflate(int cx,int cy);
+        void                            Defalte(int cx,int cy);
+        void                            Union(YRect & rc);
+    };
+    class YSize: public tagSIZE
+    {
+    public:
+        YSize();
+        YSize(const SIZE & src);
+        YSize(const RECT rc);
+        YSize(int cx, int cy);
+    };
 
 
 
-#ifdef  UTF8ToGBK
-#undef UTF8ToGBK
-#endif 
-
-#ifdef GBKToUTF8
-#undef GBKToUTF8
-#endif
-
-#if defined _UNICODE | defined UNICODE
-#define UTF8ToGBK UTF8ToGBKW 
-#define GBKToUTF8 GBKToUTF8W
-#else 
-#define UTF8ToGBK UTF8ToGBKA 
-#define GBKToUTF8 GBKToUTF8A
-#endif
 }

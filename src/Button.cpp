@@ -1,5 +1,5 @@
+#include "YUI.h"
 #include "Button.h"
-#include "RenderDGI.h"
 #include "ControlUI.h"
 #include "WindowProperty.h"
 #include "Canvas2D.h"
@@ -26,13 +26,6 @@ namespace YUI
     LPCTSTR Button::GetClass() const
     {
         return _T("ButtonUI");
-    }
-
-    std::shared_ptr<ControlUI> Button::QueryInterface(const std::string & strName)
-    {
-        if( strName ==  CTR_BUTTON  ) 
-            return shared_from_this();
-        return Label::QueryInterface(strName);
     }
 
     UINT Button::GetControlFlags() const

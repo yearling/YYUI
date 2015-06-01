@@ -1,7 +1,6 @@
 #include "YUI.h"
 #include "Label.h"
 #include "UIUtility.h"
-#include "RenderDGI.h"
 #include <atlconv.h>
 #include "ControlUI.h"
 #include "ControlManager.h"
@@ -47,12 +46,7 @@ namespace YUI
         return _T("LabelUI");
     }
 
-    std::shared_ptr<ControlUI> Label::QueryInterface(const std::string & strName)
-    {
-        if( strName ==  "Label") 
-            return shared_from_this();
-        return ControlUI::QueryInterface(strName);
-    }
+   
 
     void Label::SetTextStyle(UINT uStyle)
     {

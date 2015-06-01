@@ -1,9 +1,9 @@
 #include "YUI.h"
 #include "UIDef.h"
 #include "ControlUI.h"
-#include "RenderDGI.h"
 #include "ControlManager.h"
 #include "Canvas2D.h"
+#include "UIUtility.h"
 
 using  std::cout;
 using  std::wcout;
@@ -60,13 +60,6 @@ namespace YUI
         m_strName = strName;
     }
 
-    std::shared_ptr<ControlUI> ControlUI::QueryInterface(const std::string & strName)
-    {
-        if( strName == CTR_CONTROL )
-            return this->shared_from_this();
-        return std::shared_ptr<ControlUI>();
-    }
-
     UINT ControlUI::GetControlFlags() const
     {
         return 0;
@@ -81,20 +74,20 @@ namespace YUI
         return true;
     }
 
-    std::shared_ptr<ControlManager> ControlUI::GetManager() const
+    ControlManager* ControlUI::GetManager() const
     {
         return m_pManager;
     }
 
-    void ControlUI::SetManager(std::shared_ptr<ControlManager> &pManager, std::weak_ptr<ControlUI> pParent, bool bInit/*=true*/)
+    void ControlUI::SetManager(ControlManager *pManager,ControlUI* pParent, bool bInit/*=true*/)
     {
         m_pManager=pManager;
         m_pParent=pParent;
-        if(bInit&& (!m_pParent.expired()))
+        if(bInit && m_pParent)
             Init();
     }
 
-    std::weak_ptr<ControlUI> ControlUI::GetParent() const
+    ControlUI *ControlUI::GetParent() const
     {
         return m_pParent;
     }
@@ -397,8 +390,10 @@ namespace YUI
             std::swap(rc.top,rc.bottom);
             
 
-        YRect invalidateRc = m_rcItem;
-        if( ::IsRectEmpty(&invalidateRc) ) invalidateRc = rc;
+        YYRECT invalidateRc = m_rcItem;
+        //!!FIX ME
+        //if( ::IsRectEmpty(&invalidateRc) ) 
+            invalidateRc = rc;
 
         m_rcItem = rc;
         if( m_pManager == NULL ) return;
@@ -411,7 +406,7 @@ namespace YUI
         }*/
 
         if( m_bFloat ) {
-            auto pParent = GetParent().lock();
+            auto pParent = GetParent();
             if( pParent ) {
                 RECT rcParentPos = pParent->GetPos();
                 if( m_cXY.cx >= 0 ) m_cXY.cx = m_rcItem.left - rcParentPos.left;
@@ -426,17 +421,18 @@ namespace YUI
         m_bUpdateNeeded = false;
         invalidateRc.Join(m_rcItem);
 
-        auto pParent = shared_from_this();
+        auto pParent = this;
         RECT rcTemp;
         RECT rcParent;
-        while( pParent = pParent->GetParent().lock() )
+        while( pParent = pParent->GetParent() )
         {
             rcTemp = invalidateRc;
             rcParent = pParent->GetPos();
-            if( !::IntersectRect(&invalidateRc, &rcTemp, &rcParent) ) 
-            {
-                return;
-            }
+            //!!FIX ME
+           // if( !::IntersectRect(&invalidateRc, &rcTemp, &rcParent) ) 
+           // {
+           //     return;
+           // }
         }
         m_pManager->Invalidate(invalidateRc);
     }
@@ -680,9 +676,9 @@ namespace YUI
         m_bVisible = bVisible;
         if( m_bFocused )
             m_bFocused = false;
-        if( !bVisible && m_pManager && m_pManager->GetFocus()==shared_from_this())
+        if( !bVisible && m_pManager && m_pManager->GetFocus()== this)
         {
-            m_pManager->SetFocus(SPControlUI());
+            m_pManager->SetFocus(nullptr);
         }
         if( IsVisible() != v)
             NeedParentUpdate();
@@ -691,8 +687,8 @@ namespace YUI
     void ControlUI::SetInternVisible(bool bVisible /*= true*/)
     {
         m_bInternVisible = bVisible;
-        if( !bVisible && m_pManager && m_pManager->GetFocus() == shared_from_this())
-            m_pManager->SetFocus(SPControlUI());
+        if( !bVisible && m_pManager && m_pManager->GetFocus() ==this)
+            m_pManager->SetFocus(nullptr);
     }
 
     bool ControlUI::IsEnabled() const
@@ -736,7 +732,7 @@ namespace YUI
     void ControlUI::SetFocus()
     {
         if( m_pManager )
-            m_pManager->SetFocus(shared_from_this());
+            m_pManager->SetFocus(this);
     }
 
     bool ControlUI::IsFloat() const
@@ -752,13 +748,14 @@ namespace YUI
         NeedParentUpdate();
     }
 
-    std::shared_ptr<ControlUI> ControlUI::FindControlFromPoint(POINT pt,UINT flag)
+    ControlUI* ControlUI::FindControlFromPoint(POINT pt,UINT flag)
     {
         if( !IsVisible() ) 
             return NULL;
         if( !IsEnabled() ) 
             return NULL;
-        return ::PtInRect(&m_rcItem,pt)? shared_from_this() : NULL;
+        //!!fix me 
+        return ::PtInRect(&m_rcItem,pt)? this : NULL;
     }
 
     void ControlUI::Invalidate()
@@ -767,10 +764,10 @@ namespace YUI
 
         RECT invalidateRc = m_rcItem;
 
-        auto pParent = shared_from_this();
+        auto pParent = this;
         RECT rcTemp;
         RECT rcParent;
-        while( pParent = pParent->GetParent().lock() )
+        while( pParent = pParent->GetParent() )
         {
             rcTemp = invalidateRc;
             rcParent = pParent->GetPos();
@@ -800,7 +797,7 @@ namespace YUI
 
     void ControlUI::NeedParentUpdate()
     {
-        auto spParent = GetParent().lock();
+        auto spParent = GetParent();
         if( spParent ) 
         {
             spParent->NeedUpdate();
@@ -938,7 +935,7 @@ namespace YUI
 
     }
 
-    std::shared_ptr<ControlUI> ControlUI::ApplyAttributeList(const std::string & strList)
+    ControlUI* ControlUI::ApplyAttributeList(const std::string & strList)
     {
         std::string sItem;
         std::string sValue;
@@ -954,10 +951,10 @@ namespace YUI
             }
             assert( *pstrList == _T('=') );
             if( *pstrList++ != _T('=') ) 
-                return shared_from_this();
+                return this;
             assert( *pstrList == _T('\"') );
             if( *pstrList++ != _T('\"') )
-                return shared_from_this();
+                return this;
             while( *pstrList != _T('\0') && *pstrList != _T('\"') ) {
                 LPSTR pstrTemp = ::CharNextA(pstrList);
                 while( pstrList < pstrTemp) {
@@ -966,12 +963,12 @@ namespace YUI
             }
             assert( *pstrList == _T('\"') );
             if( *pstrList++ != _T('\"') ) 
-                return shared_from_this();
+                return this;
             SetAttribute(sItem, sValue);
             if( *pstrList++ != _T(' ') )
-                return shared_from_this();
+                return this;
         }
-        return shared_from_this();
+        return this;
     }
 
     SIZE ControlUI::EstimateSize(SIZE szAvailable)
@@ -1049,12 +1046,12 @@ namespace YUI
 
     }
 
-    std::shared_ptr<ControlUI>& ControlUI::FindControlFromName(const YString & strName)
+    ControlUI* ControlUI::FindControlFromName(const YString & strName)
     {
         if(strName == GetName() )
-            return shared_from_this();
+            return this;
         else
-            return std::shared_ptr<ControlUI>();
+            return nullptr;
     }
 
      void ControlUI::AddHandler()

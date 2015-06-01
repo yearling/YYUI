@@ -9,7 +9,7 @@
 namespace YUI
 {
 
-    class ControlUI:public std::enable_shared_from_this<ControlUI>/*,public IMsgHandler*/
+    class ControlUI:public CountRefObj
     {
     public:
         ControlUI();
@@ -19,15 +19,11 @@ namespace YUI
         virtual void                    SetName(const YString & strName);
         virtual void					HandleMsg(const MsgWrap & msg)throw();
         virtual LPCTSTR                 GetClass() const;
-        virtual std::shared_ptr<ControlUI> QueryInterface(const std::string & strName);
         virtual bool                    Activate();
-        virtual std::shared_ptr<ControlManager>
-                                        GetManager() const;
-        virtual void SetManager(std::shared_ptr<ControlManager> &pManager,
-                                                    std::weak_ptr<ControlUI> pParent,
-                                                    bool bInit=true);
-        virtual std::weak_ptr<ControlUI>
-                                        GetParent() const;
+        virtual ControlManager*         GetManager() const;
+        // FIX ME !!可以不用虚函数
+        virtual void                    SetManager(ControlManager* pManager, ControlUI* pParent,bool bInit=true);
+        virtual ControlUI*              GetParent() const;
         
         //字体类
         virtual YString                 GetText() const;
@@ -134,10 +130,8 @@ namespace YUI
         virtual void                    SetFloat(bool bFloat = true);
 
         //find
-        virtual std::shared_ptr<ControlUI>
-                                        FindControlFromPoint(POINT pt,UINT flag);
-        virtual std::shared_ptr<ControlUI>&
-                                        FindControlFromName(const YString & strName);
+        virtual ControlUI*              FindControlFromPoint(POINT pt,UINT flag);
+        virtual ControlUI*              FindControlFromName(const YString & strName);
         void                            Invalidate();
         bool                            IsUpdateNeeded() const;
         void                            NeedUpdate();
@@ -147,7 +141,7 @@ namespace YUI
 
         void                            AddHandler();
         virtual void                    SetAttribute(const std::string &strName, const std::string& strValue);
-        std::shared_ptr<ControlUI>      ApplyAttributeList(const std::string & strList);
+        ControlUI*                      ApplyAttributeList(const std::string & strList);
 
         virtual SIZE                    EstimateSize(SIZE szAvailable);
 
@@ -164,8 +158,8 @@ namespace YUI
         void                            SetVirtualWnd(LPCTSTR pstrValue);
         YString                         GetVirtualWnd() const;
     protected:
-        std::shared_ptr<ControlManager> m_pManager;
-        std::weak_ptr<ControlUI>        m_pParent;
+        CountRefPtr<ControlManager>     m_pManager;
+        ControlUI*                      m_pParent;
         YString                         m_strVirtualWnd;
         YString                         m_strName; // tag 'name'
         bool                            m_bUpdateNeeded;

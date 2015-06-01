@@ -22,15 +22,16 @@ namespace YUI
 
     void ControlManager::Invalidate(const YYRECT &rc)
     {
+        //FIX ME!!! 去掉系统调用
         ::InvalidateRect(m_hWnd,&((RECT)rc),FALSE);
     }
 
-    YUI::SPControlUI ControlManager::GetFocus() const
+    ControlUI* ControlManager::GetFocus() const
     {
         return m_pFocus;
     }
 
-    void ControlManager::SetFocus(SPControlUI &pControl)
+    void ControlManager::SetFocus(ControlUI *pControl)
     {
         HWND hFocusWnd = ::GetFocus();
         //得到当前Focus的焦点
@@ -54,7 +55,7 @@ namespace YUI
 
         if(pControl != nullptr && pControl->IsVisible() && pControl->IsEnabled())
         {
-            assert(pControl->GetManager() == shared_from_this() && "impossible");
+            assert(pControl->GetManager() == this && "impossible");
             m_pFocus = pControl;
             MsgWrap msg;
             msg.strType = UIMSG_SETFOCUS;
@@ -64,34 +65,34 @@ namespace YUI
         }
     }
 
-    void ControlManager::SendMsg(SPControlUI pControl,const MsgWrap &msg)
+    void ControlManager::SendMsg(ControlUI* pControl,const MsgWrap &msg)
     {
         pControl->HandleMsg(msg);
     }
 
-    YUI::SPControlUI ControlManager::GetRoot() const
+    ControlUI* ControlManager::GetRoot() const
     {
        return  m_pRoot;
     }
 
-    void ControlManager::InitControls(std::shared_ptr<ControlUI> &pControl,std::weak_ptr<ControlUI> parent)
+    void ControlManager::InitControls(ControlUI *pControl,ControlUI* parent)
     {
         assert(pControl);
         if( !pControl )
             return;
-        if(parent.lock())
-            pControl->SetManager(this->shared_from_this(),parent,true);
+        if(parent)
+            pControl->SetManager(this,parent,true);
         else
-            pControl->SetManager(this->shared_from_this(),pControl->GetParent(),true);
+            pControl->SetManager(this,pControl->GetParent(),true);
     }
 
-    void ControlManager::AttachDialog(std::shared_ptr<ControlUI> pControl)
+    void ControlManager::AttachDialog(ControlUI* pControl)
     {
         assert( ::IsWindow(m_hWnd) );
         ::SetFocus(NULL);
         m_pRoot = pControl;
         m_bNeedUpdate = true;
-        return InitControls(pControl,std::shared_ptr<ControlUI>());
+        return InitControls(pControl,nullptr);
     }
    
     bool ControlManager::MessageHandler(UINT uMesg, WPARAM wParam, LPARAM lParam, LRESULT &lRes)
@@ -230,7 +231,7 @@ namespace YUI
                 Ycout<<"ControlManger: WM_MOUSEMOVE"<<endl;
                 POINT pt= { GET_X_LPARAM( lParam) ,GET_Y_LPARAM(lParam) };
                 m_ptLastMousePos = pt;
-                std::shared_ptr<ControlUI> spNewHover = FindControl(pt);
+                ControlUI* spNewHover = FindControl(pt);
                 if( spNewHover == NULL )
                  {
                      //还是有可能到的，比如说跑到了屏幕的边框~~
@@ -284,8 +285,11 @@ namespace YUI
                 auto spControl = FindControl(pt);
                 if( spControl == NULL )
                     break;
-                if( spControl->GetManager() != shared_from_this())
+                if( spControl->GetManager() != this )
+                {
+                    assert(0 && " should not be here");
                     break;
+                }
                 m_pClick = spControl;
                 spControl->SetFocus();
                 SetCapture();
@@ -308,8 +312,11 @@ namespace YUI
                 auto spControl = FindControl(pt);
                 if( spControl == NULL )
                     break;
-                if( spControl->GetManager() != shared_from_this())
-                    break;
+                if( spControl->GetManager() != this)
+                {
+                        assert(0 && " should not be here");
+                        break;
+                }
                 SetCapture();
                 MsgWrap msg;
                 msg.strType = UIMSG_DBLCLICK;
@@ -350,8 +357,11 @@ namespace YUI
                 auto spControl = FindControl(pt);
                 if( spControl == NULL )
                     break;
-                if( spControl->GetManager() != shared_from_this())
+                if( spControl->GetManager() != this)
+                {
+                    assert(0 && " should not be here");
                     break;
+                }
                 spControl->SetFocus();
                 SetCapture();
                 MsgWrap msg;
@@ -394,8 +404,11 @@ namespace YUI
                 auto spControl = FindControl(pt);
                 if( spControl == NULL )
                     break;
-                if( spControl->GetManager() != shared_from_this())
+                if( spControl->GetManager() != this)
+                {
+                    assert(0 && " should not be here");
                     break;
+                }
                 int ZDelta = (int)(short)HIWORD(wParam);
                 MsgWrap msg;
                 msg.strType = UIMSG_MOUSEWHEEL;
@@ -508,7 +521,7 @@ namespace YUI
         }
         return false;
     }
-    YUI::SPControlUI ControlManager::FindControl(const YYPOINT &pt)
+    ControlUI* ControlManager::FindControl(const YYPOINT &pt)
     {
         return m_pRoot->FindControlFromPoint(pt,UIFIND_VISIBLE | UIFIND_HITTEST | UIFIND_TOP_FIRST);
     }

@@ -1,6 +1,5 @@
 #include "YUI.h"
 #include "VerticalLayout.h"
-#include "RenderDGI.h"
 using std::endl;
 namespace YUI
 {
@@ -21,12 +20,7 @@ namespace YUI
         return _T("VerticalLayoutUI");
     }
 
-    std::shared_ptr<ControlUI> VerticalLayout::QueryInterface(const std::string & strName)
-    {
-        if( strName == CTR_VERTICALLAYOUT)
-            return shared_from_this();
-        return Container::QueryInterface(strName);
-    }
+   
 
     void VerticalLayout::SetAttribute(const std::string &strName, const std::string& strValue)
     {

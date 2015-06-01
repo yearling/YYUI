@@ -18,7 +18,6 @@ namespace YUI
       LRESULT CALLBACK WindowManger::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
         WindowWnd *pWnd = NULL;
-        SPWindowWnd spWnd;
         if(uMsg == WM_NCCREATE )
         {
             //窗口刚开始创建时CreateWindowEx，最后一个参数LPVOID lpParam，保存了当前的this指针，这里取出来；

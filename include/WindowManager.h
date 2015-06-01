@@ -16,7 +16,7 @@ namespace YUI
         UINT                            GetWindowsNumber() const;
         const WindowProperty*           GetWindowProperty(HWND hWnd);
     private:
-        std::map<HWND,WindowWnd* >      m_mapHWNDToWindow;
+        std::map<HWND,CountRefPtr<WindowWnd > >      m_mapHWNDToWindow;
     private:
         static WindowManger             m_Instance;
         WindowManger();

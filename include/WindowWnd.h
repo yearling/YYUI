@@ -5,9 +5,8 @@
 #pragma once
 #include "YUI.h"
 #include "UIDef.h"
-#include "MessageHandler.h"
-#include <map>
 #include "WindowProperty.h"
+#include <map>
 namespace YUI
 {
 
@@ -25,13 +24,12 @@ namespace YUI
 #define UI_CLASSSTYLE_DIALOG     (CS_VREDRAW | CS_HREDRAW | CS_DBLCLKS | CS_SAVEBITS)
     
    
-	class WindowWnd
+	class WindowWnd:public CountRefObj
 	{
-	public:
+    public:
         friend  class                   WindowManger;
 		                                WindowWnd();
 		virtual                         ~WindowWnd();
-
     public:
        
         //注册当前窗口的类名，如果注册失败（没有重复注册）,会抛异常; 
