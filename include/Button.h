@@ -50,7 +50,7 @@ namespace YUI
 
     protected:
         UINT                            m_uButtonState;
-
+        UINT                            m_uWhere;
         DWORD                           m_dwHotBkColor;
         DWORD                           m_dwHotTextColor;
         DWORD                           m_dwPushedTextColor;

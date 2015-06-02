@@ -276,7 +276,7 @@ namespace YUI
                 }
                 else if( spNewHover )
                 {
-                    msg.strType = UIEVENT_MOUSEMOVE;
+                    msg.strType = UIMSG_MOUSEMOVE;
                     msg.pSender = spNewHover;
                     SendMsg(spNewHover,msg);
                 }

@@ -82,9 +82,6 @@
     <ClCompile Include="..\include\thirdparty\tinyxml2\tinyxml2.cpp">
       <Filter>tinnyxml2</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\ControlManager.cpp">
-      <Filter>WindowManger</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\FrameLessWindow.cpp">
       <Filter>WindowManger</Filter>
     </ClCompile>
@@ -102,6 +99,9 @@
     </ClCompile>
     <ClCompile Include="..\src\WindowWnd.cpp">
       <Filter>WindowManger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ControlManager.cpp">
+      <Filter>Control</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -183,9 +183,6 @@
     <ClInclude Include="..\include\thirdparty\tinyxml2\tinyxml2.h">
       <Filter>tinnyxml2</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\ControlManager.h">
-      <Filter>WindowManger</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\FrameLessWindow.h">
       <Filter>WindowManger</Filter>
     </ClInclude>
@@ -206,6 +203,9 @@
     </ClInclude>
     <ClInclude Include="..\include\YUI.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ControlManager.h">
+      <Filter>Control</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
