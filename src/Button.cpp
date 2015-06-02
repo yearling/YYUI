@@ -106,7 +106,7 @@ namespace YUI
 
     void Button::PaintText()
     {
-        /*if( IsFocused() ) 
+        if( IsFocused() ) 
             m_uButtonState |= UISTATE_FOCUSED;
         else
             m_uButtonState &= ~ UISTATE_FOCUSED;
@@ -139,7 +139,7 @@ namespace YUI
 
         Canvas2D canvas(m_pManager->GetHWND());
         FontD2D font(_T("Verdana"),10);
-        canvas.DrawSolidText(m_strText,font,rc,m_dwTextColor);*/
+        canvas.DrawSolidText(m_strText,font,rc,m_dwTextColor);
     }
 
     void Button::PaintStatusImage()
@@ -149,40 +149,44 @@ namespace YUI
         if( IsFocused() ) m_uButtonState |= UISTATE_FOCUSED;
         else m_uButtonState &= ~ UISTATE_FOCUSED;
             m_uWhere+=1;
-        //if( !IsEnabled() ) m_uButtonState |= UISTATE_DISABLED;
-        //else m_uButtonState &= ~ UISTATE_DISABLED;
+        if( !IsEnabled() ) m_uButtonState |= UISTATE_DISABLED;
+        else m_uButtonState &= ~ UISTATE_DISABLED;
 
-        //if( (m_uButtonState & UISTATE_DISABLED) != 0 ) {
-        //    if( !m_sDisabledImage.empty() )
-        //    {
-        //        DrawImage(m_sDisabledImage);
-        //    }
-        //}
-        //else if( (m_uButtonState & UISTATE_PUSHED) != 0 ) {
-        //    if( !m_sPushedImage.empty() ) {
-        //        DrawImage(m_sPushedImage);
-        //        //DrawImage(m_sPushedForeImage);
-        //    }
-        //}
-        //else if( (m_uButtonState & UISTATE_HOT) != 0 ) {
-        //    if( !m_sHotImage.empty() ) {
-        //        DrawImage(m_sHotImage);
-        //        //DrawImage(m_sHotForeImage);
-        //    }
-        //    else if(m_dwHotBkColor != 0) {
-        //        canvas.FillRect(m_rcPaint,m_dwHotBkColor);
-        //        return;
-        //    }
-        //}
-        //else if( (m_uButtonState & UISTATE_FOCUSED) != 0 ) {
-        //    if( !m_sFocusedImage.empty() ) {
-        //        DrawImage(m_sFocusedImage);
-        //    }
-        //}
+        if( (m_uButtonState & UISTATE_DISABLED) != 0 ) {
+            if( !m_sDisabledImage.empty() )
+            {
+                DrawImage(m_sDisabledImage);
+				return;
+            }
+        }
+        else if( (m_uButtonState & UISTATE_PUSHED) != 0 ) {
+            if( !m_sPushedImage.empty() ) {
+                DrawImage(m_sPushedImage);
+                //DrawImage(m_sPushedForeImage);
+				return;
+            }
+        }
+        else if( (m_uButtonState & UISTATE_HOT) != 0 ) {
+            if( !m_sHotImage.empty() ) {
+                DrawImage(m_sHotImage);
+                //DrawImage(m_sHotForeImage);
+				return;
+            }
+            else if(m_dwHotBkColor != 0) {
+                canvas.FillRect(m_rcPaint,m_dwHotBkColor);
+                return;
+            }
+        }
+        else if( (m_uButtonState & UISTATE_FOCUSED) != 0 ) {
+            if( !m_sFocusedImage.empty() ) {
+                DrawImage(m_sFocusedImage);
+				return;
+            }
+        }
 
-        //if( !m_sNormalImage.empty() ) {
-        //    DrawImage(m_sNormalImage);
-        //}
+        if( !m_sNormalImage.empty() ) {
+            DrawImage(m_sNormalImage);
+        }
 
     }
 
@@ -307,7 +311,7 @@ namespace YUI
     {
         m_ButtonMsgHandler.SetSuccessor(&m_LabelMsgHandler);
         
-     /*  m_ButtonMsgHandler.AddEntry(UIMSG_SETFOCUS,[&](const MsgWrap &msg)
+       m_ButtonMsgHandler.AddEntry(UIMSG_SETFOCUS,[&](const MsgWrap &msg)
         {
             Invalidate();
            m_ButtonMsgHandler.MsgHandleChainBase::HandleMsg(msg);
@@ -346,8 +350,8 @@ namespace YUI
                 Invalidate();
             }
         });
-*/
-      /*  m_ButtonMsgHandler.AddEntry(UIMSG_MOUSEMOVE,[&](const MsgWrap &msg)
+
+        m_ButtonMsgHandler.AddEntry(UIMSG_MOUSEMOVE,[&](const MsgWrap &msg)
         {
             POINT pt= { GET_X_LPARAM(msg.lParam),GET_Y_LPARAM(msg.lParam)};
             if( (m_uButtonState & UISTATE_CAPTURED) != 0 ) 
@@ -356,9 +360,9 @@ namespace YUI
                 else m_uButtonState &= ~UISTATE_PUSHED;
                 Invalidate();
             }
-        });*/
+        });
 
-       /* m_ButtonMsgHandler.AddEntry(UIMSG_LBUTTONUP,[&](const MsgWrap &msg)
+        m_ButtonMsgHandler.AddEntry(UIMSG_LBUTTONUP,[&](const MsgWrap &msg)
         {
             POINT pt= { GET_X_LPARAM(msg.lParam),GET_Y_LPARAM(msg.lParam)};
             if( (m_uButtonState & UISTATE_CAPTURED) != 0 )
@@ -368,7 +372,7 @@ namespace YUI
                 m_uButtonState &= ~(UISTATE_PUSHED | UISTATE_CAPTURED);
                 Invalidate();
             }
-        }); */
+        }); 
        
         m_ButtonMsgHandler.AddEntry(UIMSG_MOUSEENTER,[&](const MsgWrap &msg)
         {
@@ -381,7 +385,7 @@ namespace YUI
            m_ButtonMsgHandler.MsgHandleChainBase::HandleMsg(msg);
         }); 
         
-      /*  m_ButtonMsgHandler.AddEntry(UIMSG_MOUSELEAVE,[&](const MsgWrap &msg)
+        m_ButtonMsgHandler.AddEntry(UIMSG_MOUSELEAVE,[&](const MsgWrap &msg)
         {
             if( IsEnabled() ) 
             {
@@ -394,7 +398,7 @@ namespace YUI
         m_ButtonMsgHandler.AddEntry(UIMSG_SETCURSOR,[&](const MsgWrap &msg)
         {
            ::SetCursor(::LoadCursor(NULL, MAKEINTRESOURCE(IDC_HAND)));
-        });*/
+        });
 
         m_eventClick = [](){ ::MessageBeep(MB_OK);};
     }

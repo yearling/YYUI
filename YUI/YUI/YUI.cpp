@@ -73,10 +73,10 @@ int APIENTRY _tWinMain( __in HINSTANCE hInstance, __in_opt HINSTANCE hPrevInstan
 		spD2D->Init();
 		spD2D->Create(NULL,_T("D2DWnd"),UI_WNDSTYLE_FRAME,WS_EX_WINDOWEDGE);
 		spD2D->CenterWindow();
-        D2DWnd *spD3D = new D2DWnd;
-        spD3D->Init();
-        spD3D->Create(NULL,_T("D2DWnd"),UI_WNDSTYLE_FRAME,WS_EX_WINDOWEDGE);
-        spD3D->CenterWindow();
+		/*  D2DWnd *spD3D = new D2DWnd;
+		spD3D->Init();
+		spD3D->Create(NULL,_T("D2DWnd"),UI_WNDSTYLE_FRAME,WS_EX_WINDOWEDGE);
+		spD3D->CenterWindow();*/
 
        /* std::shared_ptr<D2DWnd> spD4D = std::make_shared<D2DWnd>();
         spD4D->Init();

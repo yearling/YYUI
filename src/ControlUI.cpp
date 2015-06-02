@@ -193,7 +193,8 @@ namespace YUI
         RECT rc = m_rcItem;
         RECT rcBmpPart = {0};
         RECT rcCorner = {0};
-        DWORD dwMask = 0;
+		//fix me !!!
+        DWORD dwMask = 255;
         BYTE bFade = 0xFF;
         bool bHole = false;
         bool bTiledX = false;

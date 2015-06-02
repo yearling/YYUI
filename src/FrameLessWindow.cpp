@@ -146,11 +146,11 @@ namespace YUI
         //cout<<"hello"<<endl;
         if( pt.x >= rcClient.left + rcCaption.left && pt.x < rcClient.right - rcCaption.right && pt.y >= rcCaption.top && pt.y < rcCaption.bottom )
         {
-            //auto pControl = FindControl(pt);
+            auto pControl = m_spControlManger->FindControl(pt);
             ////用来防止把点击右上角的maxSize，close等button当成点击标题栏
-            //if( pControl && _tcsicmp(pControl->GetClass(), _T("ButtonUI")) != 0 && 
-            //    _tcsicmp(pControl->GetClass(), _T("OptionUI")) != 0 &&
-            //    _tcsicmp(pControl->GetClass(), _T("TextUI")) != 0 )
+            if( pControl && _tcsicmp(pControl->GetClass(), _T("ButtonUI")) != 0 && 
+                _tcsicmp(pControl->GetClass(), _T("OptionUI")) != 0 &&
+                _tcsicmp(pControl->GetClass(), _T("TextUI")) != 0 )
                 return HTCAPTION;
         }
 
