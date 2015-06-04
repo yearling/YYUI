@@ -158,9 +158,10 @@ namespace YUI
 				if( m_bNeedUpdate ) 
 				{
 					m_bNeedUpdate = false;
-					RECT rcClient = { 0 };
-					::GetClientRect(m_hWnd, &rcClient);
-					if( !::IsRectEmpty(&rcClient) ) 
+					RECT Client = { 0 };
+					::GetClientRect(m_hWnd, &Client);
+					YYRECT rcClient(Client);
+					if( !rcClient.Empty() ) 
 					{
 						if( m_pRoot->IsUpdateNeeded() ) 
 						{
@@ -238,6 +239,7 @@ namespace YUI
                 Ycout<<"ControlManger: WM_MOUSEMOVE"<<endl;
                 POINT pt= { GET_X_LPARAM( lParam) ,GET_Y_LPARAM(lParam) };
                 m_ptLastMousePos = pt;
+				cout<<"PT x: "<<pt.x <<"  ,"<<pt.y<<endl;
                 ControlUI* spNewHover = FindControl(pt);
                 if( spNewHover == NULL )
                  {
@@ -252,6 +254,7 @@ namespace YUI
                 Ycout<<"move mouse find control: "<<spNewHover->GetName()<<endl;
                 if(spNewHover != m_pHover && m_pHover)
                 {
+					cout<<"Send LEAVE MSG"<<endl;
                     msg.strType = UIMSG_MOUSELEAVE;
                     msg.lTimeStamp = ::GetTickCount();
                     msg.ptMouse = pt;
@@ -262,6 +265,7 @@ namespace YUI
                 //新旧的hover不一样，新的存在
                 if(spNewHover != m_pHover && spNewHover)
                 {
+					cout<<"Send Enter Msg"<<endl;
                     msg.strType = UIMSG_MOUSEENTER;
                     msg.pSender = spNewHover;
                     SendMsg(spNewHover ,msg);
@@ -276,6 +280,7 @@ namespace YUI
                 }
                 else if( spNewHover )
                 {
+					cout<<"Send MOuse Move"<<endl;
                     msg.strType = UIMSG_MOUSEMOVE;
                     msg.pSender = spNewHover;
                     SendMsg(spNewHover,msg);

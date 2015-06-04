@@ -49,7 +49,7 @@ namespace YUI
         virtual LPCTSTR                 GetWindowClassName(void) const= 0;//这是个虚基类
         virtual LONG                    GetStyle();
 #pragma endregion 子类要继承的接口
-        CountRefPtr<ControlManager>     m_spControlManger;
+        CountRefPtr<ControlManager>     m_pControlManger;
     
     };
 }

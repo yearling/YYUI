@@ -3,7 +3,7 @@
 //////////////////////////////////////////////////////////////////////////
 
 #include "UIUtility.h"
-
+#include <tchar.h>
 namespace YUI
 {
 
@@ -66,97 +66,6 @@ namespace YUI
         return YString(pStr.get());
     }
 
-
-    YRect::YRect()
-    {
-        left = top = right = bottom = 0;
-    }
-
-    YRect::YRect(const RECT & src)
-    {
-        left = src.left;
-        right = src.right;
-        top = src.top;
-        bottom = src.bottom;
-    }
-
-    YRect::YRect(int nleft, int nTop, int nRight, int nBottom)
-    {
-        left = nleft;
-        top = nTop;
-        right = nRight;
-        bottom = nBottom;
-    }
-
-    void YRect::Empty()
-    {
-        left = right = top = bottom = 0;
-    }
-
-    int YRect::GetWidth() const
-    {
-        return right - left;
-    }
-
-    int YRect::GetHeight() const
-    {
-        return bottom - top;
-    }
-
-    void YRect::Join(const RECT & rc) //Ê¹·¶Î§±ä´ó
-    {
-        if( rc.left < left )
-            left = rc.left;
-        if( rc.top < top )
-            top = rc.top;
-        if( rc.right > right )
-            right = rc.right;
-        if( rc.bottom > bottom )
-            bottom = rc.bottom;
-    }
-
-    void YRect::ResetOffset()
-    {
-        ::OffsetRect(this, -left, -top);
-    }
-
-    void YRect::Normalize()
-    {
-        if( left > right )
-        {
-            std::swap(left,right);
-        }
-        if( top > bottom )
-        {
-            std::swap(top,bottom);
-        }
-    }
-
-    void YRect::OffSet(int cx, int cy)
-    {
-        ::OffsetRect(this, cx, cy);
-    }
-
-    void YRect::Inflate(int cx,int cy)
-    {
-        ::InflateRect(this, cx, cy);
-    }
-
-    void YRect::Defalte(int cx,int cy)
-    {
-        ::InflateRect(this, -cx, -cy);
-    }
-
-    void YRect::Union(YRect & rc)
-    {
-        ::UnionRect(this,this,&rc);
-    }
-
-    bool YRect::IsEmpty() const
-    {
-        return ( left == 0 && right == 0 && top == 0 && bottom == 0);
-    }
-
     YUI::YString GetFileExtension(const YString & str)
     {
         auto pos = str.find_last_of(_T('.'));
@@ -185,28 +94,7 @@ namespace YUI
     }
 
 
-    YSize::YSize()
-    {
-        cx = cy = 0 ;
-    }
-
-    YSize::YSize(const SIZE & src)
-    {
-        cx = src.cx;
-        cy = src.cy;
-    }
-
-    YSize::YSize(const RECT rc)
-    {
-        cx = rc.right - rc.left;
-        cy = rc.bottom - rc.top;
-    }
-
-    YSize::YSize(int x, int y)
-    {
-         cx = x;
-         cy = y;
-    }
+   
 
     std::string UTF8ToGBKA(LPCSTR szUFT8)
     {
@@ -279,5 +167,36 @@ namespace YUI
         pwstr[nLen-1] = L'\0'; 
         return std::wstring(pwstr.get());
     }
+
+	bool IntersectRect(YYRECT *pDest,const YYRECT &lhs,const YYRECT &rhs)
+	{
+		YYRECT NormalLhs= lhs;
+		NormalLhs.Normalize();
+		YYRECT NormalRhs= rhs;
+		NormalRhs.Normalize();
+		if(NormalLhs.left > NormalRhs.right ||
+		   NormalLhs.right < NormalRhs.left ||
+		   NormalRhs.bottom < NormalRhs.top ||
+		   NormalRhs.top > NormalRhs.bottom )
+		   return false;
+		YYRECT tmp;
+		tmp.left = (std::max)(NormalLhs.left,NormalRhs.left);
+		tmp.right = (std::min)(NormalLhs.right,NormalLhs.right);
+		tmp.top = (std::max)(NormalLhs.top,NormalRhs.top);
+		tmp.bottom= (std::min)(NormalLhs.bottom,NormalRhs.bottom);
+		if( pDest)
+			*pDest = tmp;
+		return true;
+	}
+
+	bool PtInRect(const YYRECT &rc,const YYPOINT &pt)
+	{
+		YYRECT rcNormal = rc;
+		rcNormal.Normalize();
+		if( rc.left <= pt.x && pt.x <= rc.right && rc.top <= pt.y && pt.y <= rc.bottom )
+			return true;
+		else 
+			return false;
+	}
 
 }

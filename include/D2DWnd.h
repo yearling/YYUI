@@ -20,7 +20,7 @@ namespace YUI
 	public:
 		CWndUI(): m_hWnd(NULL){}
 		virtual void SetInternVisible(bool bVisible = true);
-		virtual void SetPos(RECT &rc);
+		virtual void SetPos(YYRECT &rc);
 		BOOL Attach(HWND hWndNew);
 		HWND Detach();
 	
@@ -60,7 +60,7 @@ namespace YUI
         D3DWnd();
         virtual ~D3DWnd();
         virtual void                    SetInternVisible(bool bVisible = true);
-        virtual void                    SetPos(RECT &rc);
+        virtual void SetPos(YYRECT &rc);
         virtual UINT                    GetClassStyle() const;
         virtual LPCTSTR                 GetWindowClassName() const ;
         virtual void                    OnFinalMessage(HWND hWnd);

@@ -32,14 +32,14 @@ namespace YUI
         ,m_nBorderStyle(PS_SOLID)
         ,m_nTooltipWidth(300)
     {
-        m_cXY.cx = m_cXY.cy = 0;
-        m_cXYFixed.cx = m_cXYFixed.cy = 0;
-        m_cxyMin.cx = m_cxyMin.cy = 0;
-        m_cxyMax.cx = m_cxyMax.cy = 9999;
-        ZeroMemory(&m_rcPaint,sizeof(RECT));
-        ZeroMemory(&m_rcItem, sizeof(RECT));
-        ZeroMemory(&m_rcPadding, sizeof(RECT));
-        ZeroMemory(&m_rcBorderSize ,sizeof(RECT));
+        m_cXY.width = m_cXY.height = 0;
+        m_cXYFixed.width = m_cXYFixed.height = 0;
+        m_cxyMin.width = m_cxyMin.height = 0;
+        m_cxyMax.width = m_cxyMax.height = 9999;
+        ZeroMemory(&m_rcPaint,sizeof(YYRECT));
+        ZeroMemory(&m_rcItem, sizeof(YYRECT));
+        ZeroMemory(&m_rcPadding, sizeof(YYRECT));
+        ZeroMemory(&m_rcBorderSize ,sizeof(YYRECT));
         ZeroMemory(&m_RelativePos,sizeof(RelativePosUI));
         AddHandler();
     }
@@ -189,10 +189,10 @@ namespace YUI
         YString sImageName = strImg;
         LPCTSTR pStrImage = strImg.c_str();
         YString sImageResType;
-        RECT rcItem = m_rcItem;
-        RECT rc = m_rcItem;
-        RECT rcBmpPart = {0};
-        RECT rcCorner = {0};
+        YYRECT rcItem = m_rcItem;
+        YYRECT rc = m_rcItem;
+        YYRECT rcBmpPart ;
+        YYRECT rcCorner;
 		//fix me !!!
         DWORD dwMask = 255;
         BYTE bFade = 0xFF;
@@ -303,7 +303,7 @@ namespace YUI
         Invalidate();
     }
 
-    void ControlUI::SetBorderSize(RECT rc)
+    void ControlUI::SetBorderSize(YYRECT rc)
     {
         m_rcBorderSize = rc;
         Invalidate();
@@ -378,12 +378,12 @@ namespace YUI
         Invalidate();
     }
 
-    RECT ControlUI::GetPos() const
+    YYRECT ControlUI::GetPos() const
     {
         return m_rcItem;
     }
 
-    void ControlUI::SetPos(RECT &rc)
+    void ControlUI::SetPos(YYRECT &rc)
     {
         if( rc.right < rc.left ) 
             std::swap(rc.right,rc.left);
@@ -409,13 +409,13 @@ namespace YUI
         if( m_bFloat ) {
             auto pParent = GetParent();
             if( pParent ) {
-                RECT rcParentPos = pParent->GetPos();
-                if( m_cXY.cx >= 0 ) m_cXY.cx = m_rcItem.left - rcParentPos.left;
-                else m_cXY.cx = m_rcItem.right - rcParentPos.right;
-                if( m_cXY.cy >= 0 ) m_cXY.cy = m_rcItem.top - rcParentPos.top;
-                else m_cXY.cy = m_rcItem.bottom - rcParentPos.bottom;
-                m_cXYFixed.cx = m_rcItem.right - m_rcItem.left;
-                m_cXYFixed.cy = m_rcItem.bottom - m_rcItem.top;
+                YYRECT rcParentPos = pParent->GetPos();
+                if( m_cXY.width >= 0 ) m_cXY.width = m_rcItem.left - rcParentPos.left;
+                else m_cXY.width = m_rcItem.right - rcParentPos.right;
+                if( m_cXY.height >= 0 ) m_cXY.height = m_rcItem.top - rcParentPos.top;
+                else m_cXY.height = m_rcItem.bottom - rcParentPos.bottom;
+                m_cXYFixed.width = m_rcItem.right - m_rcItem.left;
+                m_cXYFixed.height = m_rcItem.bottom - m_rcItem.top;
             }
         }
 
@@ -423,8 +423,8 @@ namespace YUI
         invalidateRc.Join(m_rcItem);
 
         auto pParent = this;
-        RECT rcTemp;
-        RECT rcParent;
+        YYRECT rcTemp;
+        YYRECT rcParent;
         while( pParent = pParent->GetParent() )
         {
             rcTemp = invalidateRc;
@@ -458,26 +458,26 @@ namespace YUI
         return m_rcItem.top;
     }
 
-    RECT ControlUI::GetPadding() const
-    {
+    YUI::YYRECT ControlUI::GetPadding() const
+	{
         return m_rcPadding;
     }
 
-    void ControlUI::SetPadding(RECT rcPadding)
+    void ControlUI::SetPadding(YYRECT rcPadding)
     {
         m_rcPadding = rcPadding;
         Invalidate();
     }
 
-    SIZE ControlUI::GetFixedXY() const
-    {
+    YUI::YYSIZE ControlUI::GetFixedXY() const
+{
         return m_cXY;
     }
 
-    void ControlUI::SetFixedXY(SIZE szXY)
+    void ControlUI::SetFixedXY(YYSIZE szXY)
     {
-        m_cXY.cx = szXY.cx;
-        m_cXY.cy = szXY.cy;
+        m_cXY.width = szXY.width;
+        m_cXY.height = szXY.height;
         if( !m_bFloat )
             NeedParentUpdate();
         else
@@ -486,14 +486,14 @@ namespace YUI
 
     int ControlUI::GetFixedWidth() const
     {
-        return m_cXYFixed.cx;
+        return m_cXYFixed.width;
     }
 
     void ControlUI::SetFixedWidth(int cx)
     {
         if(cx < 0 )
             return;
-        m_cXYFixed.cx = cx;
+        m_cXYFixed.width = cx;
         if( !m_bFloat )
             NeedParentUpdate();
         else 
@@ -502,14 +502,14 @@ namespace YUI
 
     int ControlUI::GetFixedHeight() const
     {
-        return m_cXYFixed.cy;
+        return m_cXYFixed.height;
     }
 
     void ControlUI::SetFixedHeight(int cy)
     {
         if( cy < 0 )
             return ;
-        m_cXYFixed.cy = cy;
+        m_cXYFixed.height = cy;
         if( !m_bFloat )
             NeedParentUpdate();
         else
@@ -518,16 +518,16 @@ namespace YUI
 
     int ControlUI::GetMinWidth() const
     {
-        return m_cxyMin.cx ;
+        return m_cxyMin.width ;
     }
 
     void ControlUI::SetMinWidth(int cx)
     {
-        if( m_cxyMin.cx == cx)
+        if( m_cxyMin.width == cx)
             return;
         if(cx < 0 )
             return ;
-        m_cxyMin.cx = cx;
+        m_cxyMin.width = cx;
         if( !m_bFloat )
             NeedParentUpdate();
         else
@@ -536,59 +536,59 @@ namespace YUI
 
     int ControlUI::GetMaxWidth() const
     {
-        return m_cxyMax.cx;
+        return m_cxyMax.width;
     }
 
     void ControlUI::SetMaxWidth(int cx)
     {
-        if( m_cxyMax.cx == cx ) return;
+        if( m_cxyMax.width == cx ) return;
 
         if( cx < 0 ) return; 
-        m_cxyMax.cx = cx;
+        m_cxyMax.width = cx;
         if( !m_bFloat ) NeedParentUpdate();
         else NeedUpdate();
     }
 
-    int ControlUI::GetMinHeight() const
-    {
-        return m_cxyMin.cy;
+    float ControlUI::GetMinHeight() const
+{
+        return m_cxyMin.height;
     }
 
     void ControlUI::SetMinHeight(int cy)
     {
-        if( m_cxyMin.cy == cy ) return;
+        if( m_cxyMin.height == cy ) return;
 
         if( cy < 0 ) return; 
-        m_cxyMin.cy = cy;
+        m_cxyMin.height = cy;
         if( !m_bFloat ) NeedParentUpdate();
         else NeedUpdate();
     }
 
     int ControlUI::GetMaxHeight() const
     {
-         return m_cxyMax.cy;
+         return m_cxyMax.height;
     }
 
     void ControlUI::SetMaxHeight(int cy)
     {
-        if( m_cxyMax.cy == cy ) return;
+        if( m_cxyMax.height == cy ) return;
 
         if( cy < 0 ) return; 
-        m_cxyMax.cy = cy;
+        m_cxyMax.height = cy;
         if( !m_bFloat ) NeedParentUpdate();
         else NeedUpdate();
     }
 
-    void ControlUI::SetRelativePos(SIZE szMove,SIZE szZoom)
+    void ControlUI::SetRelativePos(YYSIZE szMove,YYSIZE szZoom)
     {
         m_RelativePos.m_bRelative = true;
-        m_RelativePos.m_nMoveXPercent = szMove.cx;
-        m_RelativePos.m_nMoveYPercent = szMove.cy;
-        m_RelativePos.m_nZoomXPercent = szZoom.cx;
-        m_RelativePos.m_nZoomYPercent = szZoom.cy;
+        m_RelativePos.m_nMoveXPercent = szMove.width;
+        m_RelativePos.m_nMoveYPercent = szMove.height;
+        m_RelativePos.m_nZoomXPercent = szZoom.width;
+        m_RelativePos.m_nZoomYPercent = szZoom.height;
     }
 
-    void ControlUI::SetRelativeParentSize(SIZE sz)
+    void ControlUI::SetRelativeParentSize(YYSIZE sz)
     {
          m_RelativePos.m_szParent = sz;
     }
@@ -756,23 +756,23 @@ namespace YUI
         if( !IsEnabled() ) 
             return NULL;
         //!!fix me 
-        return ::PtInRect(&m_rcItem,pt)? this : NULL;
+        return PtInRect(m_rcItem,pt)? this : NULL;
     }
 
     void ControlUI::Invalidate()
     {
         if( !IsVisible() ) return;
 
-        RECT invalidateRc = m_rcItem;
+        YYRECT invalidateRc = m_rcItem;
 
         auto pParent = this;
-        RECT rcTemp;
-        RECT rcParent;
+        YYRECT rcTemp;
+        YYRECT rcParent;
         while( pParent = pParent->GetParent() )
         {
             rcTemp = invalidateRc;
             rcParent = pParent->GetPos();
-            if( !::IntersectRect(&invalidateRc, &rcTemp, &rcParent) ) 
+            if( !IntersectRect(&invalidateRc, rcTemp, rcParent) ) 
             {
                 return;
             }
@@ -821,28 +821,28 @@ namespace YUI
         auto pstrName = strName.c_str();
         auto pstrValue = strValue.c_str();
         if( strcmp(pstrName, ("pos")) == 0 ) {
-            RECT rcPos = { 0 };
+            YYRECT rcPos;
             LPSTR pstr = NULL;
             rcPos.left = strtol(pstrValue, &pstr, 10);  assert(pstr);    
             rcPos.top = strtol(pstr + 1, &pstr, 10);    assert(pstr);    
             rcPos.right = strtol(pstr + 1, &pstr, 10);  assert(pstr);    
             rcPos.bottom = strtol(pstr + 1, &pstr, 10); assert(pstr);    
-            SIZE szXY = {rcPos.left >= 0 ? rcPos.left : rcPos.right, rcPos.top >= 0 ? rcPos.top : rcPos.bottom};
+            YYSIZE szXY(rcPos.left >= 0 ? rcPos.left : rcPos.right, rcPos.top >= 0 ? rcPos.top : rcPos.bottom) ;
             SetFixedXY(szXY);
             SetFixedWidth(rcPos.right - rcPos.left);
             SetFixedHeight(rcPos.bottom - rcPos.top);
         }
         else if( strcmp(pstrName, ("relativepos")) == 0 ) {
-            SIZE szMove,szZoom;
+            YYSIZE szMove,szZoom;
             LPSTR pstr = NULL;
-            szMove.cx = strtol(pstrValue, &pstr, 10);  assert(pstr);    
-            szMove.cy = strtol(pstr + 1, &pstr, 10);    assert(pstr);    
-            szZoom.cx = strtol(pstr + 1, &pstr, 10);  assert(pstr);    
-            szZoom.cy = strtol(pstr + 1, &pstr, 10); assert(pstr); 
+            szMove.width = strtol(pstrValue, &pstr, 10);  assert(pstr);    
+            szMove.height = strtol(pstr + 1, &pstr, 10);    assert(pstr);    
+            szZoom.width = strtol(pstr + 1, &pstr, 10);  assert(pstr);    
+            szZoom.height = strtol(pstr + 1, &pstr, 10); assert(pstr); 
             SetRelativePos(szMove,szZoom);
         }
         else if( strcmp(pstrName, ("padding")) == 0 ) {
-            RECT rcPadding = { 0 };
+            YYRECT rcPadding;
             LPSTR pstr = NULL;
             rcPadding.left = strtol(pstrValue, &pstr, 10);  assert(pstr);    
             rcPadding.top = strtol(pstr + 1, &pstr, 10);    assert(pstr);    
@@ -889,12 +889,12 @@ namespace YUI
             if(nValue.find((',')) < 0)
             {
                 SetBorderSize(atoi(pstrValue));
-                RECT rcPadding = {0};
+                YYRECT rcPadding;
                 SetBorderSize(rcPadding);
             }
             else
             {
-                RECT rcPadding = { 0 };
+                YYRECT rcPadding ;
                 LPSTR pstr = NULL;
                 rcPadding.left = strtol(pstrValue, &pstr, 10);  assert(pstr);
                 rcPadding.top = strtol(pstr + 1, &pstr, 10);    assert(pstr);
@@ -909,10 +909,10 @@ namespace YUI
         else if( strcmp(pstrName, ("bottombordersize")) == 0 ) SetBottomBorderSize(atoi(pstrValue));
         else if( strcmp(pstrName, ("borderstyle")) == 0 ) SetBorderStyle(atoi(pstrValue));
         else if( strcmp(pstrName, ("borderround")) == 0 ) {
-            SIZE cxyRound = { 0 };
+            YYSIZE cxyRound;
             LPSTR pstr = NULL;
-            cxyRound.cx = strtol(pstrValue, &pstr, 10);  assert(pstr);    
-            cxyRound.cy = strtol(pstr + 1, &pstr, 10);    assert(pstr);     
+            cxyRound.width = strtol(pstrValue, &pstr, 10);  assert(pstr);    
+            cxyRound.height = strtol(pstr + 1, &pstr, 10);    assert(pstr);     
         }
         else if( strcmp(pstrName, ("bkimage")) == 0 )   SetBkImage(UTF8ToGBK(pstrValue));
         else if( strcmp(pstrName, ("width")) == 0 ) SetFixedWidth(atoi(pstrValue));
@@ -972,7 +972,7 @@ namespace YUI
         return this;
     }
 
-    SIZE ControlUI::EstimateSize(SIZE szAvailable)
+    YUI::YYSIZE ControlUI::EstimateSize(YYSIZE szAvailable)
     {
         return m_cXYFixed;
     }
@@ -981,10 +981,9 @@ namespace YUI
 
     void ControlUI::DoPaint(const YYRECT &rc)
     {
-        RECT rcPaint = rc;
-         if( !::IntersectRect(&m_rcPaint, &rcPaint, &m_rcItem) ) 
-             return;
-
+        YYRECT rcPaint = rc;
+		 if(!IntersectRect(&m_rcPaint,rc,m_rcItem))
+			 return;
         // »æÖÆÑ­Ðò£º±³¾°ÑÕÉ«->±³¾°Í¼->×´Ì¬Í¼->ÎÄ±¾->±ß¿ò
             PaintBkColor();
             PaintBkImage();
@@ -1027,7 +1026,7 @@ namespace YUI
             canvas.DrawRect(m_rcItem,m_dwFocusBorderColor,m_nBorderSize);
     }
 
-    void ControlUI::DoPostPaint(HDC hDC, const RECT& rcPaint)
+    void ControlUI::DoPostPaint(HDC hDC, const YYRECT& rcPaint)
     {
 
     }

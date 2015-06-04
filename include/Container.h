@@ -47,7 +47,7 @@ namespace YUI
         virtual void                    SetMouseChildEnabled(bool bEnable = true);
 
         virtual int                     FindSelectable(int iIndex, bool bForward = true) const;
-        virtual void                    SetPos(RECT &rc);
+        virtual void SetPos(YYRECT &rc);
         virtual void                    DoPaint(const YYRECT &rc);
         virtual void                    SetAttribute(const std::string &strName, const std::string& strValue);
         virtual void                    SetManager(ControlManager* pManager,ControlUI* pParent,bool bInit=true);
@@ -63,9 +63,9 @@ namespace YUI
         ControlUI*                      FindSubControl(const YString& pstrSubControlName);
         virtual ControlUI*
                                         FindControlFromPoint(POINT pt,UINT flag);
-        virtual SIZE                    GetScrollPos() const;
-        virtual SIZE                    GetScrollRange() const;
-        virtual void                    SetScrollPos(SIZE szPos);
+        virtual YYSIZE GetScrollPos() const;
+        virtual YYSIZE GetScrollRange() const;
+        virtual void                    SetScrollPos(YYSIZE szPos);
         virtual void                    LineUp();
         virtual void                    LineDown();
         virtual void                    PageUp();

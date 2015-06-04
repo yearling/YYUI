@@ -10,7 +10,7 @@ namespace YUI
 {
 
 
-    FrameLessWindow::FrameLessWindow():m_spControlManger(new ControlManager)
+    FrameLessWindow::FrameLessWindow():m_pControlManger(new ControlManager)
     {
     }
 
@@ -50,7 +50,7 @@ namespace YUI
 
         if (bHandled) return lRes;
 
-        if (m_spControlManger->MessageHandler(uMsg, wParam, lParam, lRes))
+        if (m_pControlManger->MessageHandler(uMsg, wParam, lParam, lRes))
             return lRes;
         return WindowWnd::OnSysMessage(uMsg, wParam, lParam);
     }
@@ -146,7 +146,7 @@ namespace YUI
         //cout<<"hello"<<endl;
         if( pt.x >= rcClient.left + rcCaption.left && pt.x < rcClient.right - rcCaption.right && pt.y >= rcCaption.top && pt.y < rcCaption.bottom )
         {
-            auto pControl = m_spControlManger->FindControl(pt);
+            auto pControl = m_pControlManger->FindControl(pt);
             ////用来防止把点击右上角的maxSize，close等button当成点击标题栏
             if( pControl && _tcsicmp(pControl->GetClass(), _T("ButtonUI")) != 0 && 
                 _tcsicmp(pControl->GetClass(), _T("OptionUI")) != 0 &&
@@ -219,7 +219,6 @@ namespace YUI
         return lRes;
     }
    
-#if 1
     LRESULT FrameLessWindow::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
     {
         LONG styleValue = ::GetWindowLong(*this, GWL_STYLE);
@@ -234,18 +233,17 @@ namespace YUI
         DialogBuilder builder;
         m_Property.Init(m_hWnd);
         CountRefPtr<ControlUI> pRoot=builder.Create(_T("duilib.xml"),m_Property,nullptr,nullptr);
-        m_spControlManger->Init(m_hWnd);
-        m_spControlManger->AttachDialog(pRoot);
+        m_pControlManger->Init(m_hWnd);
+        m_pControlManger->AttachDialog(pRoot);
         InitWindow();
         Ycout<<"FrameLess: OnCreate"<<endl;
         bHandled = FALSE;
         return 0;
     }
-#endif
+
     LRESULT FrameLessWindow::OnKeyDown(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
     {
         bHandled = FALSE;
-        Ycout<<"FrameLess: OnKeyDown"<<endl;
         return 0;
     }
 

@@ -10,10 +10,10 @@ namespace YUI
         virtual LPCTSTR                 GetClass() const;
         virtual void                    SetAttribute(const std::string &strName, const std::string& strValue);
         virtual UINT                    GetControlFlags() const;
-        virtual void                    SetPos(RECT &rc);
-        virtual void                    DoPostPaint(HDC hDC, const RECT& rcPaint);
+        virtual void SetPos(YYRECT &rc);
+        virtual void DoPostPaint(HDC hDC, const YYRECT& rcPaint);
 
-        RECT                            GetThumbRect(bool bUseNew = false) const;
+        YYRECT							GetThumbRect(bool bUseNew = false) const;
         void                            SetSepHeight(int iHeight);
         int                             GetSepHeight() const;
         void                            SetSepImmMode(bool bImmediately);

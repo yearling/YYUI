@@ -155,7 +155,7 @@ namespace YUI
         return -1;
     }
 
-    void Container::SetPos(RECT &rc)
+    void Container::SetPos(YYRECT &rc)
     {
         ControlUI::SetPos(rc);
         if( m_ListItems.empty() ) return;
@@ -180,9 +180,9 @@ namespace YUI
 
     void Container::DoPaint(const YYRECT &rc)
     {
-        RECT rcTemp = { 0 };
-        RECT rcPaint = rc;
-        if( !::IntersectRect(&rcTemp, &rcPaint, &m_rcItem) ) 
+        YYRECT rcTemp;
+        YYRECT rcPaint = rc;
+        if( !IntersectRect(&rcTemp, rcPaint, m_rcItem) ) 
             return;
         Canvas2D canvas(m_pManager->GetHWND());
         ClipRegionDef clipregion(rcTemp);
@@ -192,12 +192,12 @@ namespace YUI
 
         if( !m_ListItems.empty())
         {
-            RECT subRC = m_rcItem;
+            YYRECT subRC = m_rcItem;
             subRC.left += m_rcInset.left;
             subRC.top += m_rcInset.top;
             subRC.right -= m_rcInset.right;
             subRC.bottom -= m_rcInset.bottom;
-            if(::IntersectRect(&rcTemp,&rcPaint,&subRC))
+            if(IntersectRect(&rcTemp,rcPaint,subRC))
             { 
                 ClipRegionDef subRegion(rcTemp);
                 canvas.ClipRect(subRegion);
@@ -206,17 +206,17 @@ namespace YUI
                  {
                      if(!item->IsVisible())
                          continue;
-                     if(!::IntersectRect(&rcTemp,&rcPaint,&item->GetPos()))
+                     if(!IntersectRect(&rcTemp,rcPaint,item->GetPos()))
                          continue;
                      if(item->IsFloat())
                      {
-                         if(!::IntersectRect(&rcTemp,&m_rcItem,&item->GetPos()))
+                         if(!IntersectRect(&rcTemp,m_rcItem,item->GetPos()))
                              continue;
                          item->DoPaint(rcPaint);
                      }
                      else
                      {
-                         if(!::IntersectRect(&rcTemp,&subRC,&item->GetPos()))
+                         if(!IntersectRect(&rcTemp,subRC,item->GetPos()))
                              continue; 
                          item->DoPaint(rcPaint);
                      }
@@ -282,24 +282,24 @@ namespace YUI
             return FALSE;
     }
 
-    bool Container::SetSubControlFixedHeight(const YString & pstrSubControlName,int cy)
+    bool Container::SetSubControlFixedHeight(const YString & pstrSubControlName,int height)
     {
            auto pSubControl=this->FindSubControl(pstrSubControlName);
            if (pSubControl!=NULL)
            {
-               pSubControl->SetFixedHeight(cy);
+               pSubControl->SetFixedHeight(height);
                return TRUE;
            }
            else
                return FALSE;
     }
 
-    bool Container::SetSubControlFixedWdith(const YString& pstrSubControlName,int cx)
+    bool Container::SetSubControlFixedWdith(const YString& pstrSubControlName,int width)
     {
            auto pSubControl=this->FindSubControl(pstrSubControlName);
            if (pSubControl!=NULL)
            {
-               pSubControl->SetFixedWidth(cx);
+               pSubControl->SetFixedWidth(width);
                return TRUE;
            }
            else
@@ -362,19 +362,19 @@ namespace YUI
         return spRoot->FindControlFromName(pstrSubControlName);
     }
 
-    SIZE Container::GetScrollPos() const
-    {
-        SIZE sz = {0, 0};
+    YUI::YYSIZE Container::GetScrollPos() const
+{
+        YYSIZE sz ;
         return sz;
     }
 
-    SIZE Container::GetScrollRange() const
-    {
-        SIZE sz = {0, 0};
+    YUI::YYSIZE Container::GetScrollRange() const
+{
+        YYSIZE sz ;
         return sz;
     }
 
-    void Container::SetScrollPos(SIZE szPos)
+    void Container::SetScrollPos(YYSIZE szPos)
     {
        
     }
@@ -384,8 +384,8 @@ namespace YUI
         int cyLine = 8;
         //if( m_pManager ) cyLine = m_pManager->GetDefaultFontInfo()->m_tm.tmHeight + 8;
 
-        SIZE sz = GetScrollPos();
-        sz.cy -= cyLine;
+        YYSIZE sz = GetScrollPos();
+        sz.height -= cyLine;
         SetScrollPos(sz);
     }
 
@@ -394,86 +394,86 @@ namespace YUI
         int cyLine = 8;
         //if( m_pManager ) cyLine = m_pManager->GetDefaultFontInfo()->m_tm.tmHeight + 8;
 
-        SIZE sz = GetScrollPos();
-        sz.cy += cyLine;
+        YYSIZE sz = GetScrollPos();
+        sz.height += cyLine;
         SetScrollPos(sz);
     }
 
     void Container::PageUp()
     {
-        SIZE sz = GetScrollPos();
+        YYSIZE sz = GetScrollPos();
         int iOffset = m_rcItem.bottom - m_rcItem.top - m_rcInset.top - m_rcInset.bottom;
         /*if( m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible() ) iOffset -= m_pHorizontalScrollBar->GetFixedHeight();*/
-        sz.cy -= iOffset;
+        sz.height -= iOffset;
         SetScrollPos(sz);
     }
 
     void Container::PageDown()
     {
-        SIZE sz = GetScrollPos();
+        YYSIZE sz = GetScrollPos();
         int iOffset = m_rcItem.bottom - m_rcItem.top - m_rcInset.top - m_rcInset.bottom;
       /*  if( m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible() ) iOffset -= m_pHorizontalScrollBar->GetFixedHeight();*/
-        sz.cy += iOffset;
+        sz.height += iOffset;
         SetScrollPos(sz);
     }
 
     void Container::HomeUp()
     {
-        SIZE sz = GetScrollPos();
-        sz.cy = 0;
+        YYSIZE sz = GetScrollPos();
+        sz.height = 0;
         SetScrollPos(sz);
     }
 
     void Container::EndDown()
     {
-        SIZE sz = GetScrollPos();
-        sz.cy = GetScrollRange().cy;
+        YYSIZE sz = GetScrollPos();
+        sz.height = GetScrollRange().height;
         SetScrollPos(sz);
     }
 
     void Container::LineLeft()
     {
-        SIZE sz = GetScrollPos();
-        sz.cx -= 8;
+        YYSIZE sz = GetScrollPos();
+        sz.width -= 8;
         SetScrollPos(sz);
     }
 
     void Container::LineRight()
     {
-        SIZE sz = GetScrollPos();
-        sz.cx += 8;
+        YYSIZE sz = GetScrollPos();
+        sz.width += 8;
         SetScrollPos(sz);
     }
 
     void Container::PageLeft()
     {
-        SIZE sz = GetScrollPos();
+        YYSIZE sz = GetScrollPos();
         int iOffset = m_rcItem.right - m_rcItem.left - m_rcInset.left - m_rcInset.right;
         /*if( m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible() ) iOffset -= m_pVerticalScrollBar->GetFixedWidth();*/
-        sz.cx -= iOffset;
+        sz.width -= iOffset;
         SetScrollPos(sz);
     }
 
     void Container::PageRight()
     {
-        SIZE sz = GetScrollPos();
+        YYSIZE sz = GetScrollPos();
         int iOffset = m_rcItem.right - m_rcItem.left - m_rcInset.left - m_rcInset.right;
         /*if( m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible() ) iOffset -= m_pVerticalScrollBar->GetFixedWidth();*/
-        sz.cx += iOffset;
+        sz.width += iOffset;
         SetScrollPos(sz);
     }
 
     void Container::HomeLeft()
     {
-        SIZE sz = GetScrollPos();
-        sz.cx = 0;
+        YYSIZE sz = GetScrollPos();
+        sz.width = 0;
         SetScrollPos(sz);
     }
 
     void Container::EndRight()
     {
-        SIZE sz = GetScrollPos();
-        sz.cx = GetScrollRange().cx;
+        YYSIZE sz = GetScrollPos();
+        sz.width = GetScrollRange().width;
         SetScrollPos(sz);
     }
 
@@ -502,37 +502,37 @@ namespace YUI
         if( !pControl->IsVisible() ) return;
         if( !pControl->IsFloat() ) return;
 
-        SIZE szXY = pControl->GetFixedXY();
-        SIZE sz = {pControl->GetFixedWidth(), pControl->GetFixedHeight()};
-        RECT rcCtrl = { 0 };
-        if( szXY.cx >= 0 ) {
-            rcCtrl.left = m_rcItem.left + szXY.cx;
-            rcCtrl.right = m_rcItem.left + szXY.cx + sz.cx;
+        YYSIZE szXY = pControl->GetFixedXY();
+        YYSIZE sz(pControl->GetFixedWidth(), pControl->GetFixedHeight());
+        YYRECT rcCtrl;
+        if( szXY.width >= 0 ) {
+            rcCtrl.left = m_rcItem.left + szXY.width;
+            rcCtrl.right = m_rcItem.left + szXY.width + sz.width;
         }
         else {
-            rcCtrl.left = m_rcItem.right + szXY.cx - sz.cx;
-            rcCtrl.right = m_rcItem.right + szXY.cx;
+            rcCtrl.left = m_rcItem.right + szXY.width - sz.width;
+            rcCtrl.right = m_rcItem.right + szXY.width;
         }
-        if( szXY.cy >= 0 ) {
-            rcCtrl.top = m_rcItem.top + szXY.cy;
-            rcCtrl.bottom = m_rcItem.top + szXY.cy + sz.cy;
+        if( szXY.height >= 0 ) {
+            rcCtrl.top = m_rcItem.top + szXY.height;
+            rcCtrl.bottom = m_rcItem.top + szXY.height + sz.height;
         }
         else {
-            rcCtrl.top = m_rcItem.bottom + szXY.cy - sz.cy;
-            rcCtrl.bottom = m_rcItem.bottom + szXY.cy;
+            rcCtrl.top = m_rcItem.bottom + szXY.height - sz.height;
+            rcCtrl.bottom = m_rcItem.bottom + szXY.height;
         }
         if( pControl->IsRelativePos() )
         {
             RelativePosUI tRelativePos = pControl->GetRelativePos();
-            SIZE szParent = {m_rcItem.right-m_rcItem.left,m_rcItem.bottom-m_rcItem.top};
-            if(tRelativePos.m_szParent.cx != 0)
+            YYSIZE szParent(m_rcItem.right-m_rcItem.left,m_rcItem.bottom-m_rcItem.top);
+            if(tRelativePos.m_szParent.width != 0)
             {
-                int nIncrementX = szParent.cx-tRelativePos.m_szParent.cx;
-                int nIncrementY = szParent.cy-tRelativePos.m_szParent.cy;
+                int nIncrementX = szParent.width-tRelativePos.m_szParent.width;
+                int nIncrementY = szParent.height-tRelativePos.m_szParent.height;
                 rcCtrl.left += (nIncrementX*tRelativePos.m_nMoveXPercent/100);
                 rcCtrl.top += (nIncrementY*tRelativePos.m_nMoveYPercent/100);
-                rcCtrl.right = rcCtrl.left+sz.cx+(nIncrementX*tRelativePos.m_nZoomXPercent/100);
-                rcCtrl.bottom = rcCtrl.top+sz.cy+(nIncrementY*tRelativePos.m_nZoomYPercent/100);
+                rcCtrl.right = rcCtrl.left+sz.width+(nIncrementX*tRelativePos.m_nZoomXPercent/100);
+                rcCtrl.bottom = rcCtrl.top+sz.height+(nIncrementY*tRelativePos.m_nZoomYPercent/100);
             }
             pControl->SetRelativeParentSize(szParent);
         }

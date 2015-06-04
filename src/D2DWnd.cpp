@@ -106,7 +106,7 @@ namespace YUI
 			::ShowWindow(m_hWnd, bVisible);
 	}
 
-	void CWndUI::SetPos(RECT &rc)
+	void CWndUI::SetPos(YYRECT &rc)
 	{
 			__super::SetPos(rc);
 			::SetWindowPos(m_hWnd, NULL, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, SWP_NOZORDER | SWP_NOACTIVATE);
@@ -149,7 +149,7 @@ namespace YUI
         ::ShowWindow(m_hWnd, bVisible);
     }
 
-    void D3DWnd::SetPos(RECT &rc)
+    void D3DWnd::SetPos(YYRECT &rc)
     {
         __super::SetPos(rc);
         ::SetWindowPos(m_hWnd, NULL, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, SWP_NOZORDER | SWP_NOACTIVATE);

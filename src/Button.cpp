@@ -3,6 +3,9 @@
 #include "ControlUI.h"
 #include "WindowProperty.h"
 #include "Canvas2D.h"
+#include <iostream>
+using std::cout;
+using std::endl;
 namespace YUI
 {
 
@@ -49,7 +52,7 @@ namespace YUI
         }
     }
 
-    SIZE Button::EstimateSize(SIZE szAvailable)
+    YUI::YYSIZE Button::EstimateSize(YYSIZE szAvailable)
     {
         //if( m_cXYFixed.cy == 0 ) return YSize(m_cXYFixed.cx, m_pManager->GetFontInfo(GetFont())->m_tm.tmHeight + 8);
 		return ControlUI::EstimateSize(szAvailable);
@@ -333,8 +336,8 @@ namespace YUI
 
         m_ButtonMsgHandler.AddEntry(UIMSG_LBUTTONDOWN,[&](const MsgWrap &msg)
         {
-            POINT pt= { GET_X_LPARAM(msg.lParam),GET_Y_LPARAM(msg.lParam)};
-            if( ::PtInRect(&m_rcItem, pt) && IsEnabled() ) 
+            YYPOINT pt(GET_X_LPARAM(msg.lParam),GET_Y_LPARAM(msg.lParam));
+            if( PtInRect(m_rcItem, pt) && IsEnabled() ) 
             {
                 m_uButtonState |= UISTATE_PUSHED | UISTATE_CAPTURED;
                 Invalidate();
@@ -343,8 +346,8 @@ namespace YUI
 
         m_ButtonMsgHandler.AddEntry(UIMSG_DBLCLICK,[&](const MsgWrap &msg)
         {
-            POINT pt= { GET_X_LPARAM(msg.lParam),GET_Y_LPARAM(msg.lParam)};
-            if( ::PtInRect(&m_rcItem, pt) && IsEnabled() ) 
+			YYPOINT pt(GET_X_LPARAM(msg.lParam),GET_Y_LPARAM(msg.lParam));
+			if( PtInRect(m_rcItem, pt) && IsEnabled() ) 
             {
                 m_uButtonState |= UISTATE_PUSHED | UISTATE_CAPTURED;
                 Invalidate();
@@ -353,10 +356,10 @@ namespace YUI
 
         m_ButtonMsgHandler.AddEntry(UIMSG_MOUSEMOVE,[&](const MsgWrap &msg)
         {
-            POINT pt= { GET_X_LPARAM(msg.lParam),GET_Y_LPARAM(msg.lParam)};
-            if( (m_uButtonState & UISTATE_CAPTURED) != 0 ) 
+			YYPOINT pt(GET_X_LPARAM(msg.lParam),GET_Y_LPARAM(msg.lParam));
+			if( PtInRect(m_rcItem, pt) && IsEnabled() ) 
             {
-                if( ::PtInRect(&m_rcItem, pt) ) m_uButtonState |= UISTATE_PUSHED;
+                if( PtInRect(m_rcItem, pt) ) m_uButtonState |= UISTATE_PUSHED;
                 else m_uButtonState &= ~UISTATE_PUSHED;
                 Invalidate();
             }
@@ -364,10 +367,10 @@ namespace YUI
 
         m_ButtonMsgHandler.AddEntry(UIMSG_LBUTTONUP,[&](const MsgWrap &msg)
         {
-            POINT pt= { GET_X_LPARAM(msg.lParam),GET_Y_LPARAM(msg.lParam)};
-            if( (m_uButtonState & UISTATE_CAPTURED) != 0 )
+			YYPOINT pt(GET_X_LPARAM(msg.lParam),GET_Y_LPARAM(msg.lParam));
+			if( PtInRect(m_rcItem, pt) && IsEnabled() ) 
             {
-                if( ::PtInRect(&m_rcItem, pt ) )
+                if( PtInRect(m_rcItem, pt ) )
                     Activate();
                 m_uButtonState &= ~(UISTATE_PUSHED | UISTATE_CAPTURED);
                 Invalidate();
@@ -406,6 +409,7 @@ namespace YUI
     void Button::HandleMsg(const MsgWrap & msg) throw()
     {
         m_ButtonMsgHandler.HandleMsg(msg);
+		cout<<"Button Catch Mesg"<<msg.strType<<"    m_uState: "<<m_uButtonState<<endl;
     }
 
   }

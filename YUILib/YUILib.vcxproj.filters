@@ -88,9 +88,6 @@
     <ClCompile Include="..\src\MessageSystem.cpp">
       <Filter>WindowManger</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\TextureDef.cpp">
-      <Filter>WindowManger</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\WindowManager.cpp">
       <Filter>WindowManger</Filter>
     </ClCompile>
@@ -102,6 +99,9 @@
     </ClCompile>
     <ClCompile Include="..\src\ControlManager.cpp">
       <Filter>Control</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\TextureDef.cpp">
+      <Filter>Draw</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

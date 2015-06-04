@@ -116,7 +116,7 @@ namespace YUI
         Invalidate();
     }
 
-    SIZE Label::EstimateSize(SIZE szAvailable)
+    YUI::YYSIZE Label::EstimateSize(YYSIZE szAvailable)
     {
         //if( m_cXYFixed.cy == 0 ) return YSize(m_cXYFixed.cx, m_pManager->GetFontInfo((HFONT)_ttoi(GetFont().c_str()))->m_tm.tmHeight + 4);
         return ControlUI::EstimateSize(szAvailable);

@@ -39,7 +39,7 @@ namespace YUI
 
  
 
-    void VerticalLayout::SetPos(RECT &rc)
+    void VerticalLayout::SetPos(YYRECT &rc)
     {
         ControlUI::SetPos(rc);
         //////////////////////////////////////////////////////////////////////////
@@ -65,9 +65,9 @@ namespace YUI
         }
 
         // Determine the minimum size
-        SIZE szAvailable = { rc.right - rc.left, rc.bottom - rc.top };
+        YYSIZE szAvailable ( rc.right - rc.left, rc.bottom - rc.top );
        /* if( m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible() ) 
-            szAvailable.cx += m_pHorizontalScrollBar->GetScrollRange();*/
+            szAvailable.width += m_pHorizontalScrollBar->GetScrollRange();*/
   
         int nAdjustables = 0;
         int cyFixed = 0;
@@ -75,15 +75,15 @@ namespace YUI
         for( auto pControl : m_ListItems ) {
             if( !pControl->IsVisible() ) continue;
             if( pControl->IsFloat() ) continue;
-            SIZE sz = pControl->EstimateSize(szAvailable);
-            if( sz.cy == 0 ) {
+            YYSIZE sz = pControl->EstimateSize(szAvailable);
+            if( sz.height == 0 ) {
                 nAdjustables++;
             }
             else {
-                if( sz.cy < pControl->GetMinHeight() ) sz.cy = pControl->GetMinHeight();
-                if( sz.cy > pControl->GetMaxHeight() ) sz.cy = pControl->GetMaxHeight();
+                if( sz.height < pControl->GetMinHeight() ) sz.height = pControl->GetMinHeight();
+                if( sz.height > pControl->GetMaxHeight() ) sz.height = pControl->GetMaxHeight();
             }
-            cyFixed += sz.cy + pControl->GetPadding().top + pControl->GetPadding().bottom;
+            cyFixed += sz.height + pControl->GetPadding().top + pControl->GetPadding().bottom;
             nEstimateNum++;
         }
         cyFixed += (nEstimateNum - 1) * m_iChildPadding;
@@ -92,9 +92,9 @@ namespace YUI
         // Place elements
         int cyNeeded = 0;
         int cyExpand = 0;
-        if( nAdjustables > 0 ) cyExpand = max(0, (szAvailable.cy - cyFixed) / nAdjustables);
+        if( nAdjustables > 0 ) cyExpand = max(0, (szAvailable.height - cyFixed) / nAdjustables);
         // Position the elements
-        SIZE szRemaining = szAvailable;
+        YYSIZE szRemaining = szAvailable;
         int iPosY = rc.top;
       /*  if( m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible() ) {
             iPosY -= m_pVerticalScrollBar->GetScrollPos();
@@ -116,40 +116,40 @@ namespace YUI
                 continue;
             }
 
-            RECT rcPadding = pControl->GetPadding();
-            szRemaining.cy -= rcPadding.top;
+            YYRECT rcPadding = pControl->GetPadding();
+            szRemaining.height -= rcPadding.top;
                 if(traceid%3==1)
-            Ycout<<"szRemaining.cy "<<szRemaining.cy<<endl;
-            SIZE sz = pControl->EstimateSize(szRemaining);
-            if( sz.cy == 0 ) {
+            Ycout<<"szRemaining.height "<<szRemaining.height<<endl;
+            YYSIZE sz = pControl->EstimateSize(szRemaining);
+            if( sz.height == 0 ) {
                 iAdjustable++;
-                sz.cy = cyExpand;
+                sz.height = cyExpand;
                 // Distribute remaining to last element (usually round-off left-overs)
                 if( iAdjustable == nAdjustables ) {
-                    sz.cy = max(0, szRemaining.cy - rcPadding.bottom - cyFixedRemaining);
+                    sz.height = max(0, szRemaining.height - rcPadding.bottom - cyFixedRemaining);
                 } 
-                if( sz.cy < pControl->GetMinHeight() ) sz.cy = pControl->GetMinHeight();
-                if( sz.cy > pControl->GetMaxHeight() ) sz.cy = pControl->GetMaxHeight();
+                if( sz.height < pControl->GetMinHeight() ) sz.height = pControl->GetMinHeight();
+                if( sz.height > pControl->GetMaxHeight() ) sz.height = pControl->GetMaxHeight();
             }
             else {
-                if( sz.cy < pControl->GetMinHeight() ) sz.cy = pControl->GetMinHeight();
-                if( sz.cy > pControl->GetMaxHeight() ) sz.cy = pControl->GetMaxHeight();
-                cyFixedRemaining -= sz.cy;
+                if( sz.height < pControl->GetMinHeight() ) sz.height = pControl->GetMinHeight();
+                if( sz.height > pControl->GetMaxHeight() ) sz.height = pControl->GetMaxHeight();
+                cyFixedRemaining -= sz.height;
             }
 
-            sz.cx = pControl->GetFixedWidth();
-            if( sz.cx == 0 ) sz.cx = szAvailable.cx - rcPadding.left - rcPadding.right;
-            if( sz.cx < 0 ) sz.cx = 0;
-            if( sz.cx < pControl->GetMinWidth() ) sz.cx = pControl->GetMinWidth();
-            if( sz.cx > pControl->GetMaxWidth() ) sz.cx = pControl->GetMaxWidth();
+            sz.width = pControl->GetFixedWidth();
+            if( sz.width == 0 ) sz.width = szAvailable.width - rcPadding.left - rcPadding.right;
+            if( sz.width < 0 ) sz.width = 0;
+            if( sz.width < pControl->GetMinWidth() ) sz.width = pControl->GetMinWidth();
+            if( sz.width > pControl->GetMaxWidth() ) sz.width = pControl->GetMaxWidth();
                         if(traceid%3==1)
-            Ycout<<"final sz.cx :"<<sz.cx<<"  sz.cy: "<<sz.cy<<endl;
-            RECT rcCtrl = { iPosX + rcPadding.left, iPosY + rcPadding.top, iPosX + rcPadding.left + sz.cx, iPosY + sz.cy + rcPadding.top + rcPadding.bottom };
+            Ycout<<"final sz.width :"<<sz.width<<"  sz.height: "<<sz.height<<endl;
+            YYRECT rcCtrl(iPosX + rcPadding.left, iPosY + rcPadding.top, iPosX + rcPadding.left + sz.width, iPosY + sz.height + rcPadding.top + rcPadding.bottom );
             pControl->SetPos(rcCtrl);
 
-            iPosY += sz.cy + m_iChildPadding + rcPadding.top + rcPadding.bottom;
-            cyNeeded += sz.cy + rcPadding.top + rcPadding.bottom;
-            szRemaining.cy -= sz.cy + m_iChildPadding + rcPadding.bottom;
+            iPosY += sz.height + m_iChildPadding + rcPadding.top + rcPadding.bottom;
+            cyNeeded += sz.height + rcPadding.top + rcPadding.bottom;
+            szRemaining.height -= sz.height + m_iChildPadding + rcPadding.bottom;
         }
         cyNeeded += (nEstimateNum - 1) * m_iChildPadding;
 
@@ -157,7 +157,7 @@ namespace YUI
         ProcessScrollBar(rc, 0, cyNeeded);
     }
 
-    void VerticalLayout::DoPostPaint(HDC hDC, const RECT& rcPaint)
+    void VerticalLayout::DoPostPaint(HDC hDC, const YYRECT& rcPaint)
     {
         if( (m_uButtonState & UISTATE_CAPTURED) != 0 && !m_bImmMode ) {
             RECT rcSeparator = GetThumbRect(true);
@@ -165,22 +165,22 @@ namespace YUI
         }
     }
 
-    RECT VerticalLayout::GetThumbRect(bool bUseNew /*= false*/) const
+    YUI::YYRECT VerticalLayout::GetThumbRect(bool bUseNew /*= false*/) const
     {
         if( (m_uButtonState & UISTATE_CAPTURED) != 0 && bUseNew) {
             if( m_iSepHeight >= 0 ) 
-                return YRect(m_rcNewPos.left, max(m_rcNewPos.bottom - m_iSepHeight, m_rcNewPos.top), 
+                return YYRECT(m_rcNewPos.left, max(m_rcNewPos.bottom - m_iSepHeight, m_rcNewPos.top), 
                 m_rcNewPos.right, m_rcNewPos.bottom);
             else 
-                return YRect(m_rcNewPos.left, m_rcNewPos.top, m_rcNewPos.right, 
+                return YYRECT(m_rcNewPos.left, m_rcNewPos.top, m_rcNewPos.right, 
                 min(m_rcNewPos.top - m_iSepHeight, m_rcNewPos.bottom));
         }
         else {
             if( m_iSepHeight >= 0 ) 
-                return YRect(m_rcItem.left, max(m_rcItem.bottom - m_iSepHeight, m_rcItem.top), m_rcItem.right, 
+                return YYRECT(m_rcItem.left, max(m_rcItem.bottom - m_iSepHeight, m_rcItem.top), m_rcItem.right, 
                 m_rcItem.bottom);
             else 
-                return YRect(m_rcItem.left, m_rcItem.top, m_rcItem.right, 
+                return YYRECT(m_rcItem.left, m_rcItem.top, m_rcItem.right, 
                 min(m_rcItem.top - m_iSepHeight, m_rcItem.bottom));
         }
     }

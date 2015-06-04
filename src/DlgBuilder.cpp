@@ -270,11 +270,10 @@ namespace YUI
                     Parse(pChild,pControl);
                 }
                 //attach to parent
-                auto spParent = pParent;
-                if(spParent)
+                if(pParent)
                 {
                     //如果父空间是个container,把当前control加到containerk中去
-                    IContainer* pContianer = dynamic_cast<IContainer* >(spParent);
+                    IContainer* pContianer = dynamic_cast<IContainer* >(pParent);
                     if(!pContianer)
                         return nullptr;
                     pContianer->Add(pControl);

@@ -45,7 +45,7 @@ namespace YUI
         void                            SetBorderSize(int nSize);
         DWORD                           GetBorderColor() const;
         void                            SetBorderColor(DWORD dwBorderColor);
-        void                            SetBorderSize(RECT rc);
+        void                            SetBorderSize(YYRECT rc);
         int                             GetLeftBorderSize() const;
         void                            SetLeftBorderSize(int nSize);
         int                             GetTopBorderSize() const;
@@ -59,15 +59,15 @@ namespace YUI
 
 
         // 位置相关
-        virtual RECT                    GetPos() const;
+        virtual YYRECT                    GetPos() const;
         virtual int                     GetWidth() const;
         virtual int                     GetHeight() const;
         virtual int                     GetX() const;
         virtual int                     GetY() const;
-        virtual RECT                    GetPadding() const;
-        virtual void                    SetPadding(RECT rcPadding); // 设置外边距，由上层窗口绘制
-        virtual SIZE                    GetFixedXY() const;         // 实际大小位置使用GetPos获取，这里得到的是预设的参考值
-        virtual void                    SetFixedXY(SIZE szXY);      // 仅float为true时有效
+        virtual YYRECT GetPadding() const;
+        virtual void SetPadding(YYRECT rcPadding); // 设置外边距，由上层窗口绘制
+        virtual YYSIZE GetFixedXY() const;         // 实际大小位置使用GetPos获取，这里得到的是预设的参考值
+        virtual void SetFixedXY(YYSIZE szXY);      // 仅float为true时有效
         virtual int                     GetFixedWidth() const;       // 实际大小位置使用GetPos获取，这里得到的是预设的参考值
         virtual void                    SetFixedWidth(int cx);      // 预设的参考值
         virtual int                     GetFixedHeight() const;      // 实际大小位置使用GetPos获取，这里得到的是预设的参考值
@@ -76,18 +76,18 @@ namespace YUI
         virtual void                    SetMinWidth(int cx);
         virtual int                     GetMaxWidth() const;
         virtual void                    SetMaxWidth(int cx);
-        virtual int                     GetMinHeight() const;
+        virtual float GetMinHeight() const;
         virtual void                    SetMinHeight(int cy);
         virtual int                     GetMaxHeight() const;
         virtual void                    SetMaxHeight(int cy);
-        virtual void                    SetRelativePos(SIZE szMove,SIZE szZoom);
-        virtual void                    SetRelativeParentSize(SIZE sz);
+        virtual void SetRelativePos(YYSIZE szMove,YYSIZE szZoom);
+        virtual void                    SetRelativeParentSize(YYSIZE sz);
         virtual RelativePosUI           GetRelativePos() const;
         virtual bool                    IsRelativePos() const;
 
 
 
-        virtual void                    SetPos(RECT &rc);
+        virtual void SetPos(YYRECT &rc);
 
         virtual UINT                    GetControlFlags() const;
 
@@ -141,7 +141,7 @@ namespace YUI
         virtual void                    SetAttribute(const std::string &strName, const std::string& strValue);
         ControlUI*                      ApplyAttributeList(const std::string & strList);
 
-        virtual SIZE                    EstimateSize(SIZE szAvailable);
+        virtual YYSIZE EstimateSize(YYSIZE szAvailable);
 
         virtual void                    DoPaint(const YYRECT &rc);
         virtual void                    PaintBkColor();
@@ -150,7 +150,7 @@ namespace YUI
         virtual void                    PaintText();
         virtual void                    PaintBorder();
 
-        virtual void                    DoPostPaint(HDC hDC, const RECT& rcPaint);
+        virtual void DoPostPaint(HDC hDC, const YYRECT& rcPaint);
 
         //虚拟窗口参数
         void                            SetVirtualWnd(LPCTSTR pstrValue);
@@ -162,12 +162,12 @@ namespace YUI
         YString                         m_strName; // tag 'name'
         bool                            m_bUpdateNeeded;
         bool                            m_bMenuUsed;
-        RECT                            m_rcPadding; //tag 'padding'
-        SIZE                            m_cXY; // maybe control 左上角的点  tag 'pos'
-        SIZE                            m_cXYFixed; //fix宽高 tag 'pos' 'width' 'height'
-        SIZE                            m_cxyMin;// tag 'minwidth' 'minheight'
-        SIZE                            m_cxyMax;//tag 'maxwidth' 'maxheight'
-        RECT                            m_rcItem;
+        YYRECT                          m_rcPadding; //tag 'padding'
+        YYSIZE                          m_cXY; // maybe control 左上角的点  tag 'pos'
+        YYSIZE                          m_cXYFixed; //fix宽高 tag 'pos' 'width' 'height'
+        YYSIZE                          m_cxyMin;// tag 'minwidth' 'minheight'
+        YYSIZE                          m_cxyMax;//tag 'maxwidth' 'maxheight'
+        YYRECT                          m_rcItem;
 
         
         int                             m_nTooltipWidth;
@@ -196,8 +196,8 @@ namespace YUI
         DWORD                           m_dwFocusBorderColor;//tag 'focusbordercolor'
         int                             m_nBorderSize;//tag 'boradersize'  
         int                             m_nBorderStyle; // tag 'borderstyple'
-        RECT                            m_rcPaint; 
-        RECT                            m_rcBorderSize;//tag 'boradersize' 'leftbordersize' 'topboradersize' 'bottombordersize' 
+        YYRECT                            m_rcPaint; 
+        YYRECT                            m_rcBorderSize;//tag 'boradersize' 'leftbordersize' 'topboradersize' 'bottombordersize' 
     protected:
         MsgHandler					    m_ControlMsgHandler;
     };
