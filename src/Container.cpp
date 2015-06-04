@@ -34,7 +34,7 @@ namespace YUI
 
     int Container::GetCount() const
     {
-        return m_ListItems.size();
+        return (int)m_ListItems.size();
     }
 
     bool Container::Add(ControlUI* pControl)
@@ -108,12 +108,12 @@ namespace YUI
         NeedUpdate();
     }
 
-    int Container::GetChildPadding() const
-    {
+    float Container::GetChildPadding() const
+{
         return m_iChildPadding;
     }
 
-    void Container::SetChildPadding(int iPadding)
+    void Container::SetChildPadding(float iPadding)
     {
         m_iChildPadding = iPadding;
         NeedUpdate();
@@ -243,12 +243,12 @@ namespace YUI
         LPCSTR pstrName = strName.c_str();
         LPCSTR pstrValue = strValue.c_str();
         if( strcmp(pstrName, "inset") == 0 ) {
-            RECT rcInset = { 0 };
+            YYRECT rcInset;
             LPSTR pstr = NULL;
-            rcInset.left = strtol(pstrValue, &pstr, 10);  assert(pstr);    
-            rcInset.top = strtol(pstr + 1, &pstr, 10);    assert(pstr);    
-            rcInset.right = strtol(pstr + 1, &pstr, 10);  assert(pstr);    
-            rcInset.bottom = strtol(pstr + 1, &pstr, 10); assert(pstr);    
+            rcInset.left = (float)strtol(pstrValue, &pstr, 10);  assert(pstr);    
+            rcInset.top = (float)strtol(pstr + 1, &pstr, 10);    assert(pstr);    
+            rcInset.right = (float)strtol(pstr + 1, &pstr, 10);  assert(pstr);    
+            rcInset.bottom = (float)strtol(pstr + 1, &pstr, 10); assert(pstr);    
             SetInset(rcInset);
         }
         else if( strcmp(pstrName,"mousechild") == 0 ) SetMouseChildEnabled(strcmp(pstrValue, "true") == 0);
@@ -282,24 +282,24 @@ namespace YUI
             return FALSE;
     }
 
-    bool Container::SetSubControlFixedHeight(const YString & pstrSubControlName,int height)
+    bool Container::SetSubControlFixedHeight(const YString & pstrSubControlName,float cy)
     {
            auto pSubControl=this->FindSubControl(pstrSubControlName);
            if (pSubControl!=NULL)
            {
-               pSubControl->SetFixedHeight(height);
+               pSubControl->SetFixedHeight(cy);
                return TRUE;
            }
            else
                return FALSE;
     }
 
-    bool Container::SetSubControlFixedWdith(const YString& pstrSubControlName,int width)
+    bool Container::SetSubControlFixedWdith(const YString& pstrSubControlName,float cx)
     {
            auto pSubControl=this->FindSubControl(pstrSubControlName);
            if (pSubControl!=NULL)
            {
-               pSubControl->SetFixedWidth(width);
+               pSubControl->SetFixedWidth(cx);
                return TRUE;
            }
            else
@@ -329,7 +329,7 @@ namespace YUI
              return pSubControl->GetText();
     }
 
-    int Container::GetSubControlFixedHeight(const YString& pstrSubControlName)
+    float Container::GetSubControlFixedHeight(const YString& pstrSubControlName)
     {
          auto pSubControl=this->FindSubControl(pstrSubControlName);
          if (pSubControl==NULL)
@@ -338,7 +338,7 @@ namespace YUI
              return pSubControl->GetFixedHeight();
     }
 
-    int Container::GetSubControlFixedWdith(const YString& pstrSubControlName)
+    float Container::GetSubControlFixedWdith(const YString& pstrSubControlName)
     {
         auto pSubControl=this->FindSubControl(pstrSubControlName);
         if (pSubControl==NULL)
@@ -402,7 +402,7 @@ namespace YUI
     void Container::PageUp()
     {
         YYSIZE sz = GetScrollPos();
-        int iOffset = m_rcItem.bottom - m_rcItem.top - m_rcInset.top - m_rcInset.bottom;
+        float iOffset = m_rcItem.bottom - m_rcItem.top - m_rcInset.top - m_rcInset.bottom;
         /*if( m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible() ) iOffset -= m_pHorizontalScrollBar->GetFixedHeight();*/
         sz.height -= iOffset;
         SetScrollPos(sz);
@@ -411,7 +411,7 @@ namespace YUI
     void Container::PageDown()
     {
         YYSIZE sz = GetScrollPos();
-        int iOffset = m_rcItem.bottom - m_rcItem.top - m_rcInset.top - m_rcInset.bottom;
+        float iOffset = m_rcItem.bottom - m_rcItem.top - m_rcInset.top - m_rcInset.bottom;
       /*  if( m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible() ) iOffset -= m_pHorizontalScrollBar->GetFixedHeight();*/
         sz.height += iOffset;
         SetScrollPos(sz);
@@ -448,7 +448,7 @@ namespace YUI
     void Container::PageLeft()
     {
         YYSIZE sz = GetScrollPos();
-        int iOffset = m_rcItem.right - m_rcItem.left - m_rcInset.left - m_rcInset.right;
+        float iOffset = m_rcItem.right - m_rcItem.left - m_rcInset.left - m_rcInset.right;
         /*if( m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible() ) iOffset -= m_pVerticalScrollBar->GetFixedWidth();*/
         sz.width -= iOffset;
         SetScrollPos(sz);
@@ -457,7 +457,7 @@ namespace YUI
     void Container::PageRight()
     {
         YYSIZE sz = GetScrollPos();
-        int iOffset = m_rcItem.right - m_rcItem.left - m_rcInset.left - m_rcInset.right;
+        float iOffset = m_rcItem.right - m_rcItem.left - m_rcInset.left - m_rcInset.right;
         /*if( m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible() ) iOffset -= m_pVerticalScrollBar->GetFixedWidth();*/
         sz.width += iOffset;
         SetScrollPos(sz);
@@ -527,8 +527,8 @@ namespace YUI
             YYSIZE szParent(m_rcItem.right-m_rcItem.left,m_rcItem.bottom-m_rcItem.top);
             if(tRelativePos.m_szParent.width != 0)
             {
-                int nIncrementX = szParent.width-tRelativePos.m_szParent.width;
-                int nIncrementY = szParent.height-tRelativePos.m_szParent.height;
+                float nIncrementX = szParent.width-tRelativePos.m_szParent.width;
+                float nIncrementY = szParent.height-tRelativePos.m_szParent.height;
                 rcCtrl.left += (nIncrementX*tRelativePos.m_nMoveXPercent/100);
                 rcCtrl.top += (nIncrementY*tRelativePos.m_nMoveYPercent/100);
                 rcCtrl.right = rcCtrl.left+sz.width+(nIncrementX*tRelativePos.m_nZoomXPercent/100);
@@ -539,7 +539,7 @@ namespace YUI
         pControl->SetPos(rcCtrl);
     }
 
-    void Container::ProcessScrollBar(RECT rc, int cxRequired, int cyRequired)
+    void Container::ProcessScrollBar(YYRECT rc, float cxRequired, float cyRequired)
     {
 
     }
@@ -551,7 +551,7 @@ namespace YUI
             return NULL;
         if( !IsEnabled() ) 
             return NULL;
-        RECT rc = m_rcItem;
+        YYRECT rc = m_rcItem;
         rc.left += m_rcInset.left;
         rc.top += m_rcInset.top;
         rc.right -= m_rcInset.right;
@@ -592,5 +592,21 @@ namespace YUI
     {
         m_ContainerMsgHandler.HandleMsg(msg);
     }
+
+	ControlUI* Container::FindControlFromName(const YString & strName)
+	{
+		ControlUI *pResult= nullptr;
+		for(auto iter = m_ListItems.begin();iter!=m_ListItems.end();++iter)
+		{
+			pResult = (*iter)->FindControlFromName(strName);
+			if( pResult != nullptr)
+			{
+				return pResult;
+			}
+		}
+		if( pResult == NULL ) 
+			pResult = ControlUI::FindControlFromName(strName);
+		return pResult;
+	}
 
 }

@@ -18,7 +18,6 @@ namespace YUI
         ,m_dwHotBkColor(0)
     {
         m_uTextStyle = DT_SINGLELINE | DT_VCENTER | DT_CENTER;
-        m_uWhere = 222;
         AddHander();
     }
 
@@ -125,7 +124,7 @@ namespace YUI
 
         if( m_strText.empty() ) return;
         int nLinks = 0;
-        RECT rc = m_rcItem;
+        YYRECT rc = m_rcItem;
         rc.left += m_rcTextPadding.left;
         rc.right -= m_rcTextPadding.right;
         rc.top += m_rcTextPadding.top;
@@ -151,7 +150,6 @@ namespace YUI
 
         if( IsFocused() ) m_uButtonState |= UISTATE_FOCUSED;
         else m_uButtonState &= ~ UISTATE_FOCUSED;
-            m_uWhere+=1;
         if( !IsEnabled() ) m_uButtonState |= UISTATE_DISABLED;
         else m_uButtonState &= ~ UISTATE_DISABLED;
 
@@ -382,7 +380,6 @@ namespace YUI
             if( IsEnabled() ) 
             {
                 m_uButtonState |= UISTATE_HOT;
-                m_uWhere = 1000;
                 Invalidate();
             }
            m_ButtonMsgHandler.MsgHandleChainBase::HandleMsg(msg);
@@ -402,14 +399,11 @@ namespace YUI
         {
            ::SetCursor(::LoadCursor(NULL, MAKEINTRESOURCE(IDC_HAND)));
         });
-
-        m_eventClick = [](){ ::MessageBeep(MB_OK);};
     }
 
     void Button::HandleMsg(const MsgWrap & msg) throw()
     {
         m_ButtonMsgHandler.HandleMsg(msg);
-		cout<<"Button Catch Mesg"<<msg.strType<<"    m_uState: "<<m_uButtonState<<endl;
     }
 
   }

@@ -23,7 +23,7 @@ namespace YUI
         virtual void                    SetAttribute(const std::string &strName, const std::string& strValue);
         virtual void                    PaintText();
         virtual void                    PaintStatusImage();
-        void                            SetClickEvent(EventClick& eve) { m_eventClick = eve;}
+        void							SetClickEvent(EventClick eve) { m_eventClick = eve;}
         YString                         GetNormalImage();
         void                            SetNormalImage(const YString& pStrImage);
         YString                         GetHotImage();
@@ -50,7 +50,6 @@ namespace YUI
 
     protected:
         UINT                            m_uButtonState;
-        UINT                            m_uWhere;
         DWORD                           m_dwHotBkColor;
         DWORD                           m_dwHotTextColor;
         DWORD                           m_dwPushedTextColor;

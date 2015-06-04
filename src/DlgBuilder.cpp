@@ -75,8 +75,8 @@ namespace YUI
                     pstrValue = pRoot->Attribute("size");
                     if(pstrValue)
                     {
-                        int cx = strtol(pstrValue,&pstr,10);
-                        int cy = strtol(pstr+1,&pstr,10);
+                        int cx = (float)strtol(pstrValue,&pstr,10);
+                        int cy = (float)strtol(pstr+1,&pstr,10);
                         Winproperty.SetInitSize(cx,cy);
                         cout<<"size: cx:"<<cx<<endl;
                         cout<<"size: cy:"<<cy<<endl;
@@ -90,10 +90,10 @@ namespace YUI
                     {
                         RECT rcSizeBox = { 0 };
                         pstr = nullptr;
-                        rcSizeBox.left = strtol(pstrValue, &pstr, 10);  assert(pstr);    
-                        rcSizeBox.top = strtol(pstr + 1, &pstr, 10);    assert(pstr);    
-                        rcSizeBox.right = strtol(pstr + 1, &pstr, 10);  assert(pstr);    
-                        rcSizeBox.bottom = strtol(pstr + 1, &pstr, 10); assert(pstr);   
+                        rcSizeBox.left = (float)strtol(pstrValue, &pstr, 10);  assert(pstr);    
+                        rcSizeBox.top = (float)strtol(pstr + 1, &pstr, 10);    assert(pstr);    
+                        rcSizeBox.right = (float)strtol(pstr + 1, &pstr, 10);  assert(pstr);    
+                        rcSizeBox.bottom = (float)strtol(pstr + 1, &pstr, 10); assert(pstr);   
                         Winproperty.SetSizeBox(rcSizeBox);
                     } 
                 }
@@ -104,10 +104,10 @@ namespace YUI
                     {
                         RECT rcCaption = { 0 };
                         pstr = NULL;
-                        rcCaption.left = strtol(pstrValue, &pstr, 10);  assert(pstr);    
-                        rcCaption.top = strtol(pstr + 1, &pstr, 10);    assert(pstr);    
-                        rcCaption.right = strtol(pstr + 1, &pstr, 10);  assert(pstr);    
-                        rcCaption.bottom = strtol(pstr + 1, &pstr, 10); assert(pstr);    
+                        rcCaption.left = (float)strtol(pstrValue, &pstr, 10);  assert(pstr);    
+                        rcCaption.top = (float)strtol(pstr + 1, &pstr, 10);    assert(pstr);    
+                        rcCaption.right = (float)strtol(pstr + 1, &pstr, 10);  assert(pstr);    
+                        rcCaption.bottom = (float)strtol(pstr + 1, &pstr, 10); assert(pstr);    
                         Winproperty.SetCaptionRect(rcCaption);
                     }
                 }
@@ -115,8 +115,8 @@ namespace YUI
                 {
                     if( pstrValue = pRoot->Attribute("roundcorner") )
                     {
-                        int cx = strtol(pstrValue, &pstr, 10);  assert(pstr);    
-                        int cy = strtol(pstr + 1, &pstr, 10);    assert(pstr); 
+                        int cx = (float)strtol(pstrValue, &pstr, 10);  assert(pstr);    
+                        int cy = (float)strtol(pstr + 1, &pstr, 10);    assert(pstr); 
                         //pManager->SetRoundCorner(cx, cy); 
                     }
                 }
@@ -124,8 +124,8 @@ namespace YUI
                 {
                     if( pstrValue = pRoot->Attribute("mininfo") )
                     {
-                        int cx = strtol(pstrValue, &pstr, 10);  assert(pstr);    
-                        int cy = strtol(pstr + 1, &pstr, 10);    assert(pstr); 
+                        int cx = (float)strtol(pstrValue, &pstr, 10);  assert(pstr);    
+                        int cy = (float)strtol(pstr + 1, &pstr, 10);    assert(pstr); 
                         Winproperty.SetMinInfo(cx, cy);
                     }
                 }
@@ -133,8 +133,8 @@ namespace YUI
                 {
                     if( pstrValue = pRoot->Attribute("maxinfo") )
                     {
-                        int cx = strtol(pstrValue, &pstr, 10);  assert(pstr);    
-                        int cy = strtol(pstr + 1, &pstr, 10);    assert(pstr); 
+                        int cx = (float)strtol(pstrValue, &pstr, 10);  assert(pstr);    
+                        int cy = (float)strtol(pstr + 1, &pstr, 10);    assert(pstr); 
                         Winproperty.SetMinInfo(cx, cy);
                     }
                 }

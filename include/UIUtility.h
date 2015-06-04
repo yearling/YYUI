@@ -247,9 +247,9 @@ namespace YUI
 	{
 		bool                            m_bRelative;
 		YYSIZE                            m_szParent;
-		int                             m_nMoveXPercent;
-		int                             m_nMoveYPercent;
-		int                             m_nZoomXPercent;
-		int                             m_nZoomYPercent;
+		float                             m_nMoveXPercent;
+		float                             m_nMoveYPercent;
+		float                             m_nZoomXPercent;
+		float                             m_nZoomYPercent;
 	}; 
 }

@@ -1,6 +1,7 @@
 #include "YUI.h"
 #include "D2DWnd.h"
 #include "Canvas2D.h"
+#include "Button.h"
 using std::cout;
 using std::wcout;
 using std::endl;
@@ -37,10 +38,15 @@ namespace YUI
 	{
 		YString msc_fontName = _T("Verdana");
 		static const FLOAT msc_fontSize = 50;
+		CountRefPtr<Button> pButton(dynamic_cast<Button*>(m_pControlManger->FindControl(_T("closebtn"))));
+		assert(pButton && "pButton not find");
+		pButton->SetClickEvent([&](){
+			Close();
+		});
 		HRESULT hr = S_OK;
 	}
 
-	void D2DWnd::OnResize(unsigned int width,unsigned int height)
+	void D2DWnd::OnResize(float width,float height)
 	{
 		Canvas2D canvas(m_hWnd);
         canvas.OnResize((float)width,(float)height);
@@ -109,7 +115,7 @@ namespace YUI
 	void CWndUI::SetPos(YYRECT &rc)
 	{
 			__super::SetPos(rc);
-			::SetWindowPos(m_hWnd, NULL, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, SWP_NOZORDER | SWP_NOACTIVATE);
+			::SetWindowPos(m_hWnd, NULL,(int) rc.left, (int)rc.top, (int)(rc.right - rc.left), (int) (rc.bottom - rc.top), SWP_NOZORDER | SWP_NOACTIVATE);
 
 	}
 
@@ -152,7 +158,7 @@ namespace YUI
     void D3DWnd::SetPos(YYRECT &rc)
     {
         __super::SetPos(rc);
-        ::SetWindowPos(m_hWnd, NULL, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, SWP_NOZORDER | SWP_NOACTIVATE);
+        ::SetWindowPos(m_hWnd, NULL, (int)rc.left, (int)rc.top,int( rc.right - rc.left), int(rc.bottom - rc.top), SWP_NOZORDER | SWP_NOACTIVATE);
     }
 
     UINT D3DWnd::GetClassStyle() const

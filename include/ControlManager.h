@@ -21,6 +21,7 @@ namespace YUI
         void                            SetFocus(ControlUI *pControl);
         bool                            MessageHandler(UINT uMesg, WPARAM wParam, LPARAM lParam, LRESULT &lRes);
         ControlUI*                      FindControl(const YYPOINT& pt);
+		ControlUI*						FindControl(const YString& strControlName);
         void                            SetCapture();
         void                            ReleaseCapture();
         HWND                            GetHWND() const { return m_hWnd;}

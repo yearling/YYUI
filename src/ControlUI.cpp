@@ -248,24 +248,24 @@ namespace YUI
                         ++image_count;
                     }
                     else if( sItem == _T("dest") ) {
-                        rcItem.left = rc.left + _tcstol(sValue.c_str(), &pstr, 10);  assert(pstr);    
-                        rcItem.top = rc.top + _tcstol(pstr + 1, &pstr, 10);    assert(pstr);
-                        rcItem.right = rc.left + _tcstol(pstr + 1, &pstr, 10);  assert(pstr);
+                        rcItem.left = rc.left + (float)_tcstol(sValue.c_str(), &pstr, 10);  assert(pstr);    
+                        rcItem.top = rc.top + (float)_tcstol(pstr + 1, &pstr, 10);    assert(pstr);
+                        rcItem.right = rc.left + (float)_tcstol(pstr + 1, &pstr, 10);  assert(pstr);
                         if (rcItem.right > rc.right) rcItem.right = rc.right;
-                        rcItem.bottom = rc.top + _tcstol(pstr + 1, &pstr, 10); assert(pstr);
+                        rcItem.bottom = rc.top + (float)_tcstol(pstr + 1, &pstr, 10); assert(pstr);
                         if (rcItem.bottom > rc.bottom) rcItem.bottom = rc.bottom;
                     }
                     else if( sItem == _T("source") ) {
-                        rcBmpPart.left = _tcstol(sValue.c_str(), &pstr, 10);  assert(pstr);    
-                        rcBmpPart.top = _tcstol(pstr + 1, &pstr, 10);    assert(pstr);    
-                        rcBmpPart.right = _tcstol(pstr + 1, &pstr, 10);  assert(pstr);    
-                        rcBmpPart.bottom = _tcstol(pstr + 1, &pstr, 10); assert(pstr);  
+                        rcBmpPart.left = (float)_tcstol(sValue.c_str(), &pstr, 10);  assert(pstr);    
+                        rcBmpPart.top = (float)_tcstol(pstr + 1, &pstr, 10);    assert(pstr);    
+                        rcBmpPart.right = (float)_tcstol(pstr + 1, &pstr, 10);  assert(pstr);    
+                        rcBmpPart.bottom = (float)_tcstol(pstr + 1, &pstr, 10); assert(pstr);  
                     }
                     else if( sItem == _T("corner") ) {
-                        rcCorner.left = _tcstol(sValue.c_str(), &pstr, 10);  assert(pstr);    
-                        rcCorner.top = _tcstol(pstr + 1, &pstr, 10);    assert(pstr);    
-                        rcCorner.right = _tcstol(pstr + 1, &pstr, 10);  assert(pstr);    
-                        rcCorner.bottom = _tcstol(pstr + 1, &pstr, 10); assert(pstr);
+                        rcCorner.left = (float)_tcstol(sValue.c_str(), &pstr, 10);  assert(pstr);    
+                        rcCorner.top = (float)_tcstol(pstr + 1, &pstr, 10);    assert(pstr);    
+                        rcCorner.right = (float)_tcstol(pstr + 1, &pstr, 10);  assert(pstr);    
+                        rcCorner.bottom = (float)_tcstol(pstr + 1, &pstr, 10); assert(pstr);
                     }
                     else if( sItem == _T("mask") ) {
                         if( sValue[0] == _T('#')) dwMask = _tcstoul(sValue.c_str() + 1, &pstr, 16);
@@ -290,12 +290,12 @@ namespace YUI
         canvas.DrawBitmap(sImageName,rcItem,rcBmpPart,((float)dwMask)/255.0f);
     }
 
-    int ControlUI::GetBorderSize() const
-    {
+    float ControlUI::GetBorderSize() const
+{
         return m_nBorderSize;
     }
 
-    void ControlUI::SetBorderSize(int nSize)
+    void ControlUI::SetBorderSize(float nSize)
     {
         if( m_nBorderSize == nSize )
             return;
@@ -322,45 +322,45 @@ namespace YUI
         Invalidate();
     }
 
-    int ControlUI::GetLeftBorderSize() const
-    {
+    float ControlUI::GetLeftBorderSize() const
+{
         return m_rcBorderSize.left;
     }
 
-    void ControlUI::SetLeftBorderSize(int nSize)
+    void ControlUI::SetLeftBorderSize(float nSize)
     {
         m_rcBorderSize.left = nSize;
         Invalidate();
     }
 
-    int ControlUI::GetTopBorderSize() const
-    {
+    float ControlUI::GetTopBorderSize() const
+{
        return m_rcBorderSize.top; 
     }
 
-    void ControlUI::SetTopBorderSize(int nSize)
+    void ControlUI::SetTopBorderSize(float nSize)
     {
         m_rcBorderSize.top = nSize;
         Invalidate();
     }
 
-    int ControlUI::GetRightBorderSize() const
-    {
+    float ControlUI::GetRightBorderSize() const
+{
        return m_rcBorderSize.right; 
     }
 
-    void ControlUI::SetRightBorderSize(int nSize)
+    void ControlUI::SetRightBorderSize(float nSize)
     {
         m_rcBorderSize.right = nSize;
         Invalidate();
     }
 
-    int ControlUI::GetBottomBorderSize() const
-    {
+    float ControlUI::GetBottomBorderSize() const
+{
         return m_rcBorderSize.bottom;
     }
 
-    void ControlUI::SetBottomBorderSize(int nSize)
+    void ControlUI::SetBottomBorderSize(float nSize)
     {
         m_rcBorderSize.bottom = nSize;
         Invalidate();
@@ -438,23 +438,23 @@ namespace YUI
         m_pManager->Invalidate(invalidateRc);
     }
 
-    int ControlUI::GetWidth() const
-    {
+    float ControlUI::GetWidth() const
+{
         return m_rcItem.right - m_rcItem.left;
     }
 
-    int ControlUI::GetHeight() const
-    {
+    float ControlUI::GetHeight() const
+{
         return m_rcItem.bottom - m_rcItem.top;
     }
 
-    int ControlUI::GetX() const
-    {
+    float ControlUI::GetX() const
+{
         return m_rcItem.left;
     }
 
-    int ControlUI::GetY() const
-    {
+    float ControlUI::GetY() const
+{
         return m_rcItem.top;
     }
 
@@ -484,12 +484,12 @@ namespace YUI
             NeedUpdate();
     }
 
-    int ControlUI::GetFixedWidth() const
-    {
+    float ControlUI::GetFixedWidth() const
+{
         return m_cXYFixed.width;
     }
 
-    void ControlUI::SetFixedWidth(int cx)
+    void ControlUI::SetFixedWidth(float cx)
     {
         if(cx < 0 )
             return;
@@ -500,12 +500,12 @@ namespace YUI
             NeedUpdate();
     }
 
-    int ControlUI::GetFixedHeight() const
-    {
+    float ControlUI::GetFixedHeight() const
+{
         return m_cXYFixed.height;
     }
 
-    void ControlUI::SetFixedHeight(int cy)
+    void ControlUI::SetFixedHeight(float cy)
     {
         if( cy < 0 )
             return ;
@@ -516,12 +516,12 @@ namespace YUI
             NeedUpdate();
     }
 
-    int ControlUI::GetMinWidth() const
-    {
+    float ControlUI::GetMinWidth() const
+{
         return m_cxyMin.width ;
     }
 
-    void ControlUI::SetMinWidth(int cx)
+    void ControlUI::SetMinWidth(float cx)
     {
         if( m_cxyMin.width == cx)
             return;
@@ -534,12 +534,12 @@ namespace YUI
             NeedUpdate();
     }
 
-    int ControlUI::GetMaxWidth() const
-    {
+    float ControlUI::GetMaxWidth() const
+{
         return m_cxyMax.width;
     }
 
-    void ControlUI::SetMaxWidth(int cx)
+    void ControlUI::SetMaxWidth(float cx)
     {
         if( m_cxyMax.width == cx ) return;
 
@@ -554,7 +554,7 @@ namespace YUI
         return m_cxyMin.height;
     }
 
-    void ControlUI::SetMinHeight(int cy)
+    void ControlUI::SetMinHeight(float cy)
     {
         if( m_cxyMin.height == cy ) return;
 
@@ -564,12 +564,12 @@ namespace YUI
         else NeedUpdate();
     }
 
-    int ControlUI::GetMaxHeight() const
-    {
+    float ControlUI::GetMaxHeight() const
+{
          return m_cxyMax.height;
     }
 
-    void ControlUI::SetMaxHeight(int cy)
+    void ControlUI::SetMaxHeight(float cy)
     {
         if( m_cxyMax.height == cy ) return;
 
@@ -614,13 +614,13 @@ namespace YUI
        // m_strToolTip.replace(0,std::string::npos,_T("<n>"),_T("\r\n"));
     }
 
-    void ControlUI::SetToolTipWidth(int nWidth)
+    void ControlUI::SetToolTipWidth(float nWidth)
     {
         m_nTooltipWidth = nWidth;
     }
 
-    int ControlUI::GetToolTipWidth(void)
-    {
+    float ControlUI::GetToolTipWidth(void)
+{
         return m_nTooltipWidth;
     }
 
@@ -823,10 +823,10 @@ namespace YUI
         if( strcmp(pstrName, ("pos")) == 0 ) {
             YYRECT rcPos;
             LPSTR pstr = NULL;
-            rcPos.left = strtol(pstrValue, &pstr, 10);  assert(pstr);    
-            rcPos.top = strtol(pstr + 1, &pstr, 10);    assert(pstr);    
-            rcPos.right = strtol(pstr + 1, &pstr, 10);  assert(pstr);    
-            rcPos.bottom = strtol(pstr + 1, &pstr, 10); assert(pstr);    
+            rcPos.left = (float)strtol(pstrValue, &pstr, 10);  assert(pstr);    
+            rcPos.top = (float)strtol(pstr + 1, &pstr, 10);    assert(pstr);    
+            rcPos.right = (float)strtol(pstr + 1, &pstr, 10);  assert(pstr);    
+            rcPos.bottom = (float)strtol(pstr + 1, &pstr, 10); assert(pstr);    
             YYSIZE szXY(rcPos.left >= 0 ? rcPos.left : rcPos.right, rcPos.top >= 0 ? rcPos.top : rcPos.bottom) ;
             SetFixedXY(szXY);
             SetFixedWidth(rcPos.right - rcPos.left);
@@ -835,19 +835,19 @@ namespace YUI
         else if( strcmp(pstrName, ("relativepos")) == 0 ) {
             YYSIZE szMove,szZoom;
             LPSTR pstr = NULL;
-            szMove.width = strtol(pstrValue, &pstr, 10);  assert(pstr);    
-            szMove.height = strtol(pstr + 1, &pstr, 10);    assert(pstr);    
-            szZoom.width = strtol(pstr + 1, &pstr, 10);  assert(pstr);    
-            szZoom.height = strtol(pstr + 1, &pstr, 10); assert(pstr); 
+            szMove.width = (float)strtol(pstrValue, &pstr, 10);  assert(pstr);    
+            szMove.height = (float)strtol(pstr + 1, &pstr, 10);    assert(pstr);    
+            szZoom.width = (float)strtol(pstr + 1, &pstr, 10);  assert(pstr);    
+            szZoom.height = (float)strtol(pstr + 1, &pstr, 10); assert(pstr); 
             SetRelativePos(szMove,szZoom);
         }
         else if( strcmp(pstrName, ("padding")) == 0 ) {
             YYRECT rcPadding;
             LPSTR pstr = NULL;
-            rcPadding.left = strtol(pstrValue, &pstr, 10);  assert(pstr);    
-            rcPadding.top = strtol(pstr + 1, &pstr, 10);    assert(pstr);    
-            rcPadding.right = strtol(pstr + 1, &pstr, 10);  assert(pstr);    
-            rcPadding.bottom = strtol(pstr + 1, &pstr, 10); assert(pstr);    
+            rcPadding.left = (float)strtol(pstrValue, &pstr, 10);  assert(pstr);    
+            rcPadding.top = (float)strtol(pstr + 1, &pstr, 10);    assert(pstr);    
+            rcPadding.right = (float)strtol(pstr + 1, &pstr, 10);  assert(pstr);    
+            rcPadding.bottom = (float)strtol(pstr + 1, &pstr, 10); assert(pstr);    
             SetPadding(rcPadding);
         }
         else if( strcmp(pstrName, ("bkcolor")) == 0 || strcmp(pstrName, ("bkcolor1")) == 0 ) {
@@ -896,10 +896,10 @@ namespace YUI
             {
                 YYRECT rcPadding ;
                 LPSTR pstr = NULL;
-                rcPadding.left = strtol(pstrValue, &pstr, 10);  assert(pstr);
-                rcPadding.top = strtol(pstr + 1, &pstr, 10);    assert(pstr);
-                rcPadding.right = strtol(pstr + 1, &pstr, 10);  assert(pstr);
-                rcPadding.bottom = strtol(pstr + 1, &pstr, 10); assert(pstr);
+                rcPadding.left = (float)strtol(pstrValue, &pstr, 10);  assert(pstr);
+                rcPadding.top = (float)strtol(pstr + 1, &pstr, 10);    assert(pstr);
+                rcPadding.right = (float)strtol(pstr + 1, &pstr, 10);  assert(pstr);
+                rcPadding.bottom = (float)strtol(pstr + 1, &pstr, 10); assert(pstr);
                 SetBorderSize(rcPadding);
             }
         }
@@ -911,8 +911,8 @@ namespace YUI
         else if( strcmp(pstrName, ("borderround")) == 0 ) {
             YYSIZE cxyRound;
             LPSTR pstr = NULL;
-            cxyRound.width = strtol(pstrValue, &pstr, 10);  assert(pstr);    
-            cxyRound.height = strtol(pstr + 1, &pstr, 10);    assert(pstr);     
+            cxyRound.width = (float)strtol(pstrValue, &pstr, 10);  assert(pstr);    
+            cxyRound.height = (float)strtol(pstr + 1, &pstr, 10);    assert(pstr);     
         }
         else if( strcmp(pstrName, ("bkimage")) == 0 )   SetBkImage(UTF8ToGBK(pstrValue));
         else if( strcmp(pstrName, ("width")) == 0 ) SetFixedWidth(atoi(pstrValue));
@@ -1050,8 +1050,9 @@ namespace YUI
     {
         if(strName == GetName() )
             return this;
-        else
-            return nullptr;
+		else 
+			return nullptr;
+
     }
 
      void ControlUI::AddHandler()

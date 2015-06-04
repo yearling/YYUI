@@ -99,10 +99,10 @@ namespace YUI
             ::GetMonitorInfo(::MonitorFromWindow(*this, MONITOR_DEFAULTTONEAREST), &oMonitor);
             YYRECT rcWork = oMonitor.rcWork;
             YYRECT rcMonitor = oMonitor.rcMonitor;
-            rcWork.OffSet(-oMonitor.rcMonitor.left, -oMonitor.rcMonitor.top);
+            rcWork.OffSet((float)-oMonitor.rcMonitor.left, (float)-oMonitor.rcMonitor.top);
 
-            pRect->right = pRect->left + rcWork.GetWidth();
-            pRect->bottom = pRect->top + rcWork.GetHeight();
+            pRect->right =(LONG) (pRect->left + rcWork.GetWidth());
+            pRect->bottom =(LONG) (pRect->top + rcWork.GetHeight());
             return WVR_REDRAW;
         }
         return 0;
@@ -166,17 +166,17 @@ namespace YUI
         ::GetMonitorInfo(::MonitorFromWindow(*this, MONITOR_DEFAULTTONEAREST), &oMonitor);
         YYRECT rcWork = oMonitor.rcWork;
         YYRECT rcMonitor = oMonitor.rcMonitor;
-        rcWork.OffSet(-oMonitor.rcMonitor.left, -oMonitor.rcMonitor.top);
+        rcWork.OffSet((float)-oMonitor.rcMonitor.left, (float)-oMonitor.rcMonitor.top);
 
         // 计算最大化时，正确的原点坐标
-        lpMMI->ptMaxPosition.x	= rcWork.left;
-        lpMMI->ptMaxPosition.y	= rcWork.top;
+        lpMMI->ptMaxPosition.x	= (LONG)rcWork.left;
+        lpMMI->ptMaxPosition.y	= (LONG)rcWork.top;
 
-        lpMMI->ptMaxTrackSize.x =rcWork.GetWidth();
-        lpMMI->ptMaxTrackSize.y =rcWork.GetHeight();
+        lpMMI->ptMaxTrackSize.x =(LONG)rcWork.GetWidth();
+        lpMMI->ptMaxTrackSize.y =(LONG)rcWork.GetHeight();
 
-        lpMMI->ptMinTrackSize.x =(int)m_Property.GetMinInfo().width;
-        lpMMI->ptMinTrackSize.y =(int)m_Property.GetMinInfo().height;
+        lpMMI->ptMinTrackSize.x =(LONG)m_Property.GetMinInfo().width;
+        lpMMI->ptMinTrackSize.y =(LONG)m_Property.GetMinInfo().height;
 
         bHandled = FALSE;
         return 0;

@@ -538,6 +538,11 @@ namespace YUI
         return m_pRoot->FindControlFromPoint(pt,UIFIND_VISIBLE | UIFIND_HITTEST | UIFIND_TOP_FIRST);
     }
 
+	ControlUI* ControlManager::FindControl(const YString& strControlName)
+	{
+		return m_pRoot->FindControlFromName(strControlName);
+	}
+
     void ControlManager::SetCapture()
     {
         ::SetCapture(m_hWnd);

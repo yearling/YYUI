@@ -108,17 +108,17 @@ namespace YUI
         }
         cxFixed += (nEstimateNum - 1) * m_iChildPadding;
 
-        int cxExpand = 0;
-        int cxNeeded = 0;
+        float cxExpand = 0;
+		float cxNeeded = 0;
         if( nAdjustables > 0 ) cxExpand = max(0, (szAvailable.width - cxFixed) / nAdjustables);
         // Position the elements
         YYSIZE szRemaining = szAvailable;
-        int iPosX = rc.left;
+		float iPosX = rc.left;
        /* if( m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible() ) {
             iPosX -= m_pHorizontalScrollBar->GetScrollPos();
         }*/
         int iAdjustable = 0;
-        int cxFixedRemaining = cxFixed;
+        float cxFixedRemaining = cxFixed;
         for( auto pControl : m_ListItems)
         {
             if( !pControl->IsVisible() ) continue;

@@ -41,45 +41,45 @@ namespace YUI
         void                            DrawImage(const YString &strImg);
 
         //边框
-        int                             GetBorderSize() const;
-        void                            SetBorderSize(int nSize);
+        float GetBorderSize() const;
+        void                            SetBorderSize(float nSize);
         DWORD                           GetBorderColor() const;
         void                            SetBorderColor(DWORD dwBorderColor);
         void                            SetBorderSize(YYRECT rc);
-        int                             GetLeftBorderSize() const;
-        void                            SetLeftBorderSize(int nSize);
-        int                             GetTopBorderSize() const;
-        void                            SetTopBorderSize(int nSize);
-        int                             GetRightBorderSize() const;
-        void                            SetRightBorderSize(int nSize);
-        int                             GetBottomBorderSize() const;
-        void                            SetBottomBorderSize(int nSize);
+        float GetLeftBorderSize() const;
+        void SetLeftBorderSize(float nSize);
+        float GetTopBorderSize() const;
+        void SetTopBorderSize(float nSize);
+        float GetRightBorderSize() const;
+        void SetRightBorderSize(float nSize);
+        float GetBottomBorderSize() const;
+        void SetBottomBorderSize(float nSize);
         int                             GetBorderStyle() const;
-        void                            SetBorderStyle(int nStyle);
+        void SetBorderStyle(int nStyle);
 
 
         // 位置相关
         virtual YYRECT                    GetPos() const;
-        virtual int                     GetWidth() const;
-        virtual int                     GetHeight() const;
-        virtual int                     GetX() const;
-        virtual int                     GetY() const;
+        virtual float GetWidth() const;
+        virtual float GetHeight() const;
+        virtual float GetX() const;
+        virtual float GetY() const;
         virtual YYRECT GetPadding() const;
         virtual void SetPadding(YYRECT rcPadding); // 设置外边距，由上层窗口绘制
         virtual YYSIZE GetFixedXY() const;         // 实际大小位置使用GetPos获取，这里得到的是预设的参考值
         virtual void SetFixedXY(YYSIZE szXY);      // 仅float为true时有效
-        virtual int                     GetFixedWidth() const;       // 实际大小位置使用GetPos获取，这里得到的是预设的参考值
-        virtual void                    SetFixedWidth(int cx);      // 预设的参考值
-        virtual int                     GetFixedHeight() const;      // 实际大小位置使用GetPos获取，这里得到的是预设的参考值
-        virtual void                    SetFixedHeight(int cy);     // 预设的参考值
-        virtual int                     GetMinWidth() const;
-        virtual void                    SetMinWidth(int cx);
-        virtual int                     GetMaxWidth() const;
-        virtual void                    SetMaxWidth(int cx);
+        virtual float GetFixedWidth() const;       // 实际大小位置使用GetPos获取，这里得到的是预设的参考值
+        virtual void SetFixedWidth(float cx);      // 预设的参考值
+        virtual float GetFixedHeight() const;      // 实际大小位置使用GetPos获取，这里得到的是预设的参考值
+        virtual void SetFixedHeight(float cy);     // 预设的参考值
+        virtual float GetMinWidth() const;
+        virtual void SetMinWidth(float cx);
+        virtual float GetMaxWidth() const;
+        virtual void SetMaxWidth(float cx);
         virtual float GetMinHeight() const;
-        virtual void                    SetMinHeight(int cy);
-        virtual int                     GetMaxHeight() const;
-        virtual void                    SetMaxHeight(int cy);
+        virtual void SetMinHeight(float cy);
+        virtual float GetMaxHeight() const;
+        virtual void SetMaxHeight(float cy);
         virtual void SetRelativePos(YYSIZE szMove,YYSIZE szZoom);
         virtual void                    SetRelativeParentSize(YYSIZE sz);
         virtual RelativePosUI           GetRelativePos() const;
@@ -94,8 +94,8 @@ namespace YUI
         // 鼠标提示
         virtual YString                 GetToolTip() const;
         virtual void                    SetToolTip(const YString& pstrText);
-        virtual void                    SetToolTipWidth(int nWidth);
-        virtual int	                    GetToolTipWidth(void);	// 多行ToolTip单行最长宽度
+        virtual void SetToolTipWidth(float nWidth);
+        virtual float GetToolTipWidth(void);	// 多行ToolTip单行最长宽度
 
         // 快捷键
         virtual TCHAR                   GetShortcut() const;
@@ -170,7 +170,7 @@ namespace YUI
         YYRECT                          m_rcItem;
 
         
-        int                             m_nTooltipWidth;
+        float                             m_nTooltipWidth;
         bool                            m_bVisible;// tag 'visible'
         bool                            m_bInternVisible;
         bool                            m_bEnable; // tag 'endable'
@@ -194,7 +194,7 @@ namespace YUI
         YString                         m_strForeImage;
         DWORD                           m_dwBorderColor; //tag 'bordercolor'
         DWORD                           m_dwFocusBorderColor;//tag 'focusbordercolor'
-        int                             m_nBorderSize;//tag 'boradersize'  
+        float                             m_nBorderSize;//tag 'boradersize'  
         int                             m_nBorderStyle; // tag 'borderstyple'
         YYRECT                            m_rcPaint; 
         YYRECT                            m_rcBorderSize;//tag 'boradersize' 'leftbordersize' 'topboradersize' 'bottombordersize' 

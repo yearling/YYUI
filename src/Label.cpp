@@ -92,12 +92,12 @@ namespace YUI
         return m_Fontid;
     }
 
-    RECT Label::GetTextPadding() const
-    {
+    YUI::YYRECT Label::GetTextPadding() const
+{
         return m_rcTextPadding;
     }
 
-    void Label::SetTextPadding(RECT rc)
+    void Label::SetTextPadding(YYRECT rc)
     {
         m_rcTextPadding = rc;
         Invalidate();
@@ -170,31 +170,31 @@ namespace YUI
             SetDisabledTextColor(clrColor);
         }
         else if( strcmp(pstrName, ("textpadding")) == 0 ) {
-            RECT rcTextPadding = { 0 };
+            YYRECT rcTextPadding ;
             LPSTR pstr = NULL;
-            rcTextPadding.left = strtol(pstrValue, &pstr, 10);  assert(pstr);    
-            rcTextPadding.top = strtol(pstr + 1, &pstr, 10);    assert(pstr);    
-            rcTextPadding.right = strtol(pstr + 1, &pstr, 10);  assert(pstr);    
-            rcTextPadding.bottom = strtol(pstr + 1, &pstr, 10); assert(pstr);    
+            rcTextPadding.left = (float)strtol(pstrValue, &pstr, 10);  assert(pstr);    
+            rcTextPadding.top = (float)strtol(pstr + 1, &pstr, 10);    assert(pstr);    
+            rcTextPadding.right = (float)strtol(pstr + 1, &pstr, 10);  assert(pstr);    
+            rcTextPadding.bottom = (float)strtol(pstr + 1, &pstr, 10); assert(pstr);    
             SetTextPadding(rcTextPadding);
         }
         else if( strcmp(pstrName, ("showhtml")) == 0 ) SetShowHtml(strcmp(pstrValue, ("true")) == 0);
 
         else if( strcmp(pstrName, ("enabledeffect")) == 0 ) SetEnabledEffect(strcmp(pstrValue, ("true")) == 0);
-        else if( strcmp(pstrName, ("rhaa")) == 0 ) SetTextRenderingHintAntiAlias(atoi(pstrValue));
-        else if( strcmp(pstrName, ("transshadow")) == 0 ) SetTransShadow(atoi(pstrValue));
-        else if( strcmp(pstrName, ("transtext")) == 0 ) SetTransText(atoi(pstrValue));
-        else if( strcmp(pstrName, ("transshadow1")) == 0 ) SetTransShadow1(atoi(pstrValue));
-        else if( strcmp(pstrName, ("transtext1")) == 0 ) SetTransText1(atoi(pstrValue));
-        else if( strcmp(pstrName, ("gradientangle")) == 0 ) SetGradientAngle(atoi(pstrValue));
+        else if( strcmp(pstrName, ("rhaa")) == 0 ) SetTextRenderingHintAntiAlias((float)atoi(pstrValue));
+        else if( strcmp(pstrName, ("transshadow")) == 0 ) SetTransShadow((float)atoi(pstrValue));
+        else if( strcmp(pstrName, ("transtext")) == 0 ) SetTransText((float)atoi(pstrValue));
+        else if( strcmp(pstrName, ("transshadow1")) == 0 ) SetTransShadow1((float)atoi(pstrValue));
+        else if( strcmp(pstrName, ("transtext1")) == 0 ) SetTransText1((float)atoi(pstrValue));
+        else if( strcmp(pstrName, ("gradientangle")) == 0 ) SetGradientAngle((float)atoi(pstrValue));
         else if( strcmp(pstrName, ("enabledstroke")) == 0 ) SetEnabledStroke(strcmp(pstrValue, ("true")) == 0);
         else if( strcmp(pstrName, ("enabledshadow")) == 0 ) SetEnabledShadow(strcmp(pstrValue, ("true")) == 0);
-        else if( strcmp(pstrName, ("transstroke")) == 0 ) SetTransStroke(atoi(pstrValue));
-        else if( strcmp(pstrName, ("gradientlength")) == 0 ) SetGradientLength(atoi(pstrValue));
+        else if( strcmp(pstrName, ("transstroke")) == 0 ) SetTransStroke((float)atoi(pstrValue));
+        else if( strcmp(pstrName, ("gradientlength")) == 0 ) SetGradientLength((float)atoi(pstrValue));
         else if( strcmp(pstrName, ("shadowoffset")) == 0 ){
             LPSTR pstr = NULL;
-            int offsetx = strtol(pstrValue, &pstr, 10);	assert(pstr);    
-            int offsety = strtol(pstr + 1, &pstr, 10);		assert(pstr);
+            float offsetx = (float)strtol(pstrValue, &pstr, 10);	assert(pstr);    
+            float offsety = (float)strtol(pstr + 1, &pstr, 10);		assert(pstr);
             SetShadowOffset(offsetx,offsety);
         }
         else if( strcmp(pstrName, ("textcolor1")) == 0 ) {
@@ -231,7 +231,7 @@ namespace YUI
         if( m_dwDisabledTextColor == 0 ) 
             m_dwDisabledTextColor = m_pManager->GetWindowProperty()->GetDefaultDisabledColor();
 
-        RECT rc = m_rcItem;
+        YYRECT rc = m_rcItem;
         rc.left += m_rcTextPadding.left;
         rc.right -= m_rcTextPadding.right;
         rc.top += m_rcTextPadding.top;
@@ -267,85 +267,85 @@ namespace YUI
         return m_TextValue;
     }
 
-    void Label::SetTransShadow(int ransShadow)
+    void Label::SetTransShadow(float _TransShadow)
     {
-        m_TransShadow = ransShadow;
+        m_TransShadow = _TransShadow;
     }
 
-    int Label::GetTransShadow()
-    {
+    float Label::GetTransShadow()
+{
         return m_TransShadow;
     }
 
-    void Label::SetTransShadow1(int ransShadow)
+    void Label::SetTransShadow1(float _TransShadow)
     {
-        m_TransShadow1	= ransShadow;
+        m_TransShadow1	= _TransShadow;
     }
 
-    int Label::GetTransShadow1()
-    {
+    float Label::GetTransShadow1()
+{
         return m_TransShadow1;
     }
 
-    void Label::SetTransText(int ransText)
+    void Label::SetTransText(float _TransText)
     {
-        	m_TransText = ransText;
+        	m_TransText = _TransText;
     }
 
-    int Label::GetTransText()
-    {
+    float Label::GetTransText()
+{
         return m_TransText;
     }
 
-    void Label::SetTransText1(int ransText)
+    void Label::SetTransText1(float _TransText)
     {
-        m_TransText1	= ransText;
+        m_TransText1	= _TransText;
     }
 
-    int Label::GetTransText1()
-    {
+    float Label::GetTransText1()
+{
         return m_TransText1;
     }
 
-    void Label::SetTransStroke(int ransStroke)
+    void Label::SetTransStroke(float _TransStroke)
     {
-        m_TransStroke = ransStroke;
+        m_TransStroke = _TransStroke;
     }
 
-    int Label::GetTransStroke()
-    {
+    float Label::GetTransStroke()
+{
         return m_TransStroke;
     }
 
-    void Label::SetGradientLength(int _GradientLength)
+    void Label::SetGradientLength(float _GradientLength)
     {
        m_GradientLength	= _GradientLength;
     }
 
-    int Label::GetGradientLength()
-    {
+    float Label::GetGradientLength()
+{
        return m_GradientLength;
     }
 
-    void Label::SetTextRenderingHintAntiAlias(int extRenderingHintAntiAlias)
+    void Label::SetTextRenderingHintAntiAlias(float _TextRenderingHintAntiAlias)
     {
-        if(extRenderingHintAntiAlias < 0 || extRenderingHintAntiAlias > 5)
-            extRenderingHintAntiAlias = 0;
+        if(_TextRenderingHintAntiAlias < 0 || _TextRenderingHintAntiAlias > 5)
+            _TextRenderingHintAntiAlias = 0;
         //m_TextRenderingHintAntiAlias = (TextRenderingHint)extRenderingHintAntiAlias;
     }
 
-    int Label::GetTextRenderingHintAntiAlias()
-    {
+    float Label::GetTextRenderingHintAntiAlias()
+{
         //return m_TextRenderingHintAntiAlias;
         return 1;
     }
 
-    void Label::SetShadowOffset(int _offset,int _angle)
+    void Label::SetShadowOffset(float _offset,float _angle)
     {
         if(_angle > 180 || _angle < -180)
             return;
 
-        RECT rc = m_rcItem;
+        YYRECT rc = m_rcItem;
 
         if(_angle >= 0 && _angle <= 180)
             rc.top -= _offset;
@@ -406,13 +406,13 @@ namespace YUI
         return m_dwStrokeColor;
     }
 
-    void Label::SetGradientAngle(int _SetGradientAngle)
+    void Label::SetGradientAngle(float _SetGradientAngle)
     {
         m_GradientAngle	= _SetGradientAngle;
     }
 
-    int Label::GetGradientAngle()
-    {
+    float Label::GetGradientAngle()
+{
         return m_GradientAngle;
     }
 

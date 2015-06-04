@@ -37,8 +37,8 @@ namespace YUI
 
         virtual RECT                    GetInset() const;
         virtual void                    SetInset(RECT rcInset); // 设置内边距，相当于设置客户区
-        virtual int                     GetChildPadding() const;
-        virtual void                    SetChildPadding(int iPadding);
+        virtual float GetChildPadding() const;
+        virtual void SetChildPadding(float iPadding);
         virtual bool                    IsAutoDestroy() const;
         virtual void                    SetAutoDestroy(bool bAuto);
         virtual bool                    IsDelayedDestroy() const;
@@ -53,16 +53,17 @@ namespace YUI
         virtual void                    SetManager(ControlManager* pManager,ControlUI* pParent,bool bInit=true);
 
         bool                            SetSubControlText(const YString & pstrSubControlName,const YString& pstrText);
-        bool                            SetSubControlFixedHeight(const YString & pstrSubControlName,int cy);
-        bool                            SetSubControlFixedWdith(const YString& pstrSubControlName,int cx);
+        bool SetSubControlFixedHeight(const YString & pstrSubControlName,float cy);
+        bool SetSubControlFixedWdith(const YString& pstrSubControlName,float cx);
         bool                            SetSubControlUserData(const YString& pstrSubControlName,const YString& pstrText);
         YString                         GetSubControlText(const YString& pstrSubControlName);
-        int                             GetSubControlFixedHeight(const YString& pstrSubControlName);
-        int                             GetSubControlFixedWdith(const YString& pstrSubControlName);
+        float GetSubControlFixedHeight(const YString& pstrSubControlName);
+        float GetSubControlFixedWdith(const YString& pstrSubControlName);
         YString                         GetSubControlUserData(LPCTSTR pstrSubControlName);
         ControlUI*                      FindSubControl(const YString& pstrSubControlName);
         virtual ControlUI*
                                         FindControlFromPoint(POINT pt,UINT flag);
+        virtual ControlUI*              FindControlFromName(const YString & strName);
         virtual YYSIZE GetScrollPos() const;
         virtual YYSIZE GetScrollRange() const;
         virtual void                    SetScrollPos(YYSIZE szPos);
@@ -83,11 +84,11 @@ namespace YUI
         virtual Scrollbar*              GetHorizontalScrollBar() const;
     protected:
         virtual void                    SetFloatPos(ControlUI* pControl);
-        virtual void                    ProcessScrollBar(RECT rc, int cxRequired, int cyRequired);
+        virtual void ProcessScrollBar(YYRECT rc, float cxRequired, float cyRequired);
     protected:
         std::list<CountRefPtr<ControlUI> > m_ListItems;
-        RECT                            m_rcInset;    //tag 'inset',基本上相当于收缩当前区域
-        int                             m_iChildPadding;
+        YYRECT                            m_rcInset;    //tag 'inset',基本上相当于收缩当前区域
+        float                            m_iChildPadding;
         bool                            m_bAutoDestroy;
         bool                            m_bDelayedDestroy;
         bool                            m_bMouseChildEnabled;
