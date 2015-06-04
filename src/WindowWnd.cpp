@@ -314,4 +314,19 @@ namespace YUI
 
     }
 
+	void WindowWnd::MaxWindow()
+	{
+		SendMessage(WM_SYSCOMMAND, SC_MAXIMIZE, 0); 
+	}
+
+	void WindowWnd::MinWindow()
+	{
+		SendMessage(WM_SYSCOMMAND, SC_MINIMIZE, 0);
+	}
+
+	void WindowWnd::RestoreWindow()
+	{
+		SendMessage(WM_SYSCOMMAND, SC_RESTORE, 0); 
+	}
+
 }

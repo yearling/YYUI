@@ -38,10 +38,35 @@ namespace YUI
 	{
 		YString msc_fontName = _T("Verdana");
 		static const FLOAT msc_fontSize = 50;
-		CountRefPtr<Button> pButton(dynamic_cast<Button*>(m_pControlManger->FindControl(_T("closebtn"))));
+		Button *pButton(dynamic_cast<Button*>(m_pControlManger->FindControl(_T("closebtn"))));
 		assert(pButton && "pButton not find");
 		pButton->SetClickEvent([&](){
 			Close();
+		});
+		pButton = dynamic_cast<Button*>(m_pControlManger->FindControl(_T("minbtn")));
+		assert(pButton && "pButton not find");
+		pButton->SetClickEvent([&](){
+			MinWindow();
+		});
+		pButton = dynamic_cast<Button*>(m_pControlManger->FindControl(_T("maxbtn")));
+		assert(pButton && "pButton not find");
+		pButton->SetClickEvent([&](){
+			MaxWindow();
+			Button* pButton = dynamic_cast<Button*>(m_pControlManger->FindControl(_T("maxbtn")));
+			pButton->SetVisible(false);
+			CountRefPtr<Button> RestoreButton = dynamic_cast<Button*>(m_pControlManger->FindControl(_T("restorebtn")));	
+			assert(RestoreButton && "restore button can't find");
+			RestoreButton->SetVisible(true);
+		});
+		pButton = dynamic_cast<Button*>(m_pControlManger->FindControl(_T("restorebtn")));
+		assert(pButton && "pButton not find");
+		pButton->SetClickEvent([&](){
+			RestoreWindow();
+			Button *pButton = dynamic_cast<Button*>(m_pControlManger->FindControl(_T("restorebtn")));
+			pButton->SetVisible(false);
+			CountRefPtr<Button> MaxButton = dynamic_cast<Button*>(m_pControlManger->FindControl(_T("maxbtn")));	
+			assert(MaxButton && "restore button can't find");
+			MaxButton->SetVisible(true);
 		});
 		HRESULT hr = S_OK;
 	}

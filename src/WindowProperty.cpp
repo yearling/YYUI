@@ -184,7 +184,4 @@ namespace YUI
         return m_SelectBKColor;
     }
 
-
-    
-
 }

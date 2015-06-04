@@ -64,6 +64,9 @@ namespace YUI
         void                            ShowWindow(bool bShow = true, bool bTakeFocus = true);
         UINT                            ShowModal();
         void                            Close(UINT nRet = IDOK);
+		void							MaxWindow();
+		void							MinWindow();
+		void							RestoreWindow();
         void                            CenterWindow();
         LRESULT                         SendMessage(UINT uMsg, WPARAM wParam = 0, LPARAM lParam = 0L);
         LRESULT                         PostMessage(UINT uMsg, WPARAM wParam = 0, LPARAM lParam = 0L); 
