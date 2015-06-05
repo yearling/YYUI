@@ -36,10 +36,6 @@ namespace YUI
         m_cXYFixed.width = m_cXYFixed.height = 0;
         m_cxyMin.width = m_cxyMin.height = 0;
         m_cxyMax.width = m_cxyMax.height = 9999;
-        ZeroMemory(&m_rcPaint,sizeof(YYRECT));
-        ZeroMemory(&m_rcItem, sizeof(YYRECT));
-        ZeroMemory(&m_rcPadding, sizeof(YYRECT));
-        ZeroMemory(&m_rcBorderSize ,sizeof(YYRECT));
         ZeroMemory(&m_RelativePos,sizeof(RelativePosUI));
         AddHandler();
     }
@@ -364,7 +360,6 @@ namespace YUI
     {
         m_rcBorderSize.bottom = nSize;
         Invalidate();
-
     }
 
     int ControlUI::GetBorderStyle() const
@@ -385,15 +380,10 @@ namespace YUI
 
     void ControlUI::SetPos(YYRECT &rc)
     {
-        if( rc.right < rc.left ) 
-            std::swap(rc.right,rc.left);
-        if( rc.bottom < rc.top ) 
-            std::swap(rc.top,rc.bottom);
-            
-
+        rc.Normalize();
         YYRECT invalidateRc = m_rcItem;
         //!!FIX ME
-        //if( ::IsRectEmpty(&invalidateRc) ) 
+        if( invalidateRc.Empty() ) 
             invalidateRc = rc;
 
         m_rcItem = rc;
@@ -405,15 +395,21 @@ namespace YUI
             if( OnSize ) OnSize(shared_from_this());
             m_bSetPos = false;
         }*/
-
-        if( m_bFloat ) {
+        //Ã»¿´¶®£¡£¡
+        if( m_bFloat ) 
+        {
             auto pParent = GetParent();
-            if( pParent ) {
+            if( pParent ) 
+            {
                 YYRECT rcParentPos = pParent->GetPos();
-                if( m_cXY.width >= 0 ) m_cXY.width = m_rcItem.left - rcParentPos.left;
-                else m_cXY.width = m_rcItem.right - rcParentPos.right;
-                if( m_cXY.height >= 0 ) m_cXY.height = m_rcItem.top - rcParentPos.top;
-                else m_cXY.height = m_rcItem.bottom - rcParentPos.bottom;
+                if( m_cXY.width >= 0 ) 
+                    m_cXY.width = m_rcItem.left - rcParentPos.left;
+                else
+                    m_cXY.width = m_rcItem.right - rcParentPos.right;
+                if( m_cXY.height >= 0 ) 
+                    m_cXY.height = m_rcItem.top - rcParentPos.top;
+                else 
+                    m_cXY.height = m_rcItem.bottom - rcParentPos.bottom;
                 m_cXYFixed.width = m_rcItem.right - m_rcItem.left;
                 m_cXYFixed.height = m_rcItem.bottom - m_rcItem.top;
             }
@@ -430,10 +426,10 @@ namespace YUI
             rcTemp = invalidateRc;
             rcParent = pParent->GetPos();
             //!!FIX ME
-           // if( !::IntersectRect(&invalidateRc, &rcTemp, &rcParent) ) 
-           // {
-           //     return;
-           // }
+            if( !IntersectRect(&invalidateRc, rcTemp, rcParent) ) 
+            {
+                return;
+            }
         }
         m_pManager->Invalidate(invalidateRc);
     }
@@ -789,11 +785,13 @@ namespace YUI
 
     void ControlUI::NeedUpdate()
     {
-        if( !IsVisible() ) return;
+        if( !IsVisible() ) 
+            return;
         m_bUpdateNeeded = true;
         Invalidate();
 
-        if( m_pManager != NULL ) m_pManager->NeedUpdate();
+        if( m_pManager != NULL ) 
+            m_pManager->NeedUpdate();
     }
 
     void ControlUI::NeedParentUpdate()

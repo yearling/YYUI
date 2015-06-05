@@ -13,7 +13,10 @@ namespace YUI
         void                            Invalidate(const YYRECT &rc);
         void                            SendMsg(ControlUI* pControl,const MsgWrap &msg);
         void                            NeedUpdate() { m_bNeedUpdate = true;}
+        //递归的设ControlManger和Parent
         void                            InitControls(ControlUI *pControl,ControlUI* parent);
+        //把pControl设为RootControl
+        //再调用InitControls设this和父节点
         void                            AttachDialog(ControlUI* pControl);
     public:
         ControlUI*                      GetFocus() const;
@@ -37,7 +40,6 @@ namespace YUI
         bool                            m_bMouseTracking;
         TOOLINFO                        m_ToolTip;
         bool                            m_bMouseCapture;
-        HWND                            m_hwndTooltip;
     };
 
 

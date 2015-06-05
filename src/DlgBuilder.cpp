@@ -270,7 +270,7 @@ namespace YUI
                 //attach to parent
                 if(pParent)
                 {
-                    //如果父空间是个container,把当前control加到containerk中去
+                    //如果父控件是个container,把当前control加到container中去
                     IContainer* pContianer = dynamic_cast<IContainer* >(pParent);
                     if(!pContianer)
                         return nullptr;

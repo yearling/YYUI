@@ -206,6 +206,15 @@ namespace YUI
 		{
 			Inflate(-cx,-cy);
 		}
+        //缩小一个border,rc定义的是各边要缩的量
+        void Deflate(const YYRECT &rc)
+        {
+            Normalize();
+            left +=rc.left;
+            right -= rc.right;
+            top += rc.top;
+            bottom -= rc.bottom;
+        }
 		void Union(const YYRECT &rc)
 		{
 			left = (std::min)(left,rc.left);

@@ -200,6 +200,7 @@ namespace YUI
             if(IntersectRect(&rcTemp,rcPaint,subRC))
             { 
                 ClipRegionDef subRegion(rcTemp);
+                //ClipRect时把，把清除subRegion放到了subRegion的destroyer里
                 canvas.ClipRect(subRegion);
                
                  for(auto &item : m_ListItems )
@@ -497,10 +498,13 @@ namespace YUI
     void Container::SetFloatPos(ControlUI* pControl)
     {
         // 因为CControlUI::SetPos对float的操作影响，这里不能对float组件添加滚动条的影响
-        if( !pControl || m_ListItems.empty() ) return;
+        if( !pControl || m_ListItems.empty() )
+            return;
 
-        if( !pControl->IsVisible() ) return;
-        if( !pControl->IsFloat() ) return;
+        if( !pControl->IsVisible() ) 
+            return;
+        if( !pControl->IsFloat() ) 
+            return;
 
         YYSIZE szXY = pControl->GetFixedXY();
         YYSIZE sz(pControl->GetFixedWidth(), pControl->GetFixedHeight());

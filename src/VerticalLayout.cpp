@@ -33,8 +33,10 @@ namespace YUI
 
     UINT VerticalLayout::GetControlFlags() const
     {
-        if( IsEnabled() && m_iSepHeight != 0 ) return UIFLAG_SETCURSOR;
-        else return 0;
+        if( IsEnabled() && m_iSepHeight != 0 ) 
+            return UIFLAG_SETCURSOR;
+        else 
+            return 0;
     }
 
  
@@ -42,13 +44,11 @@ namespace YUI
     void VerticalLayout::SetPos(YYRECT &rc)
     {
         ControlUI::SetPos(rc);
+        //传出来的是子类修正过的RECT
         //////////////////////////////////////////////////////////////////////////
         rc = m_rcItem;
         // Adjust for inset
-        rc.left += m_rcInset.left;
-        rc.top += m_rcInset.top;
-        rc.right -= m_rcInset.right;
-        rc.bottom -= m_rcInset.bottom;
+        rc.Deflate(m_rcInset);
       /*  if( m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible() ) rc.right -= m_pVerticalScrollBar->GetFixedWidth();
         if( m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible() ) rc.bottom -= m_pHorizontalScrollBar->GetFixedHeight();*/
 
@@ -62,28 +62,44 @@ namespace YUI
        /* if( m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible() ) 
             szAvailable.width += m_pHorizontalScrollBar->GetScrollRange();*/
   
-        int nAdjustables = 0;
+        //用来计算自动划分的区域大小（auto Extend)
+        int nNumAutoExtend = 0;
+        //固定区域大小，就是除了float的，自己的Height！=0
         float cyFixed = 0.f;
         int nEstimateNum = 0;
-        for( auto pControl : m_ListItems ) {
-            if( !pControl->IsVisible() ) continue;
-            if( pControl->IsFloat() ) continue;
+
+        for( auto pControl : m_ListItems ) 
+        {
+            //看不见的不做贡献
+            if( !pControl->IsVisible() ) 
+                continue;
+            //float型的不做贡献
+            if( pControl->IsFloat() ) 
+                continue;
             YYSIZE sz = pControl->EstimateSize(szAvailable);
-            if( sz.height == 0 ) {
-                nAdjustables++;
+            //如果height为0，说明是自动划分
+            if( sz.height == 0 ) 
+            {
+                nNumAutoExtend++;
             }
-            else {
-                if( sz.height < pControl->GetMinHeight() ) sz.height = pControl->GetMinHeight();
-                if( sz.height > pControl->GetMaxHeight() ) sz.height = pControl->GetMaxHeight();
+            else
+            {
+                //保证子控件大小在自己定义的大小内
+                if( sz.height < pControl->GetMinHeight() ) 
+                    sz.height = pControl->GetMinHeight();
+                if( sz.height > pControl->GetMaxHeight() ) 
+                    sz.height = pControl->GetMaxHeight();
             }
-            cyFixed += sz.height + pControl->GetPadding().top + pControl->GetPadding().bottom;
+            cyFixed += ( sz.height + pControl->GetPadding().top + pControl->GetPadding().bottom);
             nEstimateNum++;
         }
         cyFixed += (nEstimateNum - 1) * m_iChildPadding;
         // Place elements
-        float cyNeeded = 0;
+        float cyNeeded = 0; 
+        //自动划分层的大小
 		float cyExpand = 0;
-        if( nAdjustables > 0 ) cyExpand = max(0, (szAvailable.height - cyFixed) / nAdjustables);
+        if( nNumAutoExtend > 0 ) 
+            cyExpand = max(0, (szAvailable.height - cyFixed) / nNumAutoExtend);
         // Position the elements
         YYSIZE szRemaining = szAvailable;
         float iPosY = rc.top;
@@ -95,7 +111,7 @@ namespace YUI
         if( m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible() ) {
             iPosX -= m_pHorizontalScrollBar->GetScrollPos();
         }*/
-        float iAdjustable = 0;
+        float iAutoable = 0;
         float cyFixedRemaining = cyFixed;
         for( auto pControl: m_ListItems ) 
         {
@@ -110,28 +126,43 @@ namespace YUI
             YYRECT rcPadding = pControl->GetPadding();
             szRemaining.height -= rcPadding.top;
             YYSIZE sz = pControl->EstimateSize(szRemaining);
-            if( sz.height == 0 ) {
-                iAdjustable++;
+            if( sz.height == 0 ) 
+            {
+                iAutoable++;
                 sz.height = cyExpand;
                 // Distribute remaining to last element (usually round-off left-overs)
-                if( iAdjustable == nAdjustables ) {
+                if( iAutoable == nNumAutoExtend ) 
+                {
                     sz.height = max(0, szRemaining.height - rcPadding.bottom - cyFixedRemaining);
                 } 
-                if( sz.height < pControl->GetMinHeight() ) sz.height = pControl->GetMinHeight();
-                if( sz.height > pControl->GetMaxHeight() ) sz.height = pControl->GetMaxHeight();
+                if( sz.height < pControl->GetMinHeight() ) 
+                    sz.height = pControl->GetMinHeight();
+                if( sz.height > pControl->GetMaxHeight() ) 
+                    sz.height = pControl->GetMaxHeight();
             }
-            else {
-                if( sz.height < pControl->GetMinHeight() ) sz.height = pControl->GetMinHeight();
-                if( sz.height > pControl->GetMaxHeight() ) sz.height = pControl->GetMaxHeight();
+            else 
+            {
+                if( sz.height < pControl->GetMinHeight() ) 
+                    sz.height = pControl->GetMinHeight();
+                if( sz.height > pControl->GetMaxHeight() ) 
+                    sz.height = pControl->GetMaxHeight();
                 cyFixedRemaining -= sz.height;
             }
 
             sz.width = pControl->GetFixedWidth();
-            if( sz.width == 0 ) sz.width = szAvailable.width - rcPadding.left - rcPadding.right;
-            if( sz.width < 0 ) sz.width = 0;
-            if( sz.width < pControl->GetMinWidth() ) sz.width = pControl->GetMinWidth();
-            if( sz.width > pControl->GetMaxWidth() ) sz.width = pControl->GetMaxWidth();
-            YYRECT rcCtrl(iPosX + rcPadding.left, iPosY + rcPadding.top, iPosX + rcPadding.left + sz.width, iPosY + sz.height + rcPadding.top + rcPadding.bottom );
+            if( sz.width == 0 ) 
+                sz.width = szAvailable.width - rcPadding.left - rcPadding.right;
+            if( sz.width < 0 ) 
+                sz.width = 0;
+            if( sz.width < pControl->GetMinWidth() ) 
+                sz.width = pControl->GetMinWidth();
+            if( sz.width > pControl->GetMaxWidth() ) 
+                sz.width = pControl->GetMaxWidth();
+            YYRECT rcCtrl(iPosX + rcPadding.left,
+                          iPosY + rcPadding.top, 
+                          iPosX + rcPadding.left + sz.width, 
+                          iPosY + sz.height + rcPadding.top + rcPadding.bottom );
+
             pControl->SetPos(rcCtrl);
 
             iPosY += sz.height + m_iChildPadding + rcPadding.top + rcPadding.bottom;
@@ -146,7 +177,8 @@ namespace YUI
 
     void VerticalLayout::DoPostPaint(HDC hDC, const YYRECT& rcPaint)
     {
-        if( (m_uButtonState & UISTATE_CAPTURED) != 0 && !m_bImmMode ) {
+        if( (m_uButtonState & UISTATE_CAPTURED) != 0 && !m_bImmMode ) 
+        {
             RECT rcSeparator = GetThumbRect(true);
             //RenderGDI::/*DrawColor*/(hDC, rcSeparator, 0xAA000000);
         }
@@ -154,7 +186,8 @@ namespace YUI
 
     YUI::YYRECT VerticalLayout::GetThumbRect(bool bUseNew /*= false*/) const
     {
-        if( (m_uButtonState & UISTATE_CAPTURED) != 0 && bUseNew) {
+        if( (m_uButtonState & UISTATE_CAPTURED) != 0 && bUseNew) 
+        {
             if( m_iSepHeight >= 0 ) 
                 return YYRECT(m_rcNewPos.left, max(m_rcNewPos.bottom - m_iSepHeight, m_rcNewPos.top), 
                 m_rcNewPos.right, m_rcNewPos.bottom);
@@ -162,7 +195,8 @@ namespace YUI
                 return YYRECT(m_rcNewPos.left, m_rcNewPos.top, m_rcNewPos.right, 
                 min(m_rcNewPos.top - m_iSepHeight, m_rcNewPos.bottom));
         }
-        else {
+        else
+        {
             if( m_iSepHeight >= 0 ) 
                 return YYRECT(m_rcItem.left, max(m_rcItem.bottom - m_iSepHeight, m_rcItem.top), m_rcItem.right, 
                 m_rcItem.bottom);
@@ -185,7 +219,8 @@ namespace YUI
     void VerticalLayout::SetSepImmMode(bool bImmediately)
     {
         if( m_bImmMode == bImmediately ) return;
-        if( (m_uButtonState & UISTATE_CAPTURED) != 0 && !m_bImmMode && m_pManager != NULL ) {
+        if( (m_uButtonState & UISTATE_CAPTURED) != 0 && !m_bImmMode && m_pManager != NULL )
+        {
             //m_pManager->RemovePostPaint(shared_from_this());
         }
 

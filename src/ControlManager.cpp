@@ -20,7 +20,6 @@ namespace YUI
         ,m_bNeedUpdate(false)
         ,m_bMouseTracking(false)
         ,m_bMouseCapture(false)
-        ,m_hwndTooltip(NULL)
     {
     }
 
@@ -76,6 +75,7 @@ namespace YUI
 
     void ControlManager::SendMsg(ControlUI* pControl,const MsgWrap &msg)
     {
+        assert(pControl && " pControl should not be nullptr");
         pControl->HandleMsg(msg);
     }
 
@@ -89,6 +89,7 @@ namespace YUI
         assert(pControl);
         if( !pControl )
             return;
+        //递归调用，因为SetMnanger是虚函数；ControlUI的SetManager才是设置，Container是用来分发的。
         if(parent)
             pControl->SetManager(this,parent,true);
         else
@@ -112,7 +113,6 @@ namespace YUI
         {
         case WM_CLOSE:
             {
-                Ycout<<"ControlManger: WM_CLOSE"<<endl;
                 MsgWrap msg;
                 msg.ptMouse = m_ptLastMousePos;
                 msg.lTimeStamp = ::GetTickCount();
@@ -141,13 +141,11 @@ namespace YUI
             break;
         case WM_ERASEBKGND:
             {
-                Ycout<<"ControlManger: WM_ERASEBAKGROUND"<<endl;
                 lRes = 1;
             }
             return true;
         case WM_PAINT:
             {
-                Ycout<<"ControlManger: WM_PAINT"<<endl;
                 RECT rcPaint = { 0 };
                 //不需要更新
                 if( ! ::GetUpdateRect(m_hWnd,&rcPaint,FALSE) )
@@ -190,7 +188,6 @@ namespace YUI
             }
         case WM_SIZE:
             {
-                Ycout<<"ControlManger: size"<<endl;
                 if(m_pFocus)
                 {
                     MsgWrap msg;
@@ -205,14 +202,11 @@ namespace YUI
             return true;
         case WM_TIMER:
             {
-
-                Ycout<<"ControlManger: WM_TIME"<<endl;
             }
             break;
 
         case WM_MOUSEHOVER:
             {
-                Ycout<<"ControlManger: WM_MOUSEHOVER"<<endl;
                 POINT pt= { GET_X_LPARAM( lParam ), GET_Y_LPARAM(lParam) };
                 m_bMouseTracking = false;
                 auto spControl = FindControl(pt);
@@ -227,52 +221,30 @@ namespace YUI
                     msg.lTimeStamp = ::GetTickCount();
                     SendMsg(m_pHover,msg);
                 }
-                YString strToolTip = spControl->GetToolTip();
-                if(strToolTip.empty())
-                    return true;
-                ::ZeroMemory(&m_ToolTip, sizeof(TOOLINFO));
-                m_ToolTip.cbSize = sizeof(TOOLINFO);
-                m_ToolTip.uFlags = TTF_IDISHWND;
-                m_ToolTip.hwnd = m_hWnd;
-                m_ToolTip.uId = (UINT_PTR) m_hWnd;
-                m_ToolTip.hinst = SystemInfo::GetInstance()->GetProcessInstance();
-                m_ToolTip.lpszText = const_cast<LPTSTR>( (LPCTSTR) strToolTip.c_str() );
-                m_ToolTip.rect = spControl->GetPos();
-                if( m_hwndTooltip == NULL ) {
-                    m_hwndTooltip = ::CreateWindowEx(0, TOOLTIPS_CLASS, NULL, WS_POPUP | TTS_NOPREFIX | TTS_ALWAYSTIP, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, m_hWnd, NULL, SystemInfo::GetInstance()->GetProcessInstance(), NULL);
-                    ::SendMessage(m_hwndTooltip, TTM_ADDTOOL, 0, (LPARAM) &m_ToolTip);
-                }
-                ::SendMessage( m_hwndTooltip,TTM_SETMAXTIPWIDTH,0, spControl->GetToolTipWidth());
-                ::SendMessage(m_hwndTooltip, TTM_SETTOOLINFO, 0, (LPARAM) &m_ToolTip);
-                ::SendMessage(m_hwndTooltip, TTM_TRACKACTIVATE, TRUE, (LPARAM) &m_ToolTip);
             }
             return true;
             break;
         case WM_MOUSELEAVE:
             {
-                Ycout<<"ControlManger: WM_MOUSELEAVE"<<endl;
-                if( m_hwndTooltip != NULL ) 
-                    ::SendMessage(m_hwndTooltip, TTM_TRACKACTIVATE, FALSE, (LPARAM) &m_ToolTip);
-                if( m_bMouseTracking ) ::SendMessage(m_hWnd, WM_MOUSEMOVE, 0, (LPARAM) -1);
+                if( m_bMouseTracking ) 
+                    ::SendMessage(m_hWnd, WM_MOUSEMOVE, 0, (LPARAM) -1);
                 m_bMouseTracking = false;
             }
             break;
         case WM_MOUSEMOVE:
             {
                
-                Ycout<<"ControlManger: WM_MOUSEMOVE"<<endl;
                 if( !m_bMouseTracking ) {
                     TRACKMOUSEEVENT tme = { 0 };
                     tme.cbSize = sizeof(TRACKMOUSEEVENT);
                     tme.dwFlags = TME_HOVER | TME_LEAVE;
                     tme.hwndTrack = m_hWnd;
-                    tme.dwHoverTime = m_hwndTooltip == NULL ? 400UL : (DWORD) ::SendMessage(m_hwndTooltip, TTM_GETDELAYTIME, TTDT_INITIAL, 0L);
+                    tme.dwHoverTime = 400UL;
                     TrackMouseEvent(&tme);
                     m_bMouseTracking = true;
                 }
                 POINT pt= { GET_X_LPARAM( lParam) ,GET_Y_LPARAM(lParam) };
                 m_ptLastMousePos = pt;
-				cout<<"PT x: "<<pt.x <<"  ,"<<pt.y<<endl;
                 ControlUI* spNewHover = FindControl(pt);
                 MsgWrap msg;
                 msg.strType = UIMSG_MOUSELEAVE;
@@ -282,7 +254,6 @@ namespace YUI
                 //Ycout<<"move mouse find control: "<<spNewHover->GetName()<<endl;
                 if(spNewHover != m_pHover && m_pHover)
                 {
-					cout<<"Send LEAVE MSG"<<endl;
                     msg.strType = UIMSG_MOUSELEAVE;
                     msg.lTimeStamp = ::GetTickCount();
                     msg.ptMouse = pt;
@@ -293,7 +264,6 @@ namespace YUI
                 //新旧的hover不一样，新的存在
                 if(spNewHover != m_pHover && spNewHover)
                 {
-					cout<<"Send Enter Msg"<<endl;
                     msg.strType = UIMSG_MOUSEENTER;
                     msg.pSender = spNewHover;
                     SendMsg(spNewHover ,msg);
@@ -308,7 +278,6 @@ namespace YUI
                 }
                 else if( spNewHover )
                 {
-					cout<<"Send MOuse Move"<<endl;
                     msg.strType = UIMSG_MOUSEMOVE;
                     msg.pSender = spNewHover;
                     SendMsg(spNewHover,msg);
@@ -318,7 +287,6 @@ namespace YUI
             break;
        case WM_LBUTTONDOWN:
             {
-                Ycout<<"ControlManger: WM_LBUTTONDOWN"<<endl;
                 ::SetFocus(m_hWnd);
                 POINT pt= { GET_X_LPARAM(lParam),GET_Y_LPARAM(lParam)};
                 m_ptLastMousePos = pt;
@@ -345,7 +313,6 @@ namespace YUI
             break;
         case WM_LBUTTONDBLCLK:
             {
-                Ycout<<"ControlManger: WM_LBUTTONDBLICK"<<endl;
                 ::SetFocus(m_hWnd);
                 POINT pt= { GET_X_LPARAM(lParam),GET_Y_LPARAM(lParam)};
                 m_ptLastMousePos = pt;
@@ -371,7 +338,6 @@ namespace YUI
             break;
         case WM_LBUTTONUP:
             {
-                Ycout<<"ControlManger: WM_LBUTTON up"<<endl;
                 POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
                 m_ptLastMousePos = pt;
              
@@ -390,7 +356,6 @@ namespace YUI
             break;
         case WM_RBUTTONDOWN:
             {
-                Ycout<<"ControlManger: WM_LBUTTON down"<<endl;
                 ::SetFocus(m_hWnd);
                 POINT pt= { GET_X_LPARAM(lParam),GET_Y_LPARAM(lParam)};
                 m_ptLastMousePos = pt;
@@ -437,7 +402,6 @@ namespace YUI
             break;
         case WM_MOUSEWHEEL:
             {
-                Ycout<<"ControlManger: WM_LBUTTONUP"<<endl;
                 ::SetFocus(m_hWnd);
                 POINT pt= { GET_X_LPARAM(lParam),GET_Y_LPARAM(lParam)};
                 m_ptLastMousePos = pt;
@@ -463,7 +427,6 @@ namespace YUI
             break;
         case WM_CHAR:
             {
-                Ycout<<"ControlManger: WM_char"<<endl;
                 if( ! m_pFocus )
                     break;
                 MsgWrap msg;
@@ -477,7 +440,6 @@ namespace YUI
             break;
         case WM_KEYDOWN:
             {
-                Ycout<<"ControlManger: WM_keydown"<<endl;
                 if( ! m_pFocus )
                     break;
                 MsgWrap msg;
@@ -491,7 +453,6 @@ namespace YUI
             break;
         case WM_KEYUP:
             {
-                Ycout<<"ControlManger: WM_keyup"<<endl;
                 if( ! m_pFocus )
                     break;
                 MsgWrap msg;
@@ -505,17 +466,13 @@ namespace YUI
             break;
         case WM_SETCURSOR:
             {
-                static int i=0;
-                Ycout<<"ControlManger: WM_set cursor   "<<i++<<endl;
                 if( LOWORD(lParam) != HTCLIENT ) break;
-
                 POINT pt = { 0 };
                 ::GetCursorPos(&pt);
                 ::ScreenToClient(m_hWnd, &pt);
                 auto spControl = FindControl(pt);
                 if( spControl == NULL )
                 {
-                     Ycout<<"find control is null"<<endl;
                      break;
                 }
                 if( (spControl->GetControlFlags() & UIFLAG_SETCURSOR) == 0 ) break;
@@ -530,7 +487,6 @@ namespace YUI
             return true;
         case WM_NOTIFY:
             {
-                Ycout<<"ControlManger: WM_ nofity"<<endl;
                 LPNMHDR lpNMHDR = (LPNMHDR) lParam;
                 if( lpNMHDR != NULL ) lRes = ::SendMessage(lpNMHDR->hwndFrom, OCM__BASE + uMesg, wParam, lParam);
                 return true;
@@ -538,7 +494,6 @@ namespace YUI
             break;
         case WM_COMMAND:
             {
-                Ycout<<"ControlManger: WM_ command"<<endl;
                 if( lParam == 0 ) break;
                 HWND hWndChild = (HWND) lParam;
                 lRes = ::SendMessage(hWndChild, OCM__BASE + uMesg, wParam, lParam);
