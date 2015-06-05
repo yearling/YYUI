@@ -30,7 +30,7 @@
     <ClInclude Include="..\..\include\SystemInfo.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\D2DWnd.h">
+    <ClInclude Include="D2DWnd.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -38,10 +38,10 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\D2DWnd.cpp">
+    <ClCompile Include="YUI.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="YUI.cpp">
+    <ClCompile Include="D2DWnd.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -51,16 +51,19 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="small.ico">
-      <Filter>资源文件</Filter>
-    </Image>
-    <Image Include="YUI.ico">
-      <Filter>资源文件</Filter>
-    </Image>
-    <Image Include="icon1.ico">
-      <Filter>资源文件</Filter>
-    </Image>
     <Image Include="00706.ico">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\..\x64\Debug\CatIcon\cat.ico">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="icon3.ico">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\..\x64\Debug\CatIcon\blackCat.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="..\..\x64\Debug\icons\blackCat.ico">
       <Filter>资源文件</Filter>
     </Image>
   </ItemGroup>

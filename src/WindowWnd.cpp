@@ -299,14 +299,14 @@ namespace YUI
 
     void WindowWnd::SetIcon(UINT nRes)
     {
-        //HICON hIcon = (HICON)::LoadImage(PaintManagerUI::GetInstance(), 
-        //                                MAKEINTRESOURCE(nRes), 
-        //                                IMAGE_ICON,
-        //                                (::GetSystemMetrics(SM_CXICON) + 15) & ~15,
-        //                                (::GetSystemMetrics(SM_CYICON) + 15) & ~15,	// 防止高DPI下图标模糊
-        //                                LR_DEFAULTCOLOR);
-       /* assert(hIcon);
-        ::SendMessage( m_hWnd, WM_SETICON, (WPARAM)FALSE, (LPARAM)hIcon);*/
+        HICON hIcon = (HICON)::LoadImage(SystemInfo::GetInstance()->GetProcessInstance(), 
+                                        MAKEINTRESOURCE(nRes), 
+                                        IMAGE_ICON,
+                                        (::GetSystemMetrics(SM_CXICON) + 15) & ~15,
+                                        (::GetSystemMetrics(SM_CYICON) + 15) & ~15,	// 防止高DPI下图标模糊
+                                        LR_DEFAULTCOLOR);
+        assert(hIcon && "create icon failed!");
+        ::SendMessage( m_hWnd, WM_SETICON, (WPARAM)FALSE, (LPARAM)hIcon);
     }
 
     WindowWnd::~WindowWnd()

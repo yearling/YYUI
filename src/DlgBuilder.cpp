@@ -75,11 +75,9 @@ namespace YUI
                     pstrValue = pRoot->Attribute("size");
                     if(pstrValue)
                     {
-                        int cx = (float)strtol(pstrValue,&pstr,10);
-                        int cy = (float)strtol(pstr+1,&pstr,10);
+                        float cx = (float)strtol(pstrValue,&pstr,10);
+                        float cy = (float)strtol(pstr+1,&pstr,10);
                         Winproperty.SetInitSize(cx,cy);
-                        cout<<"size: cx:"<<cx<<endl;
-                        cout<<"size: cy:"<<cy<<endl;
                     }
                 }
                 //sizeBox
@@ -88,7 +86,7 @@ namespace YUI
 
                     if(pstrValue) 
                     {
-                        RECT rcSizeBox = { 0 };
+                        YYRECT rcSizeBox;
                         pstr = nullptr;
                         rcSizeBox.left = (float)strtol(pstrValue, &pstr, 10);  assert(pstr);    
                         rcSizeBox.top = (float)strtol(pstr + 1, &pstr, 10);    assert(pstr);    
@@ -102,7 +100,7 @@ namespace YUI
                     pstrValue = pRoot->Attribute("caption");
                     if(pstrValue)
                     {
-                        RECT rcCaption = { 0 };
+                        YYRECT rcCaption;
                         pstr = NULL;
                         rcCaption.left = (float)strtol(pstrValue, &pstr, 10);  assert(pstr);    
                         rcCaption.top = (float)strtol(pstr + 1, &pstr, 10);    assert(pstr);    
@@ -115,8 +113,8 @@ namespace YUI
                 {
                     if( pstrValue = pRoot->Attribute("roundcorner") )
                     {
-                        int cx = (float)strtol(pstrValue, &pstr, 10);  assert(pstr);    
-                        int cy = (float)strtol(pstr + 1, &pstr, 10);    assert(pstr); 
+                        float cx = (float)strtol(pstrValue, &pstr, 10);  assert(pstr);    
+                        float cy = (float)strtol(pstr + 1, &pstr, 10);    assert(pstr); 
                         //pManager->SetRoundCorner(cx, cy); 
                     }
                 }
@@ -124,8 +122,8 @@ namespace YUI
                 {
                     if( pstrValue = pRoot->Attribute("mininfo") )
                     {
-                        int cx = (float)strtol(pstrValue, &pstr, 10);  assert(pstr);    
-                        int cy = (float)strtol(pstr + 1, &pstr, 10);    assert(pstr); 
+                        float cx = (float)strtol(pstrValue, &pstr, 10);  assert(pstr);    
+                        float cy = (float)strtol(pstr + 1, &pstr, 10);    assert(pstr); 
                         Winproperty.SetMinInfo(cx, cy);
                     }
                 }
@@ -133,8 +131,8 @@ namespace YUI
                 {
                     if( pstrValue = pRoot->Attribute("maxinfo") )
                     {
-                        int cx = (float)strtol(pstrValue, &pstr, 10);  assert(pstr);    
-                        int cy = (float)strtol(pstr + 1, &pstr, 10);    assert(pstr); 
+                        float cx = (float)strtol(pstrValue, &pstr, 10);  assert(pstr);    
+                        float cy = (float)strtol(pstr + 1, &pstr, 10);    assert(pstr); 
                         Winproperty.SetMinInfo(cx, cy);
                     }
                 }

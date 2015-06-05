@@ -16,15 +16,15 @@ namespace YUI
         YYSIZE                          GetClientSize() const;
         YYRECT                          GetClientRect() const;
         YYSIZE                          GetInitSize() const;
-        void                            SetInitSize(int cx, int cy);
+        void SetInitSize(float cx, float cy);
         YYRECT                          GetSizeBox() const ;
         void                            SetSizeBox(const RECT &rcSizeBox);
         YYRECT                          GetCaptionRect() const ;
         void                            SetCaptionRect( const RECT & rcCaption);
         YYSIZE                          GetMinInfo() const;
-        void                            SetMinInfo(int cx, int cy);
+        void                            SetMinInfo(float cx, float cy);
         YYSIZE                          GetMaxInfo() const;
-        void                            SetMaxInfo(int cx, int cy);
+        void SetMaxInfo(float cx, float cy);
         float GetTransparent() const;
         void                            SetTransparent(float nOpacity);
         void                            SetBackgroundTransparent(bool bTrans);

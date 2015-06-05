@@ -255,7 +255,7 @@ namespace YUI
         else if( strcmp(pstrName, "vscrollbar") == 0 ) {
             EnableScrollBar(strcmp(pstrValue, "true") == 0, GetHorizontalScrollBar() != NULL);
         }
-        else if( strcmp(pstrName,"childpadding") == 0 ) SetChildPadding(atoi(pstrValue));
+        else if( strcmp(pstrName,"childpadding") == 0 ) SetChildPadding((float)atoi(pstrValue));
         else ControlUI::SetAttribute(strName, strValue);
     }
 

@@ -888,7 +888,7 @@ namespace YUI
             std::string nValue = pstrValue;
             if(nValue.find((',')) < 0)
             {
-                SetBorderSize(atoi(pstrValue));
+                SetBorderSize((float)atoi(pstrValue));
                 YYRECT rcPadding;
                 SetBorderSize(rcPadding);
             }
@@ -903,10 +903,10 @@ namespace YUI
                 SetBorderSize(rcPadding);
             }
         }
-        else if( strcmp(pstrName, ("leftbordersize")) == 0 ) SetLeftBorderSize(atoi(pstrValue));
-        else if( strcmp(pstrName, ("topbordersize")) == 0 ) SetTopBorderSize(atoi(pstrValue));
-        else if( strcmp(pstrName, ("rightbordersize")) == 0 ) SetRightBorderSize(atoi(pstrValue));
-        else if( strcmp(pstrName, ("bottombordersize")) == 0 ) SetBottomBorderSize(atoi(pstrValue));
+        else if( strcmp(pstrName, ("leftbordersize")) == 0 ) SetLeftBorderSize((float)atoi(pstrValue));
+        else if( strcmp(pstrName, ("topbordersize")) == 0 ) SetTopBorderSize((float)atoi(pstrValue));
+        else if( strcmp(pstrName, ("rightbordersize")) == 0 ) SetRightBorderSize((float)atoi(pstrValue));
+        else if( strcmp(pstrName, ("bottombordersize")) == 0 ) SetBottomBorderSize((float)atoi(pstrValue));
         else if( strcmp(pstrName, ("borderstyle")) == 0 ) SetBorderStyle(atoi(pstrValue));
         else if( strcmp(pstrName, ("borderround")) == 0 ) {
             YYSIZE cxyRound;
@@ -915,12 +915,12 @@ namespace YUI
             cxyRound.height = (float)strtol(pstr + 1, &pstr, 10);    assert(pstr);     
         }
         else if( strcmp(pstrName, ("bkimage")) == 0 )   SetBkImage(UTF8ToGBK(pstrValue));
-        else if( strcmp(pstrName, ("width")) == 0 ) SetFixedWidth(atoi(pstrValue));
-        else if( strcmp(pstrName, ("height")) == 0 ) SetFixedHeight(atoi(pstrValue));
-        else if( strcmp(pstrName, ("minwidth")) == 0 ) SetMinWidth(atoi(pstrValue));
-        else if( strcmp(pstrName, ("minheight")) == 0 ) SetMinHeight(atoi(pstrValue));
-        else if( strcmp(pstrName, ("maxwidth")) == 0 ) SetMaxWidth(atoi(pstrValue));
-        else if( strcmp(pstrName, ("maxheight")) == 0 ) SetMaxHeight(atoi(pstrValue));
+        else if( strcmp(pstrName, ("width")) == 0 ) SetFixedWidth((float)atoi(pstrValue));
+        else if( strcmp(pstrName, ("height")) == 0 ) SetFixedHeight((float)atoi(pstrValue));
+        else if( strcmp(pstrName, ("minwidth")) == 0 ) SetMinWidth((float)atoi(pstrValue));
+        else if( strcmp(pstrName, ("minheight")) == 0 ) SetMinHeight((float)atoi(pstrValue));
+        else if( strcmp(pstrName, ("maxwidth")) == 0 ) SetMaxWidth((float)atoi(pstrValue));
+        else if( strcmp(pstrName, ("maxheight")) == 0 ) SetMaxHeight((float)atoi(pstrValue));
         else if( strcmp(pstrName, ("name")) == 0 ) SetName(UTF8ToGBK(pstrValue));
         else if( strcmp(pstrName, ("text")) == 0 ) SetText(UTF8ToGBK(pstrValue));
         else if( strcmp(pstrName, ("tooltip")) == 0 )SetToolTip(UTF8ToGBK(pstrValue));

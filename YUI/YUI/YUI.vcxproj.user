@@ -11,7 +11,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='FarDebug|x64'">
     <LocalDebuggerWorkingDirectory>$(TargetDir)</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor>WindowsRemoteDebugger</DebuggerFlavor>
-    <RemoteDebuggerCommand>\\192.168.1.103\e\debug\YUI.exe</RemoteDebuggerCommand>
+    <RemoteDebuggerCommand>\\192.168.1.103\e\debug\YUI_d.exe</RemoteDebuggerCommand>
     <RemoteDebuggerWorkingDirectory>\\192.168.1.103\e\debug\</RemoteDebuggerWorkingDirectory>
     <RemoteDebuggerServerName>YYCOMPC</RemoteDebuggerServerName>
     <RemoteDebuggerConnection>RemoteWithoutAuthentication</RemoteDebuggerConnection>

@@ -38,11 +38,11 @@ namespace YUI
         return m_szInitWindowSize;
     }
 
-    void WindowProperty::SetInitSize(int cx, int cy)
+    void WindowProperty::SetInitSize(float cx, float cy)
     {
-        m_szInitWindowSize.width = (float)cx;
-        m_szInitWindowSize.height = (float)cy;
-        ::SetWindowPos(m_hWnd, NULL, 0, 0, cx, cy,SWP_NOZORDER | SWP_NOMOVE | SWP_NOACTIVATE);
+        m_szInitWindowSize.width = cx;
+        m_szInitWindowSize.height = cy;
+        ::SetWindowPos(m_hWnd, NULL, 0, 0,(int) cx, (int)cy,SWP_NOZORDER | SWP_NOMOVE | SWP_NOACTIVATE);
     }
 
     YUI::YYRECT WindowProperty::GetSizeBox() const
@@ -70,7 +70,7 @@ namespace YUI
         return m_szMinWindow;
     }
 
-    void WindowProperty::SetMinInfo(int cx, int cy)
+    void WindowProperty::SetMinInfo(float cx, float cy)
     {
         assert(cx >= 0 && cy >= 0);
         m_szMinWindow.width =(float) cx;
@@ -82,7 +82,7 @@ namespace YUI
         return m_szMaxWindow;
     }
 
-    void WindowProperty::SetMaxInfo(int cx, int cy)
+    void WindowProperty::SetMaxInfo(float cx, float cy)
     {
         assert(cx >= 0 && cy >= 0);
         m_szMaxWindow.width = (float)cx;

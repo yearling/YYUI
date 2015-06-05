@@ -238,7 +238,7 @@ namespace YUI
         rc.bottom -= m_rcTextPadding.bottom;
 
         Canvas2D canvas(m_pManager->GetHWND());
-        FontD2D font(_T("Verdana"),10);
+        FontD2D font(_T("Verdana"),20);
         canvas.DrawSolidText(m_strText,font,rc,m_dwTextColor);
     }
 

@@ -3,6 +3,7 @@
 #include "ControlUI.h"
 #include "Canvas2D.h"
 #include "WindowManager.h"
+#include "..\include\SystemInfo.h"
 
 using std::cout;
 using std::wcout;
@@ -19,6 +20,7 @@ namespace YUI
         ,m_bNeedUpdate(false)
         ,m_bMouseTracking(false)
         ,m_bMouseCapture(false)
+        ,m_hwndTooltip(NULL)
     {
     }
 
@@ -212,6 +214,7 @@ namespace YUI
             {
                 Ycout<<"ControlManger: WM_MOUSEHOVER"<<endl;
                 POINT pt= { GET_X_LPARAM( lParam ), GET_Y_LPARAM(lParam) };
+                m_bMouseTracking = false;
                 auto spControl = FindControl(pt);
                 if(! spControl)
                     break;
@@ -224,34 +227,59 @@ namespace YUI
                     msg.lTimeStamp = ::GetTickCount();
                     SendMsg(m_pHover,msg);
                 }
+                YString strToolTip = spControl->GetToolTip();
+                if(strToolTip.empty())
+                    return true;
+                ::ZeroMemory(&m_ToolTip, sizeof(TOOLINFO));
+                m_ToolTip.cbSize = sizeof(TOOLINFO);
+                m_ToolTip.uFlags = TTF_IDISHWND;
+                m_ToolTip.hwnd = m_hWnd;
+                m_ToolTip.uId = (UINT_PTR) m_hWnd;
+                m_ToolTip.hinst = SystemInfo::GetInstance()->GetProcessInstance();
+                m_ToolTip.lpszText = const_cast<LPTSTR>( (LPCTSTR) strToolTip.c_str() );
+                m_ToolTip.rect = spControl->GetPos();
+                if( m_hwndTooltip == NULL ) {
+                    m_hwndTooltip = ::CreateWindowEx(0, TOOLTIPS_CLASS, NULL, WS_POPUP | TTS_NOPREFIX | TTS_ALWAYSTIP, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, m_hWnd, NULL, SystemInfo::GetInstance()->GetProcessInstance(), NULL);
+                    ::SendMessage(m_hwndTooltip, TTM_ADDTOOL, 0, (LPARAM) &m_ToolTip);
+                }
+                ::SendMessage( m_hwndTooltip,TTM_SETMAXTIPWIDTH,0, spControl->GetToolTipWidth());
+                ::SendMessage(m_hwndTooltip, TTM_SETTOOLINFO, 0, (LPARAM) &m_ToolTip);
+                ::SendMessage(m_hwndTooltip, TTM_TRACKACTIVATE, TRUE, (LPARAM) &m_ToolTip);
             }
             return true;
             break;
         case WM_MOUSELEAVE:
             {
                 Ycout<<"ControlManger: WM_MOUSELEAVE"<<endl;
+                if( m_hwndTooltip != NULL ) 
+                    ::SendMessage(m_hwndTooltip, TTM_TRACKACTIVATE, FALSE, (LPARAM) &m_ToolTip);
                 if( m_bMouseTracking ) ::SendMessage(m_hWnd, WM_MOUSEMOVE, 0, (LPARAM) -1);
+                m_bMouseTracking = false;
             }
             break;
         case WM_MOUSEMOVE:
             {
                
                 Ycout<<"ControlManger: WM_MOUSEMOVE"<<endl;
+                if( !m_bMouseTracking ) {
+                    TRACKMOUSEEVENT tme = { 0 };
+                    tme.cbSize = sizeof(TRACKMOUSEEVENT);
+                    tme.dwFlags = TME_HOVER | TME_LEAVE;
+                    tme.hwndTrack = m_hWnd;
+                    tme.dwHoverTime = m_hwndTooltip == NULL ? 400UL : (DWORD) ::SendMessage(m_hwndTooltip, TTM_GETDELAYTIME, TTDT_INITIAL, 0L);
+                    TrackMouseEvent(&tme);
+                    m_bMouseTracking = true;
+                }
                 POINT pt= { GET_X_LPARAM( lParam) ,GET_Y_LPARAM(lParam) };
                 m_ptLastMousePos = pt;
 				cout<<"PT x: "<<pt.x <<"  ,"<<pt.y<<endl;
                 ControlUI* spNewHover = FindControl(pt);
-                if( spNewHover == NULL )
-                 {
-                     //还是有可能到的，比如说跑到了屏幕的边框~~
-                     break;
-                }
                 MsgWrap msg;
                 msg.strType = UIMSG_MOUSELEAVE;
                 msg.lTimeStamp = ::GetTickCount();
                 msg.ptMouse = pt;
                 //新旧hover的不一样，给旧的发送mouse leave,给新的发送mousehover
-                Ycout<<"move mouse find control: "<<spNewHover->GetName()<<endl;
+                //Ycout<<"move mouse find control: "<<spNewHover->GetName()<<endl;
                 if(spNewHover != m_pHover && m_pHover)
                 {
 					cout<<"Send LEAVE MSG"<<endl;

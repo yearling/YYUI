@@ -37,6 +37,7 @@ namespace YUI
         bool                            m_bMouseTracking;
         TOOLINFO                        m_ToolTip;
         bool                            m_bMouseCapture;
+        HWND                            m_hwndTooltip;
     };
 
 
