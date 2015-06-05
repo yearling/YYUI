@@ -261,6 +261,9 @@
     <Image Include="blackCat.ico" />
     <Image Include="icon4.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\..\x64\Debug\duilib.xml" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

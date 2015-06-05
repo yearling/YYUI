@@ -45,6 +45,7 @@ namespace YUI
 		virtual void					OnRender();
 		void							CreateDeviceDependResource();
 		void                            DiscardDeviceResources();
+		virtual LRESULT                 OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	protected:
 		CComPtr<ID2D1Factory>			m_pD2DFactory;
 		CComPtr<IWICImagingFactory>		m_pWICFactory;

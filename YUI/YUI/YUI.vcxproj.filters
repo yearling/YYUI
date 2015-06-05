@@ -58,4 +58,9 @@
       <Filter>资源文件</Filter>
     </Image>
   </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\..\x64\Debug\duilib.xml">
+      <Filter>资源文件</Filter>
+    </Xml>
+  </ItemGroup>
 </Project>
