@@ -69,7 +69,7 @@ namespace YUI
 			assert(MaxButton && "restore button can't find");
 			MaxButton->SetVisible(true);
 		});
-        SetIcon(IDI_ICONBLACKCAT);
+        SetIcon(IDI_BLACKCAT);
 		HRESULT hr = S_OK;
 	}
 

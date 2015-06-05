@@ -370,9 +370,9 @@ namespace YUI
             {
                 if( PtInRect(m_rcItem, pt ) )
                     Activate();
-                m_uButtonState &= ~(UISTATE_PUSHED | UISTATE_CAPTURED);
-                Invalidate();
-            }
+			} 
+			m_uButtonState &= ~(UISTATE_PUSHED | UISTATE_CAPTURED);
+			Invalidate();
         }); 
        
         m_ButtonMsgHandler.AddEntry(UIMSG_MOUSEENTER,[&](const MsgWrap &msg)

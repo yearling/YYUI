@@ -51,19 +51,10 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="00706.ico">
+    <Image Include="icon4.ico">
       <Filter>资源文件</Filter>
     </Image>
-    <Image Include="..\..\x64\Debug\CatIcon\cat.ico">
-      <Filter>资源文件</Filter>
-    </Image>
-    <Image Include="icon3.ico">
-      <Filter>资源文件</Filter>
-    </Image>
-    <Image Include="..\..\x64\Debug\CatIcon\blackCat.png">
-      <Filter>资源文件</Filter>
-    </Image>
-    <Image Include="..\..\x64\Debug\icons\blackCat.ico">
+    <Image Include="blackCat.ico">
       <Filter>资源文件</Filter>
     </Image>
   </ItemGroup>

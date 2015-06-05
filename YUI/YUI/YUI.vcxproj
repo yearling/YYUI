@@ -258,11 +258,8 @@
     <ResourceCompile Include="YUI.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\..\x64\Debug\CatIcon\blackCat.png" />
-    <Image Include="..\..\x64\Debug\CatIcon\cat.ico" />
-    <Image Include="..\..\x64\Debug\icons\blackCat.ico" />
-    <Image Include="00706.ico" />
-    <Image Include="icon3.ico" />
+    <Image Include="blackCat.ico" />
+    <Image Include="icon4.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
