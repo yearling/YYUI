@@ -162,6 +162,7 @@
     <ClCompile Include="..\src\WindowManager.cpp" />
     <ClCompile Include="..\src\WindowProperty.cpp" />
     <ClCompile Include="..\src\WindowWnd.cpp" />
+    <ClCompile Include="SliderBar.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\BrushDef.h" />
@@ -199,6 +200,7 @@
     <ClInclude Include="..\include\YYExceptionToString.h" />
     <ClInclude Include="..\include\YYGetErrorInfo.h" />
     <ClInclude Include="..\include\YYThrowException.h" />
+    <ClInclude Include="SliderBar.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

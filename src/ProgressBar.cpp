@@ -11,6 +11,7 @@ ProgressBar::ProgressBar(void)
     ,m_fMaxValue(100.0f)
     ,m_fValue(50.0f)
 {
+    AddHander();
     m_uTextStyle = DT_SINGLELINE | DT_CENTER;
     SetFixedHeight(12);
 }
@@ -27,7 +28,7 @@ LPCTSTR ProgressBar::GetClass() const
 
 void ProgressBar::AddHander()
 {
-
+    m_ProgressMsgHandler.SetSuccessor(&m_LabelMsgHandler);
 }
 
 bool ProgressBar::IsHorizontal() const
@@ -152,6 +153,11 @@ void ProgressBar::PaintStatusImage()
     }
     strModify= ss.str();
     DrawImage("file = \'"+m_strForeImage+'\'' + strModify);
+}
+
+void ProgressBar::HandleMsg(const MsgWrap & msg) throw()
+{
+    m_ProgressMsgHandler.HandleMsg(msg);
 }
 
 }
