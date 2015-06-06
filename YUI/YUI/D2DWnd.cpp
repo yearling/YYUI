@@ -151,6 +151,33 @@ namespace YUI
 		return lRes;
 	}
 
+    LRESULT D2DWnd::OnWindowMoving(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+    {
+        LRESULT lRes = FrameLessWindow::OnWindowMoving(uMsg,wParam,lParam,bHandled);
+        //add by yyCom to fix the 当最大化时，没有最大化的icon
+        Button* pbtnMax = dynamic_cast<Button*>(m_pControlManger->FindControl(_T("maxbtn")));
+        Button* pbtnRestore = dynamic_cast<Button*>(m_pControlManger->FindControl(_T("restorebtn")));
+        if( ::IsZoomed(*this)  )
+        {
+            // 切换最大化按钮和还原按钮的状态
+            if (pbtnMax && pbtnRestore)
+            {
+                pbtnMax->SetVisible(false);       // 此处用表达式是为了避免编译器BOOL转换的警告
+                pbtnRestore->SetVisible(true);
+            }
+        }
+        else
+        {
+            if (pbtnMax && pbtnRestore)
+            {
+                pbtnMax->SetVisible(true);       // 此处用表达式是为了避免编译器BOOL转换的警告
+                pbtnRestore->SetVisible(false);
+            }
+        }
+        return lRes;
+    }
+
+
     
 	void CWndUI::SetInternVisible(bool bVisible /*= true*/)
 	{

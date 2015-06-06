@@ -44,6 +44,8 @@ namespace YUI
         case WM_LBUTTONDOWN:	lRes = OnLButtonDown(uMsg, wParam, lParam, bHandled); break;
         case WM_MOUSEMOVE:		lRes = OnMouseMove(uMsg, wParam, lParam, bHandled); break;
         case WM_MOUSEHOVER:	    lRes = OnMouseHover(uMsg, wParam, lParam, bHandled); break;
+        case WM_MOVE:           lRes = OnWindowMove(uMsg,wParam,lParam,bHandled);break;
+        case WM_MOVING:         lRes = OnWindowMoving(uMsg,wParam,lParam,bHandled);break;
 
         default:				bHandled = FALSE; break;
         }
@@ -302,6 +304,18 @@ namespace YUI
         default:
             break;
         }
+        bHandled = FALSE;
+        return 0;
+    }
+
+    LRESULT FrameLessWindow::OnWindowMove(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+    {
+        bHandled = FALSE;
+        return 0;
+    }
+
+    LRESULT FrameLessWindow::OnWindowMoving(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+    {
         bHandled = FALSE;
         return 0;
     }
