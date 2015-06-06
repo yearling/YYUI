@@ -155,6 +155,7 @@
     <ClCompile Include="..\src\MutiScreen.cpp" />
     <ClCompile Include="..\src\ProgressBar.cpp" />
     <ClCompile Include="..\src\RenderD2D.cpp" />
+    <ClCompile Include="..\src\SliderBar.cpp" />
     <ClCompile Include="..\src\SystemInfo.cpp" />
     <ClCompile Include="..\src\TextureDef.cpp" />
     <ClCompile Include="..\src\UIUtility.cpp" />
@@ -162,7 +163,6 @@
     <ClCompile Include="..\src\WindowManager.cpp" />
     <ClCompile Include="..\src\WindowProperty.cpp" />
     <ClCompile Include="..\src\WindowWnd.cpp" />
-    <ClCompile Include="SliderBar.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\BrushDef.h" />
@@ -184,6 +184,7 @@
     <ClInclude Include="..\include\MutiScreen.h" />
     <ClInclude Include="..\include\ProgressBar.h" />
     <ClInclude Include="..\include\RenderD2D.h" />
+    <ClInclude Include="..\include\SliderBar.h" />
     <ClInclude Include="..\include\TextureDef.h" />
     <ClInclude Include="..\include\thirdparty\tinyxml2\tinyxml2.h" />
     <ClInclude Include="..\include\UIUtility.h" />
@@ -200,7 +201,6 @@
     <ClInclude Include="..\include\YYExceptionToString.h" />
     <ClInclude Include="..\include\YYGetErrorInfo.h" />
     <ClInclude Include="..\include\YYThrowException.h" />
-    <ClInclude Include="SliderBar.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

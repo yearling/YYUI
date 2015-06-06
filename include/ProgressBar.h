@@ -13,6 +13,7 @@ public:
     virtual LPCTSTR                 GetClass() const;
     void                            AddHander();
     virtual void					HandleMsg(const MsgWrap & msg)throw();
+	void							SetAttribute(const std::string &strName, const std::string& strValue);
     virtual void                    PaintStatusImage();
 public:
     bool                            IsHorizontal() const;

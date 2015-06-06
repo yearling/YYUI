@@ -103,10 +103,10 @@
     <ClCompile Include="..\src\TextureDef.cpp">
       <Filter>Draw</Filter>
     </ClCompile>
-    <ClCompile Include="SliderBar.cpp">
+    <ClCompile Include="..\src\ProgressBar.cpp">
       <Filter>Control</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\ProgressBar.cpp">
+    <ClCompile Include="..\src\SliderBar.cpp">
       <Filter>Control</Filter>
     </ClCompile>
   </ItemGroup>
@@ -216,7 +216,7 @@
     <ClInclude Include="..\include\ProgressBar.h">
       <Filter>Control</Filter>
     </ClInclude>
-    <ClInclude Include="SliderBar.h">
+    <ClInclude Include="..\include\SliderBar.h">
       <Filter>Control</Filter>
     </ClInclude>
   </ItemGroup>
