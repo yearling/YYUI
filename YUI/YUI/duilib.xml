@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<Window size="800,600" sizebox="4,4,4,4" caption="0,0,0,32" mininfo="600,400">
+    <VerticalLayout name="main VL" bkcolor="#FFBCA5CB" bkcolor2="#FFAAAAA0" bkimage ="bk.jpg" >
+        <HorizontalLayout name="head vl" height="31" bkcolor="#552D2D30" bkcolor2="#FFAAAAA0" >
+            <VerticalLayout>
+                <Label name=" label text" text="YYUI DEMO" float="true" pos="40,3,0,0" width="200" height="18" textpadding="2,0,2,0" textcolor="#FF9E9E9E" disabledtextcolor="#FFA7A6AA" font="0" />
+                <Control name="Conrol PNG" float="true" pos="3,0,0,0" width="32" height="31" bkimage="whitecat.png" />
+            </VerticalLayout>
+            <VerticalLayout name="VL 3" width="92">
+                <Button name="minbtn" tooltip="最小化" float="true" pos="0,0,0,0" width="27" height="31" bkimage="file=&apos;btn_minmax.png&apos; source=&apos;45,0,60,15&apos; dest=&apos;6,8,21,23&apos; " textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" hotimage="file=&apos;btn_style_minmax.png&apos; source=&apos;27,0,54,30&apos;" pushedimage="file=&apos;btn_style_minmax.png&apos; source=&apos;54,0,81,30&apos;" />
+                <Button name="maxbtn" tooltip="最大化" float="true" pos="28,0,0,0" width="27" height="31" bkimage="file=&apos;btn_minmax.png&apos; source=&apos;60,0,75,15&apos; dest=&apos;6,8,21,23&apos; " textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" hotimage="file=&apos;btn_style_minmax.png&apos; source=&apos;27,0,54,30&apos;" pushedimage="file=&apos;btn_style_minmax.png&apos; source=&apos;54,0,81,30&apos;" />
+                <Button name="restorebtn" tooltip="还原" visible="false" float="true" pos="28,0,0,0" width="27" height="31" bkimage="file=&apos;btn_minmax.png&apos; source=&apos;75,0,90,15&apos; dest=&apos;6,8,21,23&apos; " textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" hotimage="file=&apos;btn_style_minmax.png&apos; source=&apos;27,0,54,30&apos;" pushedimage="file=&apos;btn_style_minmax.png&apos; source=&apos;54,0,81,30&apos;" />
+                <Button name="closebtn" tooltip="关闭" float="true" pos="56,0,0,0" width="36" height="31" bkimage="file=&apos;btn_minmax.png&apos; source=&apos;90,0,105,15&apos; dest=&apos;11,8,26,23&apos; " textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" hotimage="file=&apos;btn_style_close.png&apos; source=&apos;36,0,72,30&apos;" pushedimage="file=&apos;btn_style_close.png&apos; source=&apos;72,0,108,30&apos;" />
+            </VerticalLayout>
+        </HorizontalLayout>
+        <HorizontalLayout name="HL 2">
+            <Button text="XP"       float="true" pos="20,14,0,0" width="60" height="25" normalimage=" file='BtnStyle\XP\button_nor.png' " hotimage=" file='BtnStyle\XP\button_over.png' " pushedimage=" file='BtnStyle\XP\button_down.png' " focusedimage=" file='BtnStyle\XP\button_focus.png' " />
+            <Button text="win7"     float="true" pos="20,50,0,0" width="60" height="25" normalimage=" file='BtnStyle\win7\button_nor.png' " hotimage=" file='BtnStyle\win7\button_over.png' " pushedimage=" file='BtnStyle\win7\button_down.png' " focusedimage=" file='BtnStyle\win7\button_focus.png' " />
+            <Button text="百度杀毒" float="true" pos="20,86,0,0" width="102" height="35" normalimage=" file='BtnStyle\BDKV\button_nor.png' " hotimage=" file='BtnStyle\BDKV\button_over.png' " pushedimage=" file='BtnStyle\BDKV\button_down.png' " />
+            <Button                 float="true" pos="20,132,0,0" width="171" height="46" normalimage=" file='BtnStyle\BDKV2\button_nor.png' " hotimage=" file='BtnStyle\BDKV2\button_over.png' " pushedimage=" file='BtnStyle\BDKV2\button_down.png' " />
+            <Progress name="ProgressDemo1" text="Progress" float="true" pos="20,180,0,0" width="139" height="30" foreimage="Progress/progress_fore.png" min="0" max="100" value="50" hor="true" align="center" />
+          <Slider name="SliderDemo1" value="30" float="true" pos="20,220,0,0" width="139" height="18" thumbsize="12,20" bkimage="Slider/SliderFore.png" thumbimage="Slider/SliderBar.png"/>
+        </HorizontalLayout>
+    </VerticalLayout>
+</Window>
