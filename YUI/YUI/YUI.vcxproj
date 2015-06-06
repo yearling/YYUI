@@ -171,8 +171,7 @@
       <PreserveSbr>true</PreserveSbr>
     </Bscmake>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>copy duilib.xml ..\..\x64\Debug\</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='FarDebug|x64'">
@@ -262,7 +261,7 @@
     <Image Include="icon4.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="..\..\x64\Debug\duilib.xml" />
+    <Xml Include="duilib.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

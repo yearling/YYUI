@@ -59,7 +59,7 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="..\..\x64\Debug\duilib.xml">
+    <Xml Include="duilib.xml">
       <Filter>资源文件</Filter>
     </Xml>
   </ItemGroup>
