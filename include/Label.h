@@ -16,7 +16,7 @@ namespace YUI
     public:
         Label();
         virtual ~Label();
-        LPCTSTR                         GetClass() const;
+        virtual LPCTSTR                 GetClass() const;
         void                            AddHander();
         virtual void					HandleMsg(const MsgWrap & msg)throw();
         void                            SetTextStyle(UINT uStyle);

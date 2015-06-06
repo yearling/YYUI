@@ -153,6 +153,7 @@
     <ClCompile Include="..\src\Label.cpp" />
     <ClCompile Include="..\src\MessageSystem.cpp" />
     <ClCompile Include="..\src\MutiScreen.cpp" />
+    <ClCompile Include="..\src\ProgressBar.cpp" />
     <ClCompile Include="..\src\RenderD2D.cpp" />
     <ClCompile Include="..\src\SystemInfo.cpp" />
     <ClCompile Include="..\src\TextureDef.cpp" />
@@ -180,6 +181,7 @@
     <ClInclude Include="..\include\MessageHandler.h" />
     <ClInclude Include="..\include\MessageSystem.h" />
     <ClInclude Include="..\include\MutiScreen.h" />
+    <ClInclude Include="..\include\ProgressBar.h" />
     <ClInclude Include="..\include\RenderD2D.h" />
     <ClInclude Include="..\include\TextureDef.h" />
     <ClInclude Include="..\include\thirdparty\tinyxml2\tinyxml2.h" />

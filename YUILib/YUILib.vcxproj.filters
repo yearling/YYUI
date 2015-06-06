@@ -103,6 +103,7 @@
     <ClCompile Include="..\src\TextureDef.cpp">
       <Filter>Draw</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\ProgressBar.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\CountRef.h">
@@ -206,6 +207,9 @@
     </ClInclude>
     <ClInclude Include="..\include\ControlManager.h">
       <Filter>Control</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ProgressBar.h">
+      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

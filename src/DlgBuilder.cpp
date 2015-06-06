@@ -5,6 +5,7 @@
 #include "ControlUI.h"
 #include "Label.h"
 #include "Button.h"
+#include "ProgressBar.h"
 
 #include <iostream>
 #include "Container.h"
@@ -249,6 +250,8 @@ namespace YUI
                     pControl = new ControlUI;
                 else if(strcmp(pstrClass,CTR_CONTAINER) == 0)
                     pControl = new Container;
+                else if(strcmp(pstrClass,CTR_PROGRESS) == 0)
+                    pControl = new ProgressBar;
                 //if( !pControl )
                 //{
                 //	//load from plugin;
