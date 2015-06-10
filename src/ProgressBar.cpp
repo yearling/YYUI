@@ -13,7 +13,6 @@ ProgressBar::ProgressBar(void)
 {
     AddHander();
     m_uTextStyle = DT_SINGLELINE | DT_CENTER;
-    SetFixedHeight(12);
 }
 
 

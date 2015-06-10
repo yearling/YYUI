@@ -17,9 +17,6 @@
     <Filter Include="Exception">
       <UniqueIdentifier>{565d4409-7fa3-4fc2-b2dc-c1bcd8549406}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Layout">
-      <UniqueIdentifier>{83093ad9-11a4-4735-aba2-1584c8260c60}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Sys">
       <UniqueIdentifier>{9666a099-aa40-44bc-b9e9-86f55c737a25}</UniqueIdentifier>
     </Filter>
@@ -29,15 +26,15 @@
     <Filter Include="WindowManger">
       <UniqueIdentifier>{92bc84a0-3e8a-4531-9bc4-f90ab0f86248}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Control\Layout">
+      <UniqueIdentifier>{83093ad9-11a4-4735-aba2-1584c8260c60}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\UIUtility.cpp">
       <Filter>common</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Button.cpp">
-      <Filter>Control</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Container.cpp">
       <Filter>Control</Filter>
     </ClCompile>
     <ClCompile Include="..\src\ControlUI.cpp">
@@ -65,10 +62,10 @@
       <Filter>Draw</Filter>
     </ClCompile>
     <ClCompile Include="..\src\HorizontalLayout.cpp">
-      <Filter>Layout</Filter>
+      <Filter>Control\Layout</Filter>
     </ClCompile>
     <ClCompile Include="..\src\VerticalLayout.cpp">
-      <Filter>Layout</Filter>
+      <Filter>Control\Layout</Filter>
     </ClCompile>
     <ClCompile Include="..\src\FileSystem.cpp">
       <Filter>Sys</Filter>
@@ -109,6 +106,9 @@
     <ClCompile Include="..\src\SliderBar.cpp">
       <Filter>Control</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Container.cpp">
+      <Filter>Control\Layout</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\CountRef.h">
@@ -118,9 +118,6 @@
       <Filter>common</Filter>
     </ClInclude>
     <ClInclude Include="..\include\Button.h">
-      <Filter>Control</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\Container.h">
       <Filter>Control</Filter>
     </ClInclude>
     <ClInclude Include="..\include\ControlUI.h">
@@ -175,10 +172,10 @@
       <Filter>Exception</Filter>
     </ClInclude>
     <ClInclude Include="..\include\HorizontalLayout.h">
-      <Filter>Layout</Filter>
+      <Filter>Control\Layout</Filter>
     </ClInclude>
     <ClInclude Include="..\include\VerticalLayout.h">
-      <Filter>Layout</Filter>
+      <Filter>Control\Layout</Filter>
     </ClInclude>
     <ClInclude Include="..\include\FileSystem.h">
       <Filter>Sys</Filter>
@@ -218,6 +215,9 @@
     </ClInclude>
     <ClInclude Include="..\include\SliderBar.h">
       <Filter>Control</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Container.h">
+      <Filter>Control\Layout</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -13,6 +13,7 @@ public:
     virtual void					HandleMsg(const MsgWrap & msg)throw();
     virtual void                    SetAttribute(const std::string &strName, const std::string& strValue);                       
     virtual void                    PaintStatusImage();
+	virtual void                    PaintBkImage();
     virtual void                    SetEnabled(bool bEnable = true);
 public:
     float                           GetChangeStep();

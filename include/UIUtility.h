@@ -164,8 +164,8 @@ namespace YUI
 		operator D2D1_RECT_F() const { D2D1_RECT_F tmp;tmp.left = left; tmp.top = top; tmp.right = right; tmp.bottom = bottom; return tmp;}
 
 		void Clear() { left= right=top=bottom =0.0f;}
-		float GetWidth() { return right - left;}
-		float GetHeight() { return bottom - top;}
+		float GetWidth() const { return right - left;}
+		float GetHeight() const { return bottom - top;}
 		void Join(const YYRECT & rc)
 		{
 			if( rc.left < left )
@@ -261,4 +261,10 @@ namespace YUI
 		float                             m_nZoomXPercent;
 		float                             m_nZoomYPercent;
 	}; 
+
+	template<class T>
+	T Lerp(const T& lhs,const T&rhs,float t)
+	{
+		return (1-t)*lhs+t*rhs;
+	}
 }

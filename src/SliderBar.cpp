@@ -1,5 +1,4 @@
 #include "SliderBar.h"
-
 namespace YUI
 {
 
@@ -30,7 +29,8 @@ void SliderBar::AddHander()
 		if( !IsEnabled() )
 			return;
 		YYRECT rcThumb = GetThumbRect();
-		if(PtInRect(rcThumb,msg.ptMouse))
+		YYPOINT ptInLocal=ClientToLocal(msg.ptMouse);
+		if(PtInRect(rcThumb,ptInLocal))
 		{
 			m_uButtonState |=UISTATE_CAPTURED;
 		}
@@ -40,7 +40,8 @@ void SliderBar::AddHander()
 		if( !IsEnabled() )
 			return;
 		YYRECT rcThumb = GetThumbRect();
-		if(PtInRect(rcThumb,msg.ptMouse))
+		YYPOINT ptInLocal=ClientToLocal(msg.ptMouse);
+		if(PtInRect(rcThumb,ptInLocal))
 		{
 			m_uButtonState |=UISTATE_CAPTURED;
 		}
@@ -52,23 +53,24 @@ void SliderBar::AddHander()
 		{
 			m_uButtonState &= ~UISTATE_CAPTURED;
 		}
+		YYPOINT ptInLocal=ClientToLocal(msg.ptMouse);
 		if(m_bHorizontal)
 		{
-			if(msg.ptMouse.x >= m_rcItem.right - m_szThumb.width /2 )
+			if(ptInLocal.x >= m_rcItem.GetWidth() - m_szThumb.width /2 )
 					fValue = m_fMaxValue;
-			else if( msg.ptMouse.x <= m_rcItem.left + m_szThumb.width/2)
+			else if( ptInLocal.x <= m_szThumb.width/2)
 					fValue = m_fMinValue;
 			else  
-				fValue = m_fMinValue + (m_fMaxValue - m_fMinValue) * (msg.ptMouse.x - m_rcItem.left - m_szThumb.width / 2 ) / (m_rcItem.right - m_rcItem.left - m_szThumb.width);
+				fValue = Lerp(m_fMinValue,m_fMaxValue,(ptInLocal.x-m_szThumb.width/2)/(m_rcItem.GetWidth()-m_szThumb.width));
 		}
 		else
 		{
-			if( msg.ptMouse.y >= m_rcItem.bottom - m_szThumb.height / 2 )
-				fValue = m_fMinValue;
-			else if( msg.ptMouse.y <= m_rcItem.top + m_szThumb.height / 2  ) 
+			if( ptInLocal.y >= m_rcItem.GetHeight() - m_szThumb.height / 2 )
 				fValue = m_fMaxValue;
+			else if( ptInLocal.y <= m_szThumb.height / 2  ) 
+				fValue = m_fMinValue;
 			else 
-				fValue = m_fMinValue + (m_fMaxValue - m_fMinValue) * (m_rcItem.bottom - msg.ptMouse.y - m_szThumb.height / 2 ) / (m_rcItem.bottom - m_rcItem.top - m_szThumb.height);
+				fValue = Lerp(m_fMinValue,m_fMinValue,(ptInLocal.y-m_szThumb.height/2)/(m_rcItem.GetHeight()-m_szThumb.height));
 		}
 		if(m_fValue != fValue && m_fMinValue <= fValue && fValue <= m_fMaxValue )
 		{
@@ -93,23 +95,24 @@ void SliderBar::AddHander()
 	{
 		if( (m_uButtonState & UISTATE_CAPTURED) == 0 )
 			return;
-		if( m_bHorizontal ) 
+		YYPOINT ptInLocal=ClientToLocal(msg.ptMouse);
+		if(m_bHorizontal)
 		{
-			if( msg.ptMouse.x >= m_rcItem.right - m_szThumb.width / 2 ) 
+			if(ptInLocal.x >= m_rcItem.GetWidth() - m_szThumb.width /2 )
 				m_fValue = m_fMaxValue;
-			else if( msg.ptMouse.x <= m_rcItem.left + m_szThumb.width / 2 ) 
+			else if( ptInLocal.x <= m_szThumb.width/2)
 				m_fValue = m_fMinValue;
-			else 
-				m_fValue = m_fMinValue + (m_fMaxValue - m_fMinValue) * (msg.ptMouse.x - m_rcItem.left - m_szThumb.width / 2 ) / (m_rcItem.right - m_rcItem.left - m_szThumb.width);
+			else  
+				m_fValue = Lerp(m_fMinValue,m_fMaxValue,(ptInLocal.x-m_szThumb.width/2)/(m_rcItem.GetWidth()-m_szThumb.width));
 		}
 		else 
 		{
-			if( msg.ptMouse.y >= m_rcItem.bottom - m_szThumb.height / 2 ) 
-				m_fValue = m_fMinValue;
-			else if( msg.ptMouse.y <= m_rcItem.top + m_szThumb.height / 2  ) 
+			if( ptInLocal.y >= m_rcItem.GetHeight() - m_szThumb.height / 2 )
 				m_fValue = m_fMaxValue;
+			else if( ptInLocal.y <= m_szThumb.height / 2  ) 
+				m_fValue = m_fMinValue;
 			else 
-				m_fValue = m_fMinValue + (m_fMaxValue - m_fMinValue) * (m_rcItem.bottom - msg.ptMouse.y - m_szThumb.height / 2 ) / (m_rcItem.bottom - m_rcItem.top - m_szThumb.height);
+				m_fValue = Lerp(m_fMinValue,m_fMinValue,(ptInLocal.y-m_szThumb.height/2)/(m_rcItem.GetHeight()-m_szThumb.height));
 		}
 		Invalidate();
 	});
@@ -168,10 +171,6 @@ void SliderBar::PaintStatusImage()
 {
 	ProgressBar::PaintStatusImage();
 	YYRECT rcThumb = GetThumbRect();
-	rcThumb.left -= m_rcItem.left;
-	rcThumb.right -= m_rcItem.left;
-	rcThumb.top -= m_rcItem.top;
-	rcThumb.bottom -= m_rcItem.top;
 	std::stringstream ss;
 	if( (m_uButtonState & UISTATE_CAPTURED) != 0)
 	{
@@ -224,14 +223,16 @@ YUI::YYRECT SliderBar::GetThumbRect() const
 {
 	if(m_bHorizontal)
 	{
-		float left = m_rcItem.left + (m_rcItem.right - m_rcItem.left-m_szThumb.width)*(m_fValue - m_fMinValue)/(m_fMaxValue-m_fMinValue);
-		float top = (m_rcItem.bottom + m_rcItem.top- m_szThumb.height )/2;
+		float left = Lerp(0.0f,m_rcItem.GetWidth()-m_szThumb.width,(m_fValue-m_fMinValue)/(m_fMaxValue-m_fMinValue));
+		float top = (m_rcItem.GetHeight()-m_szThumb.height)/2;
 		return YYRECT(left,top,left+m_szThumb.width,top+m_szThumb.height);
 	}
 	else
 	{
-		float left = (m_rcItem.right+ m_rcItem.left - m_szThumb.width ) /2;
-		float top = m_rcItem.bottom - m_szThumb.height-(m_rcItem.bottom - m_rcItem.top - m_szThumb.height) * (m_fValue - m_fMinValue) / (m_fMaxValue - m_fMinValue);
+		/*float left = (m_rcItem.right+ m_rcItem.left - m_szThumb.width ) /2;
+		float top = m_rcItem.bottom - m_szThumb.height-(m_rcItem.bottom - m_rcItem.top - m_szThumb.height) * (m_fValue - m_fMinValue) / (m_fMaxValue - m_fMinValue);*/
+		float left = (m_rcItem.GetWidth() - m_szThumb.width)/2;
+		float top = Lerp(0.0f,m_rcItem.GetHeight()-m_szThumb.height,(m_fValue-m_fMinValue)/(m_fMaxValue-m_fMinValue));
 		return YYRECT(left,top,left+m_szThumb.width,top+m_szThumb.height);
 	}
 }
@@ -277,6 +278,36 @@ void SliderBar::SetEnabled(bool bEnable )
     {
         m_uButtonState = 0;
     }
+}
+
+void SliderBar::PaintBkImage()
+{
+	if(m_strBKImage.empty())
+		return;
+	std::string strModify;
+	std::stringstream ss;
+	ss.str("");
+	YYRECT rc;
+	if(m_bHorizontal)
+	{
+		rc.left=m_szThumb.width/2;
+		rc.right= m_rcItem.GetWidth()-m_szThumb.width/2;
+		rc.top= 0.0f;
+		rc.bottom= m_rcItem.GetHeight();
+		ss<<" dest= \'";
+		ss<<(int)rc.left<<','<<(int)rc.top<<','<<(int)rc.right<<','<<(int)rc.bottom<<'\'';
+	}
+	else
+	{
+		rc.top=m_szThumb.height/2;
+		rc.bottom= m_rcItem.GetWidth()-m_szThumb.height/2;
+		rc.left =0.0f;
+		rc.right=m_rcItem.GetWidth();
+		ss<<" dest= \'";
+		ss<<(int)rc.left<<','<<(int)rc.top<<','<<(int)rc.right<<','<<(int)rc.bottom<<'\'';
+	}
+	strModify= ss.str();
+	DrawImage("file = \'"+m_strBKImage+'\'' + strModify);
 }
 
 }

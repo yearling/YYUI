@@ -3,12 +3,6 @@
 #include "YUI.h"
 #include "ControlUI.h"
 
-//#include <GdiPlus.h>
-//#pragma comment( lib, "GdiPlus.lib" )
-//using namespace Gdiplus;
-//class __declspec(dllexport) Gdiplus::RectF;
-//struct __declspec(dllexport) Gdiplus::GdiplusStartupInput;
-
 namespace YUI
 {
     class Label: public ControlUI
