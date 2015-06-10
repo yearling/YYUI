@@ -109,6 +109,8 @@ namespace YUI
         virtual void                    SetUserData(const YString &strText); // 辅助函数，供用户使用
         virtual UINT_PTR                GetTag() const; // 辅助函数，供用户使用
         virtual void                    SetTag(UINT_PTR pTag); // 辅助函数，供用户使用
+        //坐标转换
+        YYPOINT                         ClipToLocal(const YYPOINT &ptInClient);
     public:
        
         // 一些重要的属性

@@ -1090,6 +1090,11 @@ namespace YUI
          m_ControlMsgHandler.HandleMsg(msg);
      }
 
+     YUI::YYPOINT ControlUI::ClipToLocal(const YYPOINT &ptInClient)
+     {
+
+     }
+
 
 
 
